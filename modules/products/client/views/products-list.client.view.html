@@ -1,0 +1,168 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <!-- <button class="btn btn-danger btn-sm pull-right mg5r" ng-disabled="vm.isDisable" type="button"
+        ng-click="vm.removeMulti()">
+        <span class="glyphicon glyphicon-trash"></span> 選択したレコードを削除
+      </button> -->
+
+      <a class="btn btn-success btn-sm pull-right mg5r" ng-if="vm.isCreate" ng-click="vm.goToCreate()">
+        <span class="glyphicon glyphicon-plus"></span> 登録
+      </a>
+
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'products.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'products.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'products.list.search.operator.label' | translate}}</label>
+          <input type="text" name="operator" class="form-control" ng-model="vm.condition.operator"
+            placeholder="{{'products.list.search.operator.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label>{{'products.list.search.price.label' | translate}}</label>
+          <div>
+            <input type="number" style="width: 40%; display: inline-block" name="price_min" placeholder="" class="form-control" ng-model="vm.condition.price_min"/>
+            <label for="" style="width: 18%; display: inline-block" class="text-center">～</label>
+            <input type="number" style="width: 40%;  display: inline-block" name="price_max" placeholder="" class="form-control pull-right" ng-model="vm.condition.price_max"/>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'products.list.search.price_max.label' | translate}}</label>
+          <input type="text" name="price_max" placeholder="" class="form-control" ng-model="vm.condition.price_max"/>
+        </div>
+      </div> -->
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'products.list.search.status.label' | translate}}</label>
+          <div class="form-check form-check-inline">
+            <input type="checkbox" name="status" id="search_status" class="form-check-input" ng-model="vm.condition.status"/>
+            <label style="font-weight: 400;" for="search_status">
+            <small>{{'products.list.search.status_note.label' | translate}}</small>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'products.list.search.delete_status.label' | translate}}</label>
+          <div class="form-check form-check-inline">
+            <input type="checkbox" name="show_status" id="show_status" class="form-check-input" ng-model="vm.condition.show_status"/>
+            <label style="font-weight: 400;" for="show_status">
+              <small>{{'products.list.search.delete_status_note.label' | translate}}</small>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th class="w200" ng-click="vm.handleSortChanged('code')" tbmodel="code"
+                tbtitle="{{'products.list.table.header.code.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('name')" tbmodel="name"
+                tbtitle="{{'products.list.table.header.name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('price')" tbmodel="price"
+                tbtitle="{{'products.list.table.header.price.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('operator')" tbmodel="operator"
+                tbtitle="{{'products.list.table.header.operator.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('sell_status')" tbmodel="sell_status"
+                tbtitle="{{'products.list.table.header.status.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('delete_status')" tbmodel="delete_status"
+                tbtitle="{{'products.list.table.header.delete_status.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="20" ng-show="!vm.products || vm.products.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="product in vm.products track by $index" class="clickable"
+              ui-sref="municipality.products.detail({ productId: product._id, municipalityId: vm.municipalityId, key: vm.key,  isNeedAuthorize: vm.isNeedAuthorize })">
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td class="text-left" ng-bind="product.code"></td>
+              <td class="w200" ng-bind="product.name"></td>
+              <td class="w100" ng-bind="product.price | format_money2"></td>
+              <td class="w200" ng-bind="product.operator"></td>
+              <td class="w100" ng-bind="product.sell_status === 2 ? showMasterValue(masterdata.sel_status, product.sell_status) : ''"></td>
+              <td class="w100" >
+                <span class="text-red" ng-if="product.show_status === 2">削除済</span>
+              </td>
+              <td class="text-center w150" ui-sref-ignore>
+                <button class="btn btn-xs btn-primary"
+                  ng-if="vm.isEdit"
+                  ui-sref="municipality.products.edit({productId: product._id, municipalityId: vm.municipalityId, isNeedAuthorize: vm.isNeedAuthorize})">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                  {{'common.button.edit' | translate}}
+                </button>
+
+                <!-- <button ng-if="product.deleted === false" class="btn btn-xs btn-danger" ng-click="vm.remove(product._id)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  {{'common.button.del' | translate}}
+                </button> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

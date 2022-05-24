@@ -1,0 +1,39 @@
+﻿<section class="container-ecommerce">
+  <div class="row mg20t">
+    <div class="col-xs-12">
+      <h3>{{vm.notice.title}}</h3>
+      <div class="text-md mg20y">{{vm.notice.created | dateNormal}}({{getDayOfWeek(vm.notice.created)}})</div>
+      <p class="break-line" ng-bind-html="vm.notice.content | myParseUrl"></p>
+
+      <div class="mg30t row mg20b">
+        <div class="col-xs-6 action-btn">
+          <button class="btn btn-primary btn-sm w100p" ui-sref="company.ecommerces.home" type="button">
+            {{'ecommerce.notice.button.top' | translate}}
+          </button>
+        </div>
+        <div class="col-xs-6 action-btn">
+          <button class="btn btn-success btn-sm w100p" ui-sref="company.ecommerces.notice_list" type="button">
+            {{'ecommerce.notice.detail.button.back' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style scoped>
+  .notice-items {
+    text-align: center;
+    padding-left: 0;
+  }
+
+  @media (min-width: 767px) {
+    .notice-items {
+      text-align: left;
+    }
+
+    .action-btn {
+      width: 200px;
+    }
+  }
+</style>

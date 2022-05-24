@@ -1,0 +1,55 @@
+<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span class="page_title_clickable" ui-sref="admin.qas.list">
+              {{'qa.list.page.title' | translate}}
+            </span>&nbsp;>
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.qas.list" noback="admin.qas.create" state="admin.qas.edit" params="{qaId: vm.qaId}">
+          </button-edit>
+        </div>
+      </div>
+      <div class="table-responsive qa-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                {{'qa.detail.question.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.qa.question"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'qa.detail.answer.label' | translate}}
+              </th>
+              <td class="col-xs-10 word-break break-line" ng-bind-html="vm.qa.answer | myParseUrl">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'qa.detail.display_order.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.qa.display_order">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row mg10b">
+        <div class="col-xs-4">
+        </div>
+        <div class="col-xs-4 text-center">
+          <button-edit back="admin.qas.list" noback="admin.qas.create" state="admin.qas.edit" params="{qaId: vm.qaId}">
+          </button-edit>
+          </button-edit>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

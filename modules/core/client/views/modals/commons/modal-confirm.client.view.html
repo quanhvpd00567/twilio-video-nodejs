@@ -1,0 +1,49 @@
+<!-- modal template -->
+<script type="text/ng-template" id="confirm.html">
+    <div class="modal-header-confirm">
+        <h4 class="modal-title-confirm">確認</h4>
+    </div>
+    <div class="modal-body text-center modal-confirm" id="modal-body" >
+        {{:: dialog.message}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">{{:: dialog.btnClose || '閉じる'}}</button>
+        <button class="btn btn-primary" type="button" ng-click="confirm()">{{:: dialog.btnOk || '決定'}}</button>
+    </div>
+</script>
+<script type="text/ng-template" id="confirm_ok.html">
+    <div class="modal-header-confirm">
+        <h4 class="modal-title-confirm">確認</h4>
+    </div>
+    <div class="modal-body text-center modal-confirm" id="modal-body" >
+        {{:: dialog.message}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="confirm()">OK</button>
+    </div>
+</script>
+<!-- #modal template -->
+<script type="text/ng-template" id="textInput.html">
+    <div class="modal-header-confirm">
+        <h4 class="modal-title-confirm">{{:: dialog.title}}</h4>
+    </div>
+    <div class="modal-body">
+        <p>{{:: dialog.message}}</p>
+        <input type="text" class="form-control" ng-model="dialog.data">
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">キャンセル</button>
+        <button class="btn btn-primary" type="button" ng-click="confirm(dialog.data)">{{:: dialog.button}}</button>
+    </div>
+</script>
+<script type="text/ng-template" id="error_notification.html">
+    <div class="modal-header-confirm">
+        <h4 class="modal-title-confirm">{{'common.modal.error.notification.label' | translate}}</h4>
+    </div>
+    <div class="modal-body text-center modal-confirm" id="modal-body" >
+        {{:: dialog.message}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">{{'common.button.close' | translate}}</button>
+    </div>
+</script>

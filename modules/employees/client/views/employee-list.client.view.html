@@ -1,0 +1,204 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <button class="btn btn-danger btn-sm pull-right mg5r" ng-disabled="vm.isDisable" type="button"
+        ng-click="vm.removeMulti()" ng-if="vm.isAssignRequest === false || vm.isDelete">
+        <span class="glyphicon glyphicon-trash"></span> {{'employees.list.btn.remove_all.label' | translate}}
+      </button>
+      <!-- 
+      <button class="btn btn-primary btn-sm pull-right mg5r" ng-click="vm.export(true)" type="button">
+        <i class="fa fa-download"></i> {{'employees.list.btn.export.label' | translate}} 
+      </button> -->
+
+      <button class="btn btn-primary btn-sm pull-right mg5r" ng-if="vm.isAssignRequest === false|| vm.isExport"
+        ng-click="vm.export(false)" type="button">
+        <i class="fa fa-download"></i> {{'employees.list.btn.export_data.label' | translate}}
+      </button>
+
+      <button class="btn btn-primary btn-sm pull-right mg5r" 
+        ng-click="vm.onShowUrl()" type="button">
+        <i class="fa fa-external-link"></i> 登録URL
+      </button>
+
+      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="company.employees.import"
+        ng-if="vm.isAssignRequest === false">
+        <i class="fa fa-upload"></i> {{'employees.list.btn.import.label' | translate}}
+      </a>
+
+      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="company.employees.create"
+        ng-if="vm.isAssignRequest === false">
+        <span class="glyphicon glyphicon-plus"></span> 登録
+      </a>
+
+     
+
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6">
+        <div class="form-group">
+          <label>{{'employees.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'employees.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'employees.list.search.role.label' | translate}}</label>
+          <select name="subsidiary" class="form-control" ng-model="vm.condition.role">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in vm.master.company_roles" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'employees.list.search.subsidiary.label' | translate}}</label>
+          <select name="subsidiary" class="form-control" ng-model="vm.condition.subsidiary">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in vm.subsidiaries" value="{{item._id}}"> {{item.name}}</option>
+          </select>
+          <!-- <multiselect class="input-xlarge" multiple="true" ng-model="selectedCar" options="item in vm.subsidiaries"
+            change="selected()">
+          </multiselect> -->
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'employees.list.search.created_min.label' | translate}}</label>
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min" class="form-control"
+            ng-model="vm.condition.created_min" ng-change="vm.onChangeCreatedMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'employees.list.search.created_max.label' | translate}}</label>
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max" class="form-control"
+            ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
+              vm.condition.created_max || 'null'
+            }}); vm.onChangeCreatedMax()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index" ng-if="vm.isAssignRequest === false || vm.isDelete">
+                <div class="form-check">
+                  <input class="form-check-input" ng-checked="vm.listIdsAll.length > 0" ng-click="vm.onSelectAll()"
+                    type="checkbox" value="">
+                </div>
+              </th>
+              <th class="col-index">#</th>
+              <th class="w200" ng-click="vm.handleSortChanged('number')" tbmodel="number"
+                tbtitle="{{'employees.list.table.header.number.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('last_name')" tbmodel="last_name"
+                tbtitle="{{'employees.list.table.header.last_name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('first_name')" tbmodel="first_name"
+                tbtitle="{{'employees.list.table.header.first_name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('email')" tbmodel="email"
+                tbtitle="{{'employees.list.table.header.email.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('subsidiary')" tbmodel="subsidiary"
+                tbtitle="{{'employees.list.table.header.company.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('e_department')" tbmodel="e_department"
+                tbtitle="{{'employees.list.table.header.department.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('role')" tbmodel="role"
+                tbtitle="{{'employees.list.table.header.role.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('created')" tbmodel="created"
+                tbtitle="{{'employees.list.table.header.created.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" ng-show="!vm.employees || vm.employees.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="employee in vm.employees track by $index" class="clickable"
+              ui-sref="company.employees.detail({ employeeId: employee._id, companyId: vm.companyId })">
+              <td class="text-center" ui-sref-ignore ng-if="vm.isAssignRequest === false || vm.isDelete">
+                <div class="form-check" ng-if="!isCompany(employee.roles)">
+                  <input class="form-check-input" ng-checked="vm.listIds.includes(employee._id)"
+                    ng-click="vm.onSelect(employee._id)" type="checkbox" value="">
+                </div>
+              </td>
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td class="text-left" ng-bind="employee.number"></td>
+              <td class="w150" ng-bind="employee.last_name"></td>
+              <td class="w150" ng-bind="employee.first_name"></td>
+              <td class="w200" ui-sref-ignore>
+                <a href="mailTo:{{employee.email}}">{{employee.email}}</a>
+              </td>
+              <td class="w200" ng-bind="getFullCompanyName(employee.subsidiary.kind, employee.subsidiary.name)"></td>
+              <td class="w200" ng-bind="employee.e_department.name"></td>
+              <td class="w200" ng-bind="showMasterValue(masterdata.company_roles, employee.roles[0])"></td>
+              <td class="w200" ng-bind="employee.created | dateTimeNormal">
+              </td>
+
+              <td class="text-center w150" ui-sref-ignore>
+                <button class="btn btn-xs btn-primary"
+                  ui-sref="company.employees.edit({employeeId: employee._id, companyId: vm.companyId})"
+                  ng-if="vm.isAssignRequest === false || vm.isEdit">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                  {{'common.button.edit' | translate}}
+                </button>
+
+                <button ng-if="!isCompany(employee.roles) && (vm.isAssignRequest === false || vm.isDelete)"
+                  class="btn btn-xs btn-danger" ng-click="vm.remove(employee._id)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  {{'common.button.del' | translate}}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

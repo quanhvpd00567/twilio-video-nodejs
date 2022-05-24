@@ -1,0 +1,200 @@
+﻿<section class="content container-fluid">
+  <form name="vm.companyForm" class="form-edit employee-form" ng-submit="vm.updateOrCreate(vm.companyForm.$valid)"
+    novalidate autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <span class="page_title_clickable" ui-sref="admin.companies.list">
+                {{'companies.list.page.title' | translate}}
+              </span>&nbsp;>
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-back back="admin.companies.list"></button-back>
+            <button-save></button-save>
+          </div>
+        </div>
+
+        <div class="table-custom">
+
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <!-- <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.id.label' | translate}}
+                </th>
+                <td class="col-xs-10 form-group" show-errors  colspan="3">
+                  <input type="text" name="code" class="form-control" ng-model="vm.company.code" readonly>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.created.label' | translate}}
+                </th>
+                <td class="col-xs-10 form-group" show-errors  colspan="3">
+                  <input type="text" name="created" class="form-control" ng-model="vm.company.created | dateTimeNormal" readonly>
+                </td>
+              </tr> -->
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.kind.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <div class="form-check inline-block" ng-repeat="(key, item) in vm.master.kind_statuses">
+                    <input class="form-check-input" ng-value="item.id" ng-model="vm.company.kind"
+                      ng-checked="item.id === vm.company.kind" type="radio" name="kind" id="kind_{{item.id}}">
+                    <label class="form-check-label" for="kind_{{item.id}}">{{item.value}}</label>&nbsp;&nbsp;
+                  </div>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input type="text" name="name" class="form-control" ng-model="vm.company.name"
+                    placeholder="{{'companies.form.name.placeholder' | translate}}" required ng-maxlength="60"
+                    maxlength="60">
+                </td>
+                <td class="col-xs-4" colspan="3">
+                  <button class="btn btn-success btn-sm pull-left" ng-click="vm.onGetNumberCompany()"
+                    ng-disabled="!vm.company.name" type="button">法人番号を取得</button>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.number.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10  form-group" show-errors colspan="3">
+                  <input name="number" class="form-control" ng-model="vm.company.number"
+                    placeholder="{{'companies.form.number.placeholder' | translate}}" required>
+                  <a ng-if="vm.isCreate" href="https://www.houjin-bangou.nta.go.jp/" target="_blank">国税庁 法人番号公表サイト</a>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.last_name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input name="last_name" class="form-control" ng-model="vm.company.admin.last_name"
+                    placeholder="{{'companies.form.last_name.placeholder' | translate}}" required maxlength="16"
+                    ng-maxlength="16">
+                </td>
+
+                <th class="col-xs-2">
+                  {{'companies.form.first_name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input name="first_name" class="form-control" ng-model="vm.company.admin.first_name"
+                    placeholder="{{'companies.form.first_name.placeholder' | translate}}" required maxlength="16"
+                    ng-maxlength="16">
+                </td>
+              </tr>
+
+              <tr>
+                <!-- <th class="col-xs-2">
+                  {{'companies.form.department.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="{{vm.isCreate ? 'col-xs-4' : 'col-xs-10'}} form-group" show-errors colspan="{{vm.isCreate ? 0 : 3}}">
+                  <input name="department" class="form-control" ng-model="vm.company.admin.department" required
+                    placeholder="{{'companies.form.department.placeholder' | translate}}">
+                </td> -->
+
+                <th class="col-xs-2" ng-if="vm.isCreate">
+                  {{'companies.form.employee_no.label' | translate}}
+                </th>
+                <td class="col-xs-10 form-group" show-errors ng-if="vm.isCreate" colspan="3">
+                  <input name="employee_no" class="form-control" ng-model="vm.company.admin.employee_no"
+                    placeholder="{{'companies.form.employee_no.placeholder' | translate}}">
+                </td>
+
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.phone.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input name="phone" class="form-control" ng-model="vm.company.admin.phone"
+                    placeholder="{{'companies.form.phone.placeholder' | translate}}" required input-validator="tel"
+                    maxlength="13">
+                </td>
+              </tr>
+
+              <tr ng-if="vm.isCreate">
+                <th class="col-xs-2">
+                  {{'companies.form.email.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="email" name="email" class="form-control" ng-model="vm.company.admin.email"
+                    placeholder="{{'companies.form.email.placeholder' | translate}}" required input-validator="email">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <button-back back="admin.companies.list"></button-back>
+          <button-save></button-save>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.companyForm.name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.name.error.max_length' | translate}}</li>
+          </div>
+          <div ng-messages="vm.companyForm.number.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.number.error.required' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.companyForm.last_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.last_name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.last_name.error.max_length' | translate}}</li>
+          </div>
+          <div ng-messages="vm.companyForm.first_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.first_name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.first_name.error.max_length' | translate}}
+            </li>
+          </div>
+
+          <div ng-messages="vm.companyForm.password.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.password.error.required' | translate}}</li>
+            <li class="text-red" ng-message="minlength">{{'companies.form.password.error.invalid' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.password.error.invalid' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.companyForm.department.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.department.error.required' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.companyForm.phone.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.phone.error.required' | translate}}</li>
+            <li class="text-red" ng-message="tel">{{'companies.form.phone.error.invalid' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.companyForm.email.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.email.error.required' | translate}}</li>
+            <li class="text-red" ng-message="email">{{'companies.form.email.error.invalid' | translate}}</li>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

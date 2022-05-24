@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="ja"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="ja"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="ja"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ja" class="no-js" ng-strict-di ng-controller="AppController">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title page-title></title>
+    <meta name="description" content="{{description}}">
+    <meta name="fragment" content="!">
+
+    <!-- Apple META -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Fav Icon -->
+    <!-- <link href="/{{favicon}}" rel="shortcut icon" type="image/x-icon"> -->
+    <link rel="shortcut icon" type="image/x-icon">
+
+    <!-- Manifest -->
+    <link href="/manifest.json" rel="manifest">
+
+    <!-- Application CSS Files -->
+    {{#each cssFiles}}
+    <link rel="stylesheet" href="/{{this}}">{{/each}}
+  </head>
+
+  <body class="hold-transition">
+    <div id="wrapper-company-guest">
+      <section ui-view></section>
+      <!-- /.login-box -->
+    </div>
+
+    <div ng-include="'/modules/core/client/views/modals/commons/modal-confirm.client.view.html'"></div>
+
+    <noscript>
+      <style>
+        [ng\:cloak],
+        [ng-cloak],
+        [x-ng-cloak],
+        .ng-cloak,
+        .x-ng-cloak {
+          display: block !important;
+        }
+
+      </style>
+      <div class="alert alert-warning">
+        <strong>このページがJavascriptを求めています</strong>のでONにしてください。
+      </div>
+    </noscript>
+
+    <!--Embedding The User Object-->
+    <script type="text/javascript">
+      var user = {{{ user }}};
+    var env = "{{ env }}";
+
+    </script>
+
+    <!--Load The Socket.io File-->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+    <script type="text/ng-template" id="waiting.html">
+      <div class="modal-body">
+      <div class="form-group text-center mg20t mg20b">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+      </div>
+    </script>
+
+    <!--Application JavaScript Files-->
+    {{#each jsFiles}}
+    <script type="text/javascript" src="/{{this}}"></script>{{/each}}
+    <!--owasp config sync-->
+    <script type="text/javascript">
+    var sharedConfig = {{{ sharedConfig}}};
+    var masterdata = {{{  masterdata}}};
+    var translatedata = {{{ translatedata}}};
+
+
+    </script> {{#if livereload}}
+    <!--Livereload script rendered -->
+    <script type="text/javascript" src="{{host}}:35729/livereload.js"></script> {{/if}}
+
+  </body>
+
+</html>

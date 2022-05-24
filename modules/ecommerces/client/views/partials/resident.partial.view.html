@@ -1,0 +1,83 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex">
+      <h5><b>住民票の住所</b></h5>
+      <h6 class="flex-1 text-left" style="padding-left: 30px;">住民票の登録と異なる場合、寄付金控除の対象とならない可能性があります。</h6>
+    </div>
+    <div class="border-split"></div>
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+        <label>{{'ecommerce.follow.two.resident_zipcode.label' | translate}}<small class="text-red">*</small></label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+        <input type="text" class="form-control pay-input w100p" ng-model="vm.data.zipcode"
+          ng-change="vm.getAddressByZipcode(vm.data.zipcode, 'resident')" required name="zipcode" minlength="7"
+          ng-pattern="/^[0-9]*$/" ng-maxlength="7" maxlength="7" />
+        <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.zipcode.$error" role="alert">
+          <small class="text-red" ng-message="required">{{'ecommerce.follow.two.resident_zipcode.error.required' |
+            translate}}</small>
+          <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.resident_zipcode.error.invalid' |
+            translate}}</small>
+          <small class="text-red" ng-message="maxlength">{{'ecommerce.follow.two.resident_zipcode.error.invalid' |
+            translate}}</small>
+          <small class="text-red" ng-message="minlength">{{'ecommerce.follow.two.resident_zipcode.error.invalid' |
+            translate}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+        <label>{{'ecommerce.follow.two.resident_prefecture.label' | translate}}<small class="text-red">*</small></label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+        <!-- <input type="text" class="form-control pay-input w100p"
+          name="prefecture"
+          ng-model="vm.data.prefecture"
+          required /> -->
+
+        <select class="form-control" name="prefecture" ng-model="vm.data.prefecture" required>
+          <option value="{{prefecture}}" ng-selected="prefecture === vm.data.prefecture"
+            ng-repeat="prefecture in vm.prefectures">{{prefecture}}</option>
+        </select>
+
+        <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.prefecture.$error" role="alert">
+          <small class="text-red" ng-message="required">{{'ecommerce.follow.two.resident_prefecture.error.required' |
+            translate}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+        <label>{{'ecommerce.follow.two.resident_city.label' | translate}}<small class="text-red">*</small></label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+        <input type="text" class="form-control pay-input w100p" name="city" ng-model="vm.data.city" required />
+        <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.city.$error" role="alert">
+          <small class="text-red" ng-message="required">{{'ecommerce.follow.two.resident_city.error.required' |
+            translate}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+        <label>{{'ecommerce.follow.two.resident_address.label' | translate}}<small class="text-red">*</small></label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+        <input type="text" class="form-control pay-input w100p" name="address" ng-model="vm.data.address" required
+          placeholder="{{'ecommerce.follow.two.resident_address.placeholder' | translate}}" />
+        <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.address.$error" role="alert">
+          <small class="text-red" ng-message="required">{{'ecommerce.follow.two.resident_address.error.required' |
+            translate}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+        <label>{{'ecommerce.follow.two.resident_building.label' | translate}}</label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <input type="text" class="form-control pay-input w100p" name="buildding" ng-model="vm.data.building" />
+      </div>
+    </div>
+  </div>
+</div>

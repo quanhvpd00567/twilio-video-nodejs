@@ -1,0 +1,255 @@
+﻿<section class="container-ecommerce">
+  <h4>申し込み内容の確認</h4>
+
+  <!-- section 1 -->
+  <div class="d-flex">
+    <h5><b>申込み内容概要</b></h5>
+  </div>
+  <div class="border-split"></div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      寄付先の自治体
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4">
+      {{vm.order.municipality.prefecture}} {{vm.order.municipality.name}}
+    </div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      寄付額
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4">
+      {{vm.order.total | format_money :false : false}}(内ポイント利用{{vm.order.point | format_point}})
+    </div>
+  </div>
+  <div class="border-split"></div>
+  <div class="d-flex space-between mg12y">
+    <h5><b>寄付金の使い道</b></h5>
+  </div>
+  <div class="border-split"></div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      寄付金の使い道
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4">
+      <div><b>{{vm.order.using.name}}</b></div>
+      <div class="break-line">{{vm.order.using.description}}</div>
+    </div>
+  </div>
+  <div class="border-split"></div>
+  <div class="d-flex space-between mg12y">
+    <h5><b>寄付者情報</b></h5>
+  </div>
+  <div class="border-split"></div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      寄付者名
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4" ng-bind="vm.order.last_name + '　' + vm.order.first_name">
+    </div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      寄付者名(かな)
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4" ng-bind="vm.order.last_name_kana + '　' + vm.order.first_name_kana">
+    </div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      郵便番号(ハイフン無し)
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4" ng-bind="vm.order.zip_code | format_zipcode"></div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      住所
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4"
+      ng-bind="vm.order.prefecture + '　' + vm.order.city + vm.order.address + '　' + vm.order.building">
+    </div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      ふるさと納税関連書類のお届け先
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4">
+      <span ng-if="vm.order.doc_is_same_resident === 1">
+        住民票の住所と同じ
+      </span>
+      <span ng-if="vm.order.doc_is_same_resident === 2">
+        {{vm.order.doc_add_last_name + ' ' + vm.order.doc_add_first_name}}
+        <br />
+        {{vm.order.doc_add_zipcode | format_zipcode}}<br />
+        {{vm.order.doc_add_prefecture + vm.order.doc_add_city + vm.order.doc_add_address + vm.order.doc_add_building}}
+        <br />
+        ☎{{vm.order.doc_add_tel}}
+      </span>
+    </div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      電話番号(ハイフンあり)
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4">
+      {{vm.hashNumberPhone(vm.order.tel)}}
+    </div>
+  </div>
+  <div class="row mg12y d-flex">
+    <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+      メールアドレス
+    </div>
+    <div class="col-xs-8 col-sm-6 col-md-4">
+      <a href="mailto:{{vm.order.email}}" ng-bind="vm.order.email"></a>
+    </div>
+  </div>
+  <div class="border-split"></div>
+  <div class="d-flex space-between mg12y">
+    <h5><b>返礼品・お届け先</b></h5>
+  </div>
+  <div class="item-product" ng-repeat="item in vm.order.products track by $index">
+    <div class="border-split" style="border: 1px solid #cccc"></div>
+    <h5><b>{{item.product.name}}</b></h5>
+    <div class="row mg12y d-flex">
+      <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+        お届け先
+      </div>
+      <div class="col-xs-8 col-sm-6 col-md-4">
+        <span ng-if="item.is_same_resident === 1">
+          寄付者の住所と同じ
+        </span>
+        <span ng-if="item.is_same_resident === 2">
+          <span ng-if="vm.getName(item)">{{vm.getName(item)}}<br /></span>
+          <span ng-if="item.zipcode">{{item.zipcode | format_zipcode}}<br /></span>
+          <span ng-if="vm.getAddress(item)">{{vm.getAddress(item)}}<br /></span>
+          <span ng-if="item.tel">☎{{vm.hashNumberPhone(item.tel)}}</span>
+        </span>
+      </div>
+    </div>
+    <div class="row mg12y d-flex">
+      <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+        発送期日
+      </div>
+      <div class="col-xs-8 col-sm-6 col-md-4 break-line" ng-bind="item.product.ship_date"></div>
+    </div>
+    <div class="row mg12y d-flex">
+      <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+        単価
+      </div>
+      <div class="col-xs-8 col-sm-6 col-md-4">
+        <span class="price mg40r">
+          <span class="number" ng-bind="item.price | format_money""></span>
+        </span>
+      </div>
+    </div>
+      <div class=" row mg12y d-flex">
+        <div class="col-xs-4 col-sm-4 col-md-4 pay-label">数量</div>
+        <div class="col-xs-8 col-sm-6 col-md-4" ng-bind="item.quantity"></div>
+      </div>
+      
+      <div class=" row mg12y d-flex" ng-if="item.note_detail_address">
+        <div class="col-xs-4 col-sm-4 col-md-4 pay-label">のしの希望</div>
+        <div class="col-xs-8 col-sm-6 col-md-4 word-break break-line"
+          ng-bind="item.note_detail_address">
+        </div>
+      </div>
+
+      <div class=" row mg12y d-flex">
+        <div class="col-xs-4 col-sm-4 col-md-4 pay-label">配達希望</div>
+        <div class="col-xs-8 col-sm-6 col-md-4">
+          <span ng-if="!item.accepted_schedule">指定不可</span>
+          <span ng-if="item.accepted_schedule">{{item.accepted_schedule}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class=" row mg12y d-flex">
+            <div class="col-xs-4 col-sm-4 col-md-4 pay-label">数量</div>
+            <div class="col-xs-8 col-sm-6 col-md-4">{{item.accepted_schedule}}</div>
+      </div>
+    </div> -->
+
+    <div class="border-split"></div>
+    <div class="row mg12y mg0x d-flex">
+      <div class="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8 total-price">
+        <div class="row mg12y">
+          <div class="col-xs-5 col-md-6 pay-label">
+            小計：
+          </div>
+          <div class="col-xs-7 col-md-6 text-right">
+            <span class="price mg20r">
+              <span class="number">
+                {{vm.order.total | format_money :false : false}}
+              </span>
+              <span class="currency">円</span>
+            </span>
+          </div>
+        </div>
+        <div class="row mg12y d-flex">
+          <div class="col-xs-5 col-md-6 pay-label">
+            ポイント利用：
+          </div>
+          <div class="col-xs-7 col-md-6 text-right">
+            <span class="price mg20r">
+              <span class="number">{{vm.order.point | format_money :false : true}}</span>
+              <span class="currency">pt</span>
+            </span>
+          </div>
+        </div>
+        <div class="row mg12y d-flex">
+          <div class="col-xs-5 col-md-6 pay-label">
+            <b>合計：</b>
+          </div>
+          <div class="col-xs-7 col-md-6 text-right">
+            <span class="price mg20r">
+              <span class="number text-red"><b>{{vm.order.pay_amount | format_money :false : false}}</b></span>
+              <span class="currency">円</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="border-split"></div>
+    <div class="row mg12y d-flex">
+      <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+        ワンストップ特例申請
+      </div>
+      <div class="col-xs-8 col-sm-6 col-md-4">
+        <span ng-if="vm.order.apply_is_need === 1">希望しない</span>
+        <span ng-if="vm.order.apply_is_need !== 1">希望する ({{vm.order.apply_sex === 1 ? '男性' : '女性'}}
+          {{vm.getBirthDay(vm.order)}})</span>
+      </div>
+    </div>
+    <div class="row mg12y d-flex">
+      <div class="col-xs-4 col-sm-4 col-md-4 pay-label">
+        申込に関する備考
+      </div>
+      <div class="col-xs-8 col-sm-6 col-md-8 word-break break-line" ng-bind="vm.order.note_question"></div>
+    </div>
+    <div class="border-split"></div>
+
+    <div class="mg30y row content-center d-flex">
+      <div class="col-xs-6 col-md-3 action-btn">
+        <button class="btn btn-primary btn-sm w100p" ui-sref="company.ecommerces.home" type="button">
+          {{'ecommerce.products.detail.button.top' | translate}}
+        </button>
+      </div>
+      <div class="col-xs-6 col-md-3 action-btn">
+        <button class="btn btn-success btn-sm w100p" ui-sref="company.ecommerces.history" type="button">
+          {{'ecommerce.products.detail.button.back' | translate}}
+        </button>
+      </div>
+    </div>
+</section>
+
+<style scoped>
+  .card-header-custome {
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+    background-color: #ff0000e6;
+    text-align: center;
+    color: white;
+    padding: 8px;
+    border-radius: 3px 3px 0 0;
+    font-weight: bold;
+  }
+</style>

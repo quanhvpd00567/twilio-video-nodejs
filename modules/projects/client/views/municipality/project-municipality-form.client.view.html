@@ -1,0 +1,168 @@
+<section class="content container-fluid">
+  <form name="vm.projectForm" class="form-edit project-form" ng-submit="vm.update(vm.projectForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <span ng-if="!isAdminOrSubAdmin">
+                <span class="page_title_clickable" data-ui-sref="municipality.projects.list({municipalityId: vm.municipalityId})">
+                  {{'project.list.page.title' | translate}}
+                </span>&nbsp;>
+              </span>
+           
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-back back="municipality.projects.list"></button-back>
+            <button type="submit" class="btn btn-success btn-sm ng-binding">
+              <i class="fa fa-save"></i>
+              <span ng-if="vm.isNeedAuthorize === 'true'">申請登録</span>
+              <span ng-if="vm.isNeedAuthorize !== 'true'">保存</span>
+            </button>
+          </div>
+        </div>
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'project.form.name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" colspan="3" show-errors>
+                  <input type="text" name="name" class="form-control" ng-model="vm.project.name"
+                    placeholder="{{'project.form.name.placeholder' | translate}}" required maxlength="100">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'project.form.description.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" colspan="3" show-errors>
+                  <textarea name="description" class="form-control" rows="10" ng-model="vm.project.description"
+                    placeholder="{{'project.form.description.placeholder' | translate}}" required maxlength="20000">
+                  </textarea>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'project.form.image.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" colspan="3" show-errors>
+                  <div class="w200 pdn">
+                    <div class="panel panel-default panel-image">
+                      <img class="img-responsive clickable" src="{{vm.imageUrl}}"
+                        ng-click="handleShowImage(vm.imageUrl)">
+                      <div class="panel-footer text-center">
+                        <button ng-if="vm.project.image" class="btn btn-danger btn-sm" type="button"
+                          ng-click="vm.removeConstructImage()">
+                          <i class="fa fa-times" aria-hidden="true"></i></button>
+                        <button class="btn btn-warning btn-sm" type="button" ng-click="vm.modalConstructImage()">
+                          <i class="fa fa-edit" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                    <input type="text" name="image" class="form-control" ng-model="vm.project.image" required
+                      style="visibility: hidden;">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'project.form.start.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group datetime-picker" show-errors
+                  ng-if="!(vm.project._id && vm.numberOfComprojects)">
+                  <input type="text" name="start" datetime-picker="" datepicker-options="vm.dateOptionsStartTime"
+                    timepicker-options="timeOptions" ng-click="openCalendar($event, 'start')"
+                    placeholder="YYYY/MM/DD HH:mm" is-open="open.start" class="form-control" ng-model="vm.project.start"
+                    required ng-change="vm.onChangeStartTime()" readonly />
+                </td>
+                <td class="col-xs-4 form-group datetime-picker" ng-if="vm.project._id && vm.numberOfComprojects">
+                  <input type="text" name="start" datetime-picker="" timepicker-options="timeOptions"
+                    placeholder="YYYY/MM/DD HH:mm" class="form-control" ng-model="vm.project.start" disabled />
+                </td>
+                <th class="col-xs-2">
+                  {{'project.form.end.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group datetime-picker" show-errors
+                  ng-if="!(vm.project._id && vm.numberOfComprojects)">
+                  <input type="text" name="end" datetime-picker="" datepicker-options="vm.dateOptionsEndTime"
+                    timepicker-options="timeOptions" ng-click="openCalendar($event, 'end')"
+                    placeholder="YYYY/MM/DD HH:mm" is-open="open.end" class="form-control" ng-model="vm.project.end"
+                    required ng-change="vm.onChangeEndTime()" readonly n />
+                </td>
+                <td class="col-xs-4 form-group datetime-picker" ng-if="vm.project._id && vm.numberOfComprojects">
+                  <input type="text" name="end" datetime-picker="" timepicker-options="timeOptions"
+                    placeholder="YYYY/MM/DD HH:mm" class="form-control" ng-model="vm.project.end" disabled />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'project.form.target_amount.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="number" name="target_amount" class="form-control apply_form_input"
+                    ng-model="vm.project.target_amount"
+                    placeholder="{{'project.form.target_amount.placeholder' | translate}}" required
+                    input-validator="float">
+                  <span>{{'common.label.unit.money' | translate}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <button-back back="municipality.projects.list"></button-back>
+          <button type="submit" class="btn btn-success btn-sm ng-binding">
+            <i class="fa fa-save"></i>
+            <span ng-if="vm.isNeedAuthorize === 'true'">申請登録</span>
+            <span ng-if="vm.isNeedAuthorize !== 'true'">保存</span>
+          </button>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.projectForm.name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'project.form.name.error.required' | translate}}</li>
+          </div>
+          <div ng-messages="vm.projectForm.description.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'project.form.description.error.required' | translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.projectForm.image.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'project.form.image.error.required' | translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.projectForm.start.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'project.form.start.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="datetime">{{'project.form.start.error.datetime' | translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.projectForm.end.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'project.form.end.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="datetime">{{'project.form.end.error.datetime' | translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.projectForm.target_amount.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'project.form.target_amount.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="number">{{'project.form.target_amount.error.number' | translate}}
+            </li>
+            <li class="text-red" ng-message="float">{{'project.form.target_amount.error.number' | translate}}
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

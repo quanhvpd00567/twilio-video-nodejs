@@ -1,0 +1,163 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex">
+      <h5><b>自治体からのワンストップ特例申請書の送付</b></h5>
+    </div>
+    <div class="border-split"></div>
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-4 col-md-4 pay-label">
+        <label>{{'ecommerce.follow.two.apply_is_need.label' | translate}}<small class="text-red">*</small>
+          <p ng-if="vm.municInfo.is_apply_need === 1"><small class="text-red">※ワンストップ特例申請書の申込受付は終了しました。</small></p>
+        </label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+
+        <div class="option-group" style="margin: 0; display: inline-block;">
+          <input class="option-input" type="radio" name="apply_is_need" style="margin-right: 0 !important" value="2"
+            id="apply_is_need_ok" checked="vm.data.apply.apply_is_need === 2" ng-click="vm.onChangeIsNeed(2)"
+            ng-disabled="vm.municInfo.is_apply_need === 1" ng-model="vm.data.apply.apply_is_need">
+          <label for="apply_is_need_ok" style="cursor: pointer; font-weight: normal; margin: 0 12px 0 0">希望する</label>
+        </div>
+
+        <div class="option-group" style="margin: 0; display: inline-block;">
+          <input class="option-input" type="radio" name="apply_is_need" style="margin: 0 !important" value="1"
+            id="apply_is_need_no" ng-click="vm.onChangeIsNeed(1)" ng-model="vm.data.apply.apply_is_need"
+            checked="vm.data.apply.apply_is_need === 1">
+          <label for="apply_is_need_no" style="cursor: pointer; font-weight: normal; margin: 0 12px 0 0">希望しない</label>
+        </div>
+
+        <a target="_blank"
+          href="https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/mechanism/procedure.html"
+          style="float: right;">ワンストップ特例制度とは？</a>
+      </div>
+    </div>
+
+    <div ng-if="vm.data.apply.apply_is_need === 2">
+      <h6 class="flex-1 text-left">性別と生年月日を入力し、注意事項をご確認ください。</h6>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.apply_sex.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+
+          <div class="option-group" style="margin: 0; display: inline-block;">
+            <input class="option-input" type="radio" name="apply_sex" style="margin-right: 0 !important" value="1"
+              id="apply_sex_male" ng-click="vm.onChangeApplySex(1)" ng-model="vm.data.apply.apply_sex"
+              checked="vm.data.apply.apply_sex === 1">
+            <label for="apply_sex_male"
+              style="cursor: pointer; font-weight: normal; margin-right: 12px">{{'ecommerce.follow.two.apply_sex_male.label'
+              | translate}}</label>
+          </div>
+
+          <div class="option-group" style="margin: 0; display: inline-block;">
+            <input class="option-input" type="radio" name="apply_sex" value="2" id="apply_sex_female"
+              checked="vm.data.apply.apply_sex === 2" ng-click="vm.onChangeApplySex(2)"
+              ng-model="vm.data.apply.apply_sex">
+            <label for="apply_sex_female"
+              style="cursor: pointer; font-weight: normal;">{{'ecommerce.follow.two.apply_sex_female.label' |
+              translate}}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.apply_birthday.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-md-2 form-group mb-0" show-errors>
+          <input type="number" class="form-control pay-input w100p" name="apply_birthday_year"
+            ng-model="vm.data.apply.apply_birthday_year" required ng-pattern="/^[0-9]{4,4}$/" placeholder="年" min="1800"
+            max="{{vm.currentYear}}" />
+        </div>
+
+        <div class="col-md-1 form-group mb-0" show-errors>
+          <input type="number" class="form-control pay-input w100p" name="apply_birthday_month"
+            ng-model="vm.data.apply.apply_birthday_month" required ng-pattern="/^[0-9]{1,2}$/" min="1" max="12"
+            placeholder="月" />
+        </div>
+
+        <div class="col-md-1 form-group mb-0" show-errors>
+          <input type="number" class="form-control pay-input w100p" name="apply_birthday_day"
+            ng-model="vm.data.apply.apply_birthday_day" required ng-pattern="/^[0-9]{1,2}$/" placeholder="日" min="1"
+            max="31" />
+        </div>
+        <input type="hidden" name="apply_birthday" ng-model="vm.apply_birthday" check-birth-day
+          value="{{vm.data.apply.apply_birthday_year }}{{vm.data.apply.apply_birthday_month ? '/' + vm.data.apply.apply_birthday_month : '' }}{{vm.data.apply.apply_birthday_day ? '/' + vm.data.apply.apply_birthday_day : ''}}">
+      </div>
+
+      <div class="row mg12y align-center" ng-if="vm.isSaveClick && vm.isChangeIsNeed2">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label"></div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+
+          <div ng-messages="vm.follow2Info.apply_birthday.$error" role="alert">
+            <small class="text-red" ng-message="birth_day_invaild">{{'ecommerce.follow.two.apply_birthday.error.invalid'
+              | translate}}</small>
+          </div>
+
+          <div ng-messages="vm.follow2Info.apply_birthday_year.$error" role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.apply_birthday_y.error.required' |
+              translate}}</small>
+            <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.apply_birthday_y.error.invalid' |
+              translate}}</small>
+            <small class="text-red" ng-message="min">{{'ecommerce.follow.two.apply_birthday_y.error.invalid' |
+              translate}}</small>
+            <small class="text-red" ng-message="max">{{'ecommerce.follow.two.apply_birthday_y.error.invalid' |
+              translate}}</small>
+          </div>
+
+          <div ng-messages="vm.follow2Info.apply_birthday_month.$error" role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.apply_birthday_m.error.required' |
+              translate}}</small>
+            <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.apply_birthday_m.error.invalid' |
+              translate}}</small>
+            <small class="text-red" ng-message="min">{{'ecommerce.follow.two.apply_birthday_m.error.invalid' |
+              translate}}</small>
+            <small class="text-red" ng-message="max">{{'ecommerce.follow.two.apply_birthday_m.error.invalid' |
+              translate}}</small>
+          </div>
+
+          <div ng-messages="vm.follow2Info.apply_birthday_day.$error" role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.apply_birthday_d.error.required' |
+              translate}}</small>
+            <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.apply_birthday_d.error.invalid' |
+              translate}}</small>
+            <small class="text-red" ng-message="min">{{'ecommerce.follow.two.apply_birthday_d.error.invalid' |
+              translate}}</small>
+            <small class="text-red" ng-message="max">{{'ecommerce.follow.two.apply_birthday_d.error.invalid' |
+              translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row d-flex align-center">
+        <div
+          style="background: yellow; width: 100%; height: 30px; line-height: 30px; margin: 0 10px 0 10px; border: 1px solid black"
+          class="text-center">注意事項</div>
+      </div>
+      <div class="row mg12y align-center">
+        <div style="margin: 0 10px 0 10px; background-color: #fff; border: 1px solid #ccc; padding: 0 10px 20px 10px"
+          class="word-break break-line">
+          ワンストップ特例制度を受けるためには、寄付を行った年の翌年1月10日までにワンストップ特例申請書を寄付先の自治体に提出する必要があります。また、ワンストップ特例制度を利用するには、以下の条件を満たす必要があります。
+
+          1. 1年間の寄付先は5自治体以内である
+          1つの自治体に複数回寄付をしても1カウントになります。ほかに4自治体への寄付が可能です。
+          2. 確定申告を行う必要のない給与所得者である（年収2,000万円を超える所得者や、医療費控除等で確定申告が必要な場合、ワンストップ特例制度は使用できません）
+          3. 寄付毎に寄付先の自治体にワンストップ特例申請書と必要書類を合わせて提出する
+          ※必要書類:個人番号確認および本人確認書類"
+        </div>
+      </div>
+      <div class="row d-flex align-center">
+        <div class="col-md-12 text-center">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" ng-click="vm.onApplyIsAccept()"
+              ng-model="vm.data.apply.apply_is_accept" id="apply_is_accept">
+            <label class="form-check-label" for="apply_is_accept" style="cursor: pointer;">
+              注意事項を確認しました
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

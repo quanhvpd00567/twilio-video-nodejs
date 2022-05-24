@@ -1,0 +1,9 @@
+{
+    "mobile.common.server.error": "A server error has occurred.",
+    "mobile.users.signup.uuid.required": "uuid is required",
+    "mobile.users.signup.name.required": "name is required",
+    "mobile.users.signup.ip.required": "ip is required",
+    "mobile.coupe.home.uuid.required": "uuid is required",
+    "mobile.coupe.home.coupeId.required": "coupeId is required",
+    "mobile.coupe.home.targetId.required": "targetId is required"
+}

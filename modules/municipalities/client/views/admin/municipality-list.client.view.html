@@ -1,0 +1,139 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.municipalities.create">
+        <span class="glyphicon glyphicon-plus"></span> 登録
+      </a>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'municipalities.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'municipalities.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'municipalities.list.search.prefecture.label' | translate}}</label>
+          <select name="type" class="form-control" ng-model="vm.condition.prefecture">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in vm.master.prefectures" value="{{item}}"> {{item}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'municipalities.list.search.create_from.label' | translate}}</label>
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min" class="form-control"
+            ng-model="vm.condition.created_min" ng-change="vm.onChangeCreatedMin()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'municipalities.list.search.create_to.label' | translate}}</label>
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max" class="form-control"
+            ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
+              vm.condition.created_max || 'null'
+            }}); vm.onChangeCreatedMax()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <!-- <th class="w50 text-center" ng-click="vm.handleSortChanged('code')" tbmodel="code"
+                tbtitle="{{'municipalities.list.table.header.code.label' | translate}}" table-order
+                tbcondition="vm.condition"></th> -->
+              <th class="w200" ng-click="vm.handleSortChanged('name')" tbmodel="name"
+                tbtitle="{{'municipalities.list.table.header.name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('user_email')" tbmodel="user_email"
+                tbtitle="{{'municipalities.list.table.header.email.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('prefecture')" tbmodel="prefecture"
+                tbtitle="{{'municipalities.list.table.header.prefecture.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+                <th class="w200" ng-click="vm.handleSortChanged('phone')" tbmodel="phone"
+                tbtitle="{{'municipalities.list.table.header.phone.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150 text-center" ng-click="vm.handleSortChanged('created')" tbmodel="created"
+                tbtitle="{{'municipalities.list.table.header.created.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" ng-show="!vm.municipalities || vm.municipalities.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="municipality in vm.municipalities track by $index" class="clickable"
+              ui-sref="admin.municipalities.detail({ municId: municipality._id })">
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <!-- <td class="text-center" ng-bind="municipality.code"></td> -->
+              <td ng-bind="municipality.name"></td>
+              <td>
+                <a href="mailto:{{municipality.user_email}}">{{municipality.user_email}}</a>
+              </td>
+              <td class="w150 text-left" ng-bind="municipality.prefecture"></td>
+              <td class="w150 text-left" ng-bind="municipality.phone"></td>
+              <td class="w150 text-center" ng-bind="municipality.created | dateTimeNormal"></td>
+
+              <td class="text-center w150" ui-sref-ignore>
+                <button class="btn btn-xs btn-primary" ui-sref="admin.municipalities.edit({municId: municipality._id})">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                  {{'common.button.edit' | translate}}
+                </button>
+                <button class="btn btn-xs btn-danger" ng-click="vm.remove(municipality._id)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  {{'common.button.del' | translate}}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

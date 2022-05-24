@@ -1,0 +1,8 @@
+<button ng-hide="!back" type="button" ng-click="handleBackScreen()" class="btn btn-default btn-sm">
+  <i class="fa fa-chevron-left"></i>
+  {{'common.button.back' | translate}}
+</button>
+<button class="btn btn-primary btn-sm" ui-sref="{{state}}({{params}})" title="編集">
+  <i class="fa fa-edit"></i>
+  {{'common.button.edit' | translate}}
+</button>

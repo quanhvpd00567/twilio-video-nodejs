@@ -1,0 +1,151 @@
+<section class="content container-fluid">
+  <form name="vm.SettingForm" class="form-edit notice-form" ng-submit="vm.update(vm.SettingForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <form-title></form-title>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-save></button-save>
+          </div>
+        </div>
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'setting_version.form.version.ios_link.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="5">
+                  <input type="text" name="ios_link" class="form-control" ng-model="vm.setting.app.ios_link" required
+                    autocomplete="off" />
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'setting_version.form.version.android_link.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="5">
+                  <input type="text" name="android_link" class="form-control" ng-model="vm.setting.app.android_link"
+                    required autocomplete="off" />
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'setting_version.form.version.ios_version.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-2 form-group" show-errors>
+                  <input type="text" name="ios_version" class="form-control" ng-model="vm.setting.app.ios_version"
+                    required autocomplete="off" pattern="[0-9]+.[0-9]+?"
+                    ng-blur="vm.handlerStartEndVersionBlur(vm.TYPE.IOS)" />
+                </td>
+                <th class="col-xs-2">
+                  {{'setting_version.form.version.ios_version_require.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-2 form-group" show-errors>
+                  <input type="text" name="ios_version_require" class="form-control"
+                    ng-model="vm.setting.app.ios_version_require" required autocomplete="off" pattern="[0-9]+.[0-9]+?"
+                    ng-blur="vm.handlerStartEndVersionBlur(vm.TYPE.IOS)" />
+                </td>
+                <td class="col-xs-2">
+                  <button type="button" ng-click="vm.pushVersion('ios')"
+                    class="btn btn-info btn-sm">{{'setting_version.form.version.button.update_notification' |
+                    translate}}</button>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">{{'setting_version.form.version.android_version.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-2 form-group" show-errors>
+                  <input type="text" name="android_version" class="form-control"
+                    ng-model="vm.setting.app.android_version" required autocomplete="off" pattern="[0-9]+.[0-9]+?"
+                    ng-blur="vm.handlerStartEndVersionBlur(vm.TYPE.ANDROID)" />
+                </td>
+                <th class="col-xs-2">
+                  {{'setting_version.form.version.android_version_require.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-2 form-group" show-errors>
+                  <input type="text" name="android_version_require" class="form-control"
+                    ng-model="vm.setting.app.android_version_require" required autocomplete="off"
+                    pattern="[0-9]+.[0-9]+?" ng-blur="vm.handlerStartEndVersionBlur(vm.TYPE.ANDROID)" />
+                </td>
+                <td class="col-xs-2">
+                  <button type="button" ng-click="vm.pushVersion('android')"
+                    class="btn btn-info btn-sm">{{'setting_version.form.version.button.update_notification' |
+                    translate}}</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-group mgnb mg50b text-center">
+          <button-save></button-save>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.SettingForm.ios_link.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'setting_version.form.version.ios_link.error.required' |
+              translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.SettingForm.android_link.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'setting_version.form.version.android_link.error.required' |
+              translate}}</li>
+          </div>
+          <div ng-messages="vm.SettingForm.ios_version.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'setting_version.form.version.ios_version.error.required' |
+              translate}}
+            </li>
+            <li class="text-red" ng-message="pattern">{{'setting_version.form.version.ios_version.error.pattern' |
+              translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.SettingForm.ios_version_require.$error" role="alert">
+            <li class="text-red" ng-message="required">
+              {{'setting_version.form.version.ios_version_require.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="pattern">{{'setting_version.form.version.ios_version_require.error.pattern'
+              |translate}}
+            </li>
+            <li class="text-red" ng-message="start_end_version">
+              {{'setting_version.form.version.ios_version_require.error.start_end_version'
+              |translate}}
+            </li>
+          </div>
+
+          <div ng-messages="vm.SettingForm.android_version.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'setting_version.form.version.android_version.error.required' |
+              translate}}</li>
+            <li class="text-red" ng-message="pattern">{{'setting_version.form.version.android_version.error.pattern' |
+              translate}}</li>
+          </div>
+          <div ng-messages="vm.SettingForm.android_version_require.$error" role="alert">
+            <li class="text-red" ng-message="required">
+              {{'setting_version.form.version.android_version_require.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="pattern">
+              {{'setting_version.form.version.android_version_require.error.pattern'
+              |translate}}
+            </li>
+            <li class="text-red" ng-message="start_end_version">
+              {{'setting_version.form.version.android_version_require.error.start_end_version'
+              |translate}}
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </form>
+</section>

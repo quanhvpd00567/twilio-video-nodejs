@@ -1,0 +1,49 @@
+<!-- modal template -->
+<div class="modal-header-confirm">
+    <h4 class="modal-title-confirm">確認</h4>
+</div>
+<div class="modal-body text-center modal-confirm" id="modal-body" >
+    <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="w150">法人番号</th>
+                <th class="w300">商号又は名称</th>
+                <th>所在地</th>
+                <th class="w100">{{vm.xxxxx}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="4" ng-show="vm.corporations.length === 0">
+                    {{'subsidiaries.form.controller.message.notfound' | translate}}
+                </td>
+            </tr>
+            <tr ng-repeat="item in vm.corporations track by $index" >
+                <td class="text-left w150" ng-bind="item.corporateNumber"></td>
+                <td class="text-left w300">
+                    <div class="furigana" style="font-size: 75%">{{item.furigana}}</div>
+                    {{item.name}}
+                </td>
+                <td class="text-left">{{item.prefectureName + item.cityName + item.streetNumber}}</td>
+                <td class="text-center w100">
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="onSelectNumber(item)" >
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        選択する
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <uib-pagination class="mg10t" total-items="vm.condition.total"
+        ng-model="vm.condition.page" max-size="5" boundary-links="true"
+        items-per-page="vm.condition.limit" ng-click="vm.handlePageChanged()" previous-text="前"
+        next-text="次" first-text="最初" last-text="最後">
+      </uib-pagination>
+
+      <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+    </div>
+</div>
+<!-- <div class="modal-footer">
+    <button class="btn btn-warning btn-sm" type="button" ng-click="closeThisDialog()">キャンセル</button>
+</div> -->

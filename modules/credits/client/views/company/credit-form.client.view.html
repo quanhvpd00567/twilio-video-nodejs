@@ -1,0 +1,141 @@
+<section class="content container-fluid">
+  <form name="vm.creditForm" ng-submit="vm.save(vm.creditForm.$valid)" novalidate>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="row mg10b">
+          <div class="col-xs-12">
+            <form-title></form-title>
+          </div>
+        </div>
+        <div class="table-custom">
+          <table class="table table-detail">
+            <tbody>
+              <tr>
+              <tr>
+                <th class="col-xs-4">
+                  カード番号
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-8" colspan="3">
+                  <input type="text" name="cardNumber" class="form-control" ng-model="vm.credit.cardNumber"
+                    placeholder="1234567890123456" autocomplete="off" minlength="12" maxlength="20" required>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-4">
+                  有効期限
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <select class="form-control" name="month" required ng-model="vm.credit.month"
+                      ng-options="item for item in vm.months" ng-change="vm.handleExpiryChanged()">
+                      <option>月</option>
+                    </select>
+                    <span class="input-group-addon">月</span>
+                  </div>
+                </td>
+                <td class="col-xs-4">
+                  <div class="input-group">
+                    <select class="form-control" name="year" required ng-model="vm.credit.year"
+                      ng-options="item for item in vm.years" ng-change="vm.handleExpiryChanged()">
+                      <option>年</option>
+                    </select>
+                    <span class="input-group-addon"> 年</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-4">
+                  セキュリティコード
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-8" colspan="3">
+                  <input type="text" name="cvv" class="form-control" ng-model="vm.credit.cvv" placeholder="123"
+                    autocomplete="off" input-validator="number" minlength="3" maxlength="5" required>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-4">
+                </th>
+                <td class="col-xs-4 text-center" colspan="3">
+                  <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fa fa-plus"></i>
+                    <span>登録</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="col-index">#</th>
+                <th class="w200" ng-click="vm.handleSortChanged('cardNumber')" tbmodel="cardNumber"
+                  tbtitle="cardNumber" table-order tbcondition="vm.condition"></th>
+                <th class="w150" ng-click="vm.handleSortChanged('cardExpire')" tbmodel="cardExpire"
+                  tbtitle="cardExpire" table-order tbcondition="vm.condition"></th>
+                <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="7" ng-show="!vm.cards || vm.cards.length === 0">
+                  {{'common.table.no_data_available' | translate}}
+                </td>
+              </tr>
+              <tr ng-repeat="card in vm.cards track by $index">
+                <td class="text-center">
+                  {{ $index + 1 }}
+                </td>
+                <td class="w150" ng-bind="card.cardNumber"></td>
+                <td class="w150" ng-bind="card.cardExpire"></td>
+                <td class="text-center w150" ui-sref-ignore>
+                  <button type="button" class="btn btn-xs btn-primary" ng-click="vm.pay(card)">
+                    <i class="fa fa-jpy" aria-hidden="true"></i>
+                    Payment
+                  </button>
+                  <button type="button" class="btn btn-xs btn-danger" ng-click="vm.remove(card)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    {{'common.button.del' | translate}}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="messages" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.creditForm.cardNumber.$error" role="alert">
+            <li class="text-red" ng-message="required">カード番号を入力してください。</li>
+            <li class="text-red" ng-message="number">カード番号は12～20の半角数字を入力してください。</li>
+            <li class="text-red" ng-message="minlength">カード番号は12～20の半角数字を入力してください。</li>
+            <li class="text-red" ng-message="maxlength">カード番号は12～20の半角数字を入力してください。</li>
+          </div>
+          <div ng-messages="vm.creditForm.year.$error" role="alert">
+            <li class="text-red" ng-message="required">有効期限 (月)を入力してください。</li>
+            <li class="text-red" ng-message="expiry">有効期限が切れる</li>
+          </div>
+          <div ng-messages="vm.creditForm.month.$error" role="alert">
+            <li class="text-red" ng-message="required">有効期限 (年)を入力してください。</li>
+          </div>
+          <div ng-messages="vm.creditForm.cvv.$error" role="alert">
+            <li class="text-red" ng-message="required">セキュリティコードを入力してください。</li>
+            <li class="text-red" ng-message="number">セキュリティコードは3～5桁の半角数字を入力してください。</li>
+            <li class="text-red" ng-message="minlength">セキュリティコードは3～5桁の半角数字を入力してください。</li>
+            <li class="text-red" ng-message="maxlength">セキュリティコードは3～5桁の半角数字を入力してください。</li>
+          </div>
+        </div>
+        <div class="form-group mgnb mg20t mg50b text-center">
+          <button type="button" ui-sref="company.plans.list" class="btn btn-default btn-sm">
+            <i class="fa fa-chevron-left"></i> 戻る </button>
+          <button type="submit" class="btn btn-success btn-sm">
+            <i class="fa fa-save"></i>
+            <span ng-if="vm.is_credit !== true">登録</span>
+            <span ng-if="vm.is_credit === true">保存</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

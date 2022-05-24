@@ -1,0 +1,132 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="company.subsidiaries.create"
+        ng-if="vm.isAssignRequest === false">
+        <span class="glyphicon glyphicon-plus"></span> 登録
+      </a>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'subsidiaries.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'subsidiaries.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'subsidiaries.list.search.kind.label' | translate}}</label>
+          <select name="type" class="form-control" ng-model="vm.condition.kind">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in vm.master.kind_statuses" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'subsidiaries.list.search.created_min.label' | translate}}</label>
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="vm.dateOptionsStartMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min" class="form-control"
+            ng-model="vm.condition.created_min" ng-change="vm.onChangeStartMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'subsidiaries.list.search.created_max.label' | translate}}</label>
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="vm.dateOptionsStartMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max" class="form-control"
+            ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
+              vm.condition.start_max || 'null'
+            }}); vm.onChangeStartMax()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th class="w200 text-center" ng-click="vm.handleSortChanged('number')" tbmodel="number"
+                tbtitle="{{'subsidiaries.list.table.header.number.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('name')" tbmodel="name"
+                tbtitle="{{'subsidiaries.list.table.header.name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <!-- <th class="w150 text-center" ng-click="vm.handleSortChanged('kind')" tbmodel="tel"
+                tbtitle="{{'subsidiaries.list.table.header.kind.label' | translate}}" table-order
+                tbcondition="vm.condition"></th> -->
+              <th class="w150 text-center" ng-click="vm.handleSortChanged('created')" tbmodel="name"
+                tbtitle="{{'subsidiaries.list.table.header.created.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" ng-show="!vm.subsidiaries || vm.subsidiaries.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="subsidiary in vm.subsidiaries track by $index" class="clickable"
+              ui-sref="company.subsidiaries.detail({ subsidiaryId: subsidiary._id, companyId: vm.companyId })">
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td class="text-center" ng-bind="subsidiary.number"></td>
+              <td class="w200" ng-bind="getFullCompanyName(subsidiary.kind, subsidiary.name)"></td>
+              <!-- <td class="text-center w150" ng-bind="showMasterValue(vm.master.kind_statuses, subsidiary.kind)"></td> -->
+              <td class="text-center w200" ng-bind="subsidiary.created | dateTimeNormal"></td>
+
+              <td class="text-center w150" ui-sref-ignore>
+                <button class="btn btn-xs btn-primary"
+                  ui-sref="company.subsidiaries.edit({subsidiaryId: subsidiary._id, companyId: vm.companyId})"
+                  ng-if="vm.isAssignRequest === false || vm.isEdit">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                  {{'common.button.edit' | translate}}
+                </button>
+
+                <button ng-if="vm.isShowButtonDelete(subsidiary) && (vm.isAssignRequest === false || vm.isDelete)"
+                  class="btn btn-xs btn-danger" ng-click="vm.remove(subsidiary._id)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  {{'common.button.del' | translate}}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

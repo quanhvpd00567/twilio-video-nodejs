@@ -1,0 +1,82 @@
+﻿<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span class="page_title_clickable" ui-sref="admin.companies.list">{{'companies.list.page.title' |
+              translate}}</span> >
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.companies.list" noback="admin.companies.create" state="admin.companies.edit"
+            params="{companyId: vm.company._id}"></button-edit>
+        </div>
+      </div>
+
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.code.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.company.code"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="getFullCompanyName(vm.company.kind, vm.company.name)"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.number.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.company.number"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.kind.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="showMasterValue(vm.master.kind_statuses, vm.company.kind)"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.admin.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.company.admin.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.email.label' | translate }}</th>
+              <td class="col-xs-10">
+                <a href="mailto:{{vm.company.admin.email}}">{{vm.company.admin.email}}</a>
+              </td>
+            </tr>
+            <!-- <tr>
+              <th class="col-xs-2">{{ 'companies.detail.department.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.company.admin.department"></td>
+            </tr> -->
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.phone.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.company.admin.phone"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'companies.detail.created.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.company.created | dateTimeNormal"></td>
+            </tr>
+            <!-- <tr>
+              <th class="col-xs-2">{{ 'companies.detail.admin.label' | translate }}</th>
+              <td class="col-xs-10" ng-if="vm.company.admin">
+                <a
+                  data-ui-sref="admin.companies.account-detail({companyId: vm.company._id, adminId: vm.company.admin._id})">
+                  {{vm.company.admin.email}}
+                </a>
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row mg10b">
+      <div class="col-xs-4">
+      </div>
+      <div class="col-xs-4 text-center">
+        <button-edit back="admin.companies.list" noback="admin.companies.create" state="admin.companies.edit"
+          params="{companyId: vm.company._id}"></button-edit>
+      </div>
+    </div>
+  </div>
+</section>

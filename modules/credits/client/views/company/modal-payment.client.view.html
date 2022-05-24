@@ -1,0 +1,32 @@
+<table class="table table-detail">
+<tbody>
+    <tr>
+        <th class="col-xs-4">
+            cardNumber
+        </th>
+        <td class="col-xs-8" colspan="3">
+            {{card.cardNumber}}
+        </td>
+        </tr>
+    <tr>
+    <th class="col-xs-4">
+        Amount
+        <span class="text-red">*</span>
+    </th>
+    <td class="col-xs-8" colspan="3">
+        <input type="number" ng-model="amount" placeholder="5000" required>
+    </td>
+    </tr>
+    <tr>
+    <th class="col-xs-4">
+    </th>
+    <td class="col-xs-4" colspan="3">
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.payment()">
+            <i class="fa fa-jpy"></i>
+            <span>Payment</span>
+        </button>
+        <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">Close</button>
+    </td>
+    </tr>
+</tbody>
+</table>

@@ -1,0 +1,14 @@
+<div class="title-group mg10b">
+  <h4 class="clickable mgn title-group__inline-title" ng-click="vm.open = !vm.open">
+    <span ng-show="!vm.open" class="fa fa-chevron-down"></span>
+    <span ng-show="vm.open" class="fa fa-chevron-up"></span>
+    {{'common.label.search_title' | translate}}
+  </h4>
+  <div class="title-group__inline-buttons">
+    <button class="btn btn-warning btn-sm" ng-click="vm.handleClearCondition()">
+      <i class="fa fa-refresh" aria-hidden="true"></i> {{'common.button.refresh_search' | translate}}
+    </button>
+    <i class="fa fa-spinner fa-pulse fa-lg fa-fw mg20l" ng-show="vm.busy"></i>
+  </div>
+  <div ng-transclude></div>
+</div>

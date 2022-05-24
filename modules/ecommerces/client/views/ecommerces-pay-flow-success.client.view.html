@@ -1,0 +1,48 @@
+﻿<section class="container-ecommerce">
+  <h4>申し込みと支払いの完了</h4>
+  <p>
+    申し込み手続きと支払が完了しました。<br />
+    申し込み完了のメールが配信されますので、ご確認お願い致します。
+  </p>
+
+  <div class="d-flex" ng-if="vm.municipality">
+    <h5><b>ご不明点等のお問い合わせ先</b></h5>
+  </div>
+
+  <div class="row mg12y mg0x d-flex" ng-if="vm.municipality">
+    <div class="col-xs-12 total-price">
+      <div class="row mg12y d-flex" ng-if="vm.municipality.contact_name">
+        <div class="col-xs-3 col-sm-4 col-md-4 pay-label">
+          担当：
+        </div>
+        <div class="col-xs-9 col-sm-6 col-md-4">
+          {{vm.municipality.contact_name}}
+        </div>
+      </div>
+      <div class="row mg12y d-flex" ng-if="vm.municipality.contact_tel">
+        <div class="col-xs-3 col-sm-4 col-md-4 pay-label">
+          TEL：
+        </div>
+        <div class="col-xs-9 col-sm-6 col-md-4">
+          {{vm.municipality.contact_tel}}
+        </div>
+      </div>
+      <div class="row mg12y d-flex" ng-if="vm.municipality.contact_mail">
+        <div class="col-xs-3 col-sm-4 col-md-4 pay-label">
+          Eメール：
+        </div>
+        <div class="col-xs-9 col-sm-6 col-md-4">
+          <a href="mailto:example@gmail.com">{{vm.municipality.contact_mail}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row d-flex content-center mg30y">
+    <div class="col-xs-6 col-sm-3 action-btn">
+      <button class="btn btn-primary btn-sm w100p" ui-sref="company.ecommerces.home">
+        TOPへ戻る
+      </button>
+    </div>
+  </div>
+</section>

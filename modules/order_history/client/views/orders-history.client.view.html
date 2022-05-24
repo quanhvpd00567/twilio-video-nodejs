@@ -1,0 +1,168 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default" ng-repeat="munic in vm.docs track by $index">
+      <div class="panel-heading" role="tab" ng-id="munic.municCode">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#accordion" href="{{'#' + munic.municCode}}"
+            aria-expanded="false" ng-click="vm.getMunicDetail(munic.municId)" aria-controls="{{munic.municCode}}">
+            <b>{{munic.municName}}</b>
+          </a>
+        </h4>
+        <div class="pay-history pay-month">
+          <span>今月：</span>
+          <span class="price">{{munic.totalMonthPrice | format_money }}</span>
+        </div>
+        <div class="pay-history pay-total">
+          <span>合計：</span>
+          <span class="price">{{munic.totalPrice | format_money}}</span>
+        </div>
+      </div>
+      <div id="{{munic.municCode}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <!-- history-count -->
+          <div class="history-count">
+            <div class="row d-flex bdbt">
+              <h5 class="flex-1"><b>販売数の多い寄付商品</b></h5>
+              <button class="btn btn-sm mg10r"
+                ng-class="{'btn-selected': munic.isFilterCountByMonth, 'btn-unselected': !munic.isFilterCountByMonth }"
+                ng-click="vm.changeFilterCountMunic(munic.municId, true)">
+                今月
+              </button>
+              <button class="btn btn-sm"
+                ng-class="{'btn-selected': !munic.isFilterCountByMonth, 'btn-unselected': munic.isFilterCountByMonth }"
+                ng-click="vm.changeFilterCountMunic(munic.municId, false)">
+                合計
+              </button>
+            </div>
+            <div class="history-record-number bdbt row" ng-repeat="product in munic.topProductsCount track by $index">
+              <div class="text-right col-xs-2 col-sm-1">{{$index + 1}}位</div>
+              <div class="col-xs-6 col-sm-8">
+                <a ui-sref="municipality.products.detail({ productId: product._id._id })">{{product._id.name}}</a>
+              </div>
+              <div class="text-right col-xs-2 col-sm-2 pd1r">
+                {{product.count | format_money :false : true}}
+              </div>
+              <div class="col-xs-1 col-sm-1">
+                個
+              </div>
+            </div>
+          </div>
+          <!-- history-total-price -->
+          <div class="history-total-price mg20t">
+            <div class="row d-flex bdbt">
+              <h5 class="flex-1"><b>売上総額が高い寄付商品</b></h5>
+              <button class="btn btn-sm mg10r"
+                ng-class="{'btn-selected': munic.isFilterPriceByMonth, 'btn-unselected': !munic.isFilterPriceByMonth }"
+                ng-click="vm.changeFilterPriceMunic(munic.municId, true)">
+                今月
+              </button>
+              <button class="btn btn-sm"
+                ng-class="{'btn-selected': !munic.isFilterPriceByMonth, 'btn-unselected': munic.isFilterPriceByMonth }"
+                ng-click="vm.changeFilterPriceMunic(munic.municId, false)">
+                合計
+              </button>
+            </div>
+            <div class="history-record bdbt row" ng-repeat="product in munic.topProductsPrice track by $index">
+              <div class="text-right col-xs-2 col-sm-1">{{$index + 1}}位</div>
+              <div class="col-xs-6 col-sm-8">
+                <a ui-sref="municipality.products.detail({ productId: product._id._id })">{{product._id.name}}</a>
+              </div>
+              <div class="text-right col-xs-2 col-sm-2 pd1r">
+                {{product.sum | format_money :false : true}}
+              </div>
+              <div class="col-xs-1 col-sm-1">
+                円
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style scoped>
+  .panel-body {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .panel-body button {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .panel-heading {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  .panel-heading>h4 {
+    flex: 1;
+  }
+
+  .panel-heading>.pay-history {
+    display: flex;
+    min-width: 260px;
+    justify-content: space-between;
+  }
+
+  .panel-heading>.pay-total>.price {
+    font-size: 20px;
+    color: red;
+  }
+
+  .panel-heading>.pay-history>span {
+    margin: 0 8px 0 20px;
+  }
+
+  @media (min-width: 767px) {
+    .panel-heading {
+      flex-direction: row;
+    }
+
+    .panel-body {
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+
+    .panel-body button {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+
+  .bdbt {
+    border-bottom: 1px solid #ccc;
+    padding: 8px;
+
+  }
+
+  .btn-selected {
+    background-color: #9e9e9ee0;
+    border-color: #9e9e9e;
+  }
+
+  .btn-selected:hover,
+  .btn-selected:active,
+  .btn-selected.hover {
+    background-color: #9e9e9e;
+  }
+
+  .btn-unselected {
+    background-color: white;
+    border-color: #9e9e9e;
+  }
+
+  .btn-unselected:hover,
+  .btn-unselected:active,
+  .btn-unselected.hover {
+    background-color: gainsboro;
+  }
+</style>

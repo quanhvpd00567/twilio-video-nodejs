@@ -1,0 +1,72 @@
+<nav id="header-ecommerce" class="d-flex pd16x pd10y" ng-controller="HeaderEcommerceController as vm">
+  <div class="header-wrapper">
+    <a ui-sref="company.ecommerces.home" class="h70">
+      <img src="/modules/core/client/img/brand/logo.png" class="img-responsive h100p" alt="">
+    </a>
+    <ul class="nav navbar-nav d-flex align-center">
+      <li class="w150 lock-out-color">
+        <a href="#" class="d-flex flex-column text-center text-dark pd8" ng-click="logout()">
+          <i class="fa fa-lock font-5xl" aria-hidden="true"></i>
+          ログアウト
+        </a>
+      </li>
+      <li class="w150 point-color mg20l">
+        <a href="#" ui-sref="company.ecommerces.history" class="d-flex flex-column text-center text-dark pd8">
+          <i class="fa fa-history font-5xl" aria-hidden="true"></i>
+          注文履歴
+        </a>
+      </li>
+      <li class="w150 cart-color mg20l">
+        <a href="#" ui-sref="company.ecommerces.cart" class="d-flex flex-column text-center text-dark pd8">
+          <i class="fa fa-shopping-cart font-5xl" aria-hidden="true"></i>
+          カート
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<style scoped>
+  #header-ecommerce {
+    border-bottom: 1.5px solid #c2c1c1;
+  }
+
+  .header-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+  }
+
+  .header-wrapper>ul {
+    width: 100%;
+  }
+
+  .header-wrapper>ul>li {
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+    .header-wrapper {
+      justify-content: space-between;
+    }
+
+    .header-wrapper>ul {
+      width: initial
+    }
+  }
+
+  .lock-out-color {
+    background-color: #faafb2;
+  }
+
+  .point-color {
+    background-color: #ffe699;
+  }
+
+  .cart-color {
+    background-color: #f9caac;
+  }
+</style>

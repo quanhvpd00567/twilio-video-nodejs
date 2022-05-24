@@ -1,0 +1,66 @@
+﻿<section class="container-ecommerce">
+  <h4>寄付金の使い道を選択</h4>
+  <p>寄付の申し込みありがとうございます。<br />
+    寄付金の使い道を選択してください。</p>
+
+  <div class="card">
+    <div class="card-body">
+      <div ng-if="vm.usings && vm.usings.length === 0">
+        <span>寄付金の使い道がありません</span>
+      </div>
+
+      <div class="bg-white mg12b pd5" ng-repeat="using in vm.usings">
+        <div class="row">
+          <div class="col-xs-12 mg30b">
+            <div class="pay-method">
+              <input class="form-input-radio mnw15" type="radio" id="using_{{using._id}}" name="pay-method"
+                value="{{using._id}}" ng-change="vm.onChangeUsing(using._id)" ng-model="vm.usingSelected" />
+              <label style="cursor: pointer; margin-bottom: 0;" for="using_{{using._id}}">{{using.name}}</label>
+            </div>
+            <div class="pay-detail break-line" ng-bind-html="using.description | myParseUrl"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div ng-if="vm.isError">
+    <label class="text-red">寄付金の使い道を選択してください</label>
+  </div>
+
+  <div class="row d-flex content-center mg30b">
+    <div class="col-xs-6 col-sm-3 action-btn">
+      <button class="btn btn-default btn-sm w100p" style="background-color: #e7e7e7;" ui-sref="company.ecommerces.cart"
+        type="button">
+        戻る
+      </button>
+    </div>
+    <div class="col-xs-6 col-sm-3 action-btn" ng-if="vm.usings.length > 0">
+      <!-- ui-sref="company.ecommerces.pay-confirm" -->
+      <button class="btn btn-primary btn-sm w100p" type="button" ng-click="vm.onClickRedirectToFollow2()">
+        次へ
+      </button>
+    </div>
+  </div>
+
+</section>
+
+<style scoped>
+  .pay-method {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+  }
+
+  .form-input-radio {
+    margin: 0 !important;
+    margin-right: 12px !important;
+  }
+
+  .pay-detail {
+    max-width: 800px;
+    padding: 0 10px;
+    margin: auto;
+  }
+</style>

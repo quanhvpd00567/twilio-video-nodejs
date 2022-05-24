@@ -1,0 +1,97 @@
+<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span class="page_title_clickable" ui-sref="admin.notices.list">
+              {{'notice.list.page.title' | translate}}
+            </span>&nbsp;>
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.notices.list" noback="admin.notices.create" state="admin.notices.edit"
+            params="{noticeId: vm.noticeId}" ng-if="!vm.NoticesHelper.isHideEditButton(vm.notice)"></button-edit>
+          <button-back back="admin.notices.list" noback="admin.notices.create"
+            ng-if="vm.NoticesHelper.isHideEditButton(vm.notice)">
+          </button-back>
+        </div>
+      </div>
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                {{'notice.detail.title.label' | translate}}
+              </th>
+              <td class="col-xs-10" colspan="3" ng-bind="vm.notice.title"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'notice.detail.content.label' | translate}}
+              </th>
+              <td class="col-xs-10 word-break break-line" colspan="3" ng-bind-html="vm.notice.content | myParseUrl">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'notice.detail.start_time.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.notice.start_time | dateTimeNormal">
+              </td>
+              <th class="col-xs-2">
+                {{'notice.form.end_time.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.notice.end_time | dateTimeNormal">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'notice.detail.target.label' | translate}}
+              </th>
+              <td class="col-xs-10 form-group" colspan="3"
+                ng-bind="showMasterValue(masterdata.notice_targets, vm.notice.target)">
+              </td>
+            </tr>
+
+            <!-- municipalities -->
+            <tr ng-if="vm.notice.target === vm.NOTICE_TARGET.CONDITION">
+              <th class="col-xs-2">
+                {{'notice.detail.municipalities.label' | translate}}
+              </th>
+              <td class="col-xs-10 form-group" colspan="3" ng-bind="vm.notice.municipalitiesName">
+              </td>
+            </tr>
+            <!-- companies -->
+            <tr ng-if="vm.notice.target === vm.NOTICE_TARGET.CONDITION">
+              <th class="col-xs-2">
+                {{'notice.detail.companies.label' | translate}}
+              </th>
+              <td class="col-xs-10 form-group" colspan="3" ng-bind="vm.notice.companiesName">
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-2">
+                {{'notice.detail.created.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.notice.created | dateTimeNormal" colspan="3"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row mg10b">
+        <div class="col-xs-4">
+        </div>
+        <div class="col-xs-4 text-center">
+          <button-edit back="admin.notices.list" noback="admin.notices.create" state="admin.notices.edit"
+            params="{noticeId: vm.noticeId}" ng-if="!vm.NoticesHelper.isHideEditButton(vm.notice)"></button-edit>
+          <button-back back="admin.notices.list" noback="admin.notices.create"
+            ng-if="vm.NoticesHelper.isHideEditButton(vm.notice)">
+          </button-back>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

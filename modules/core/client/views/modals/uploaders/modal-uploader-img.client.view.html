@@ -1,0 +1,91 @@
+<div class="modal-header">
+  <h4 class="modal-title mgn mg5t mg5b">ファイルアップロード</h4>
+</div>
+<div class="modal-body" id="modal-body">
+  <div class="form-group d-md-none">
+    <span class="btn btn-default btn-upload-file">
+      <input type="file" nv-file-select uploader="uploader" accept="image/*" multiple />
+    </span>
+  </div>
+
+  <div class="row d-sm-down-none m50t" nv-file-drop="" uploader="uploader">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">ファイル選択</div>
+        <div class="panel-body">
+          <div class="col-md-6">
+            <div class="form-group">
+              <span class="btn btn-default btn-upload-file">
+                <input type="file" nv-file-select uploader="uploader" accept="image/*"
+                  multiple />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m20t">
+    <div class="col-xs-12">
+      <div class="panel panel-default" ng-if="uploader.isHTML5">
+        <div class="panel-heading">アップロード進捗</div>
+        <div class="panel-body">
+          <p>ファイル数: {{ uploader.queue.length }}</p>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }">
+            </div>
+          </div>
+          <button type="button" class="btn btn-success btn-sm" ng-click="uploader.uploadAll()"
+            ng-disabled="!uploader.getNotUploadedItems().length">
+            <span class="glyphicon glyphicon-upload"></span> 全てアップロード
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" ng-click="uploader.clearQueue()"
+            ng-disabled="!uploader.queue.length">
+            <span class="glyphicon glyphicon-trash"></span> 全て削除
+          </button>
+          <table class="table table-bordered table-hover mg20t">
+            <thead>
+              <tr>
+                <th>ファイル名</th>
+                <th class="col-sm-1" ng-show="uploader.isHTML5">サイズ</th>
+                <th class="col-sm-2" ng-show="uploader.isHTML5">進捗</th>
+                <th class="col-sm-1">状態</th>
+                <th class="col-button">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in uploader.queue">
+                <td><strong>{{ item.file.name }}</strong></td>
+                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                <td ng-show="uploader.isHTML5">
+                  <div class="progress" style="margin-bottom: 0;">
+                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                  <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                  <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                </td>
+                <td nowrap>
+                  <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()"
+                    ng-disabled="item.isReady || item.isUploading || item.isSuccess" title="アップロード">
+                    <span class="glyphicon glyphicon-upload"></span>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()" title="削除"
+                    ng-disabled="item.isUploading || item.isSuccess">
+                    <span class="glyphicon glyphicon-trash"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning" type="button" ng-click="confirm(vm.results)">閉じる</button>
+</div>

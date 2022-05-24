@@ -1,0 +1,199 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'com_projects.municipality.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'com_projects.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.send_status.label' | translate}}</label>
+          <select name="send_status" class="form-control" ng-model="vm.condition.send_status">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in masterdata.sent_statuses" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.pay_status.label' | translate}}</label>
+          <select name="pay_status" class="form-control" ng-model="vm.condition.pay_status">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in masterdata.pay_statuses" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.magazine.label' | translate}}</label>
+          <select name="magazine" class="form-control" ng-model="vm.condition.magazine">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in masterdata.magazine_types" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.start_min.label' | translate}}</label>
+          <input type="text" name="start_time_min" datetime-picker="" datepicker-options="vm.dateOptionsStartTimeMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'start_time_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.start_time_min" class="form-control"
+            ng-model="vm.condition.start_time_min" ng-change="vm.onChangeStartTimeMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.start_max.label' | translate}}</label>
+          <input type="text" name="start_time_max" datetime-picker="" datepicker-options="vm.dateOptionsStartTimeMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'start_time_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.start_time_max" class="form-control"
+            ng-model="vm.condition.start_time_max" ng-change="vm.handleConditionChanged(false, 'start_time_max', {{
+              vm.condition.start_time_max || 'null'
+            }}); vm.onChangeStartTimeMax()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.end_min.label' | translate}}</label>
+          <input type="text" name="end_time_min" datetime-picker="" datepicker-options="vm.dateOptionsEndTimeMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'end_time_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.end_time_min" class="form-control"
+            ng-model="vm.condition.end_time_min" ng-change="vm.onChangeEndTimeMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'com_projects.list.search.end_max.label' | translate}}</label>
+          <input type="text" name="end_time_max" datetime-picker="" datepicker-options="vm.dateOptionsEndTimeMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'end_time_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.end_time_max" class="form-control"
+            ng-model="vm.condition.end_time_max" ng-change="vm.handleConditionChanged(false, 'end_time_max', {{
+              vm.condition.end_time_max || 'null'
+            }}); vm.onChangeEndTimeMax()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th class="w100 text-center" ng-click="vm.handleSortChanged('number')" tbmodel="number"
+                tbtitle="{{'com_projects.list.table.header.number.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('event_name')" tbmodel="event_name"
+                tbtitle="{{'com_projects.list.table.header.event_name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('project_name')" tbmodel="project_name"
+                tbtitle="{{'com_projects.list.table.header.project_name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150" ng-click="vm.handleSortChanged('company_name')" tbmodel="company_name"
+                tbtitle="{{'com_projects.list.table.header.company_name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center" ng-click="vm.handleSortChanged('total')" tbmodel="total"
+                tbtitle="{{'com_projects.list.table.header.total.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <!-- <th class="w100">{{'com_projects.list.table.header.method.label' | translate}}</th>
+              <th class="w150 text-center">{{'com_projects.list.table.header.send_status.label' | translate}}</th>
+              <th class="w150 text-center">{{'com_projects.list.table.header.pay_status.label' | translate}}</th>
+              <th class="w100 text-center" ng-click="vm.handleSortChanged('zipcode')" tbmodel="zipcode"
+                tbtitle="{{'com_projects.list.table.header.zipcode.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100" ng-click="vm.handleSortChanged('address')" tbmodel="address"
+                tbtitle="{{'com_projects.list.table.header.address.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100" ng-click="vm.handleSortChanged('name')" tbmodel="name"
+                tbtitle="{{'com_projects.list.table.header.name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th> -->
+              <th class="w100 text-center" ng-click="vm.handleSortChanged('start')" tbmodel="start"
+                tbtitle="{{'com_projects.list.table.header.start.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center" ng-click="vm.handleSortChanged('end')" tbmodel="end"
+                tbtitle="{{'com_projects.list.table.header.end.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <!-- <th class="w100 text-center">{{'com_projects.list.table.header.magazine.label' | translate}}</th> -->
+              <!-- <th class="text-center w100">{{'common.table.header.action' | translate}}</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="11" ng-show="!vm.com_projects || vm.com_projects.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="comproject in vm.com_projects track by $index">
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td class="text-center" ng-bind="comproject.number"></td>
+              <td ng-bind="comproject.event_name"></td>
+              <td ng-bind="comproject.project_name"></td>
+              <td ng-bind="getFullCompanyName(comproject.company_kind, comproject.company_name)"></td>
+              <td class="text-center"
+                ng-bind="comproject.total | parse_donation_amount: comproject.status : masterdata.EVENT_STATUS.FINISHED">
+              </td>
+              <!-- <td class="text-center" ng-bind="showMasterValue(masterdata.payment_methods, comproject.method)"></td>
+              <td class="text-left editable" ui-sref-ignore>
+                {{showMasterValue(masterdata.sent_statuses, comproject.send_status)}}
+                <i class="fa fa-pencil clickable" aria-hidden="true"
+                  ng-click="vm.updateSendStatus(comproject._id, comproject.send_status)"></i>
+              </td>
+              <td class="text-left editable" ui-sref-ignore>
+                {{showMasterValue(masterdata.pay_statuses, comproject.pay_status)}}
+                <i class="fa fa-pencil clickable" aria-hidden="true"
+                  ng-click="vm.updatePayStatus(comproject._id, comproject.pay_status)"></i>
+              </td>
+              <td class="text-center" ng-bind="comproject.zipcode"></td>
+              <td ng-bind="comproject.address"></td>
+              <td ng-bind="comproject.name"></td> -->
+              <td class="text-center" ng-bind="comproject.start | dateTimeNormal"></td>
+              <td class="text-center" ng-bind="comproject.end | dateTimeNormal"></td>
+              <!-- <td class="text-center" ng-bind="showMasterValue(masterdata.magazine_types, comproject.magazine)"></td> -->
+              <!-- <td class="text-center" ui-sref-ignore>
+                <button class="btn btn-xs btn-primary"
+                  ui-sref="municipality.com_projects.detail({ comProjectId: comproject._id })">
+                  <i class="fa fa-info" aria-hidden="true"></i>
+                  {{'common.button.detail' | translate}}
+                </button>
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

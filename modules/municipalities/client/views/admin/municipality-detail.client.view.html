@@ -1,0 +1,144 @@
+﻿<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span class="page_title_clickable" ui-sref="admin.municipalities.list">{{'municipalities.list.page.title' |
+              translate}}</span> >
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.municipalities.list" noback="admin.municipalities.create" state="admin.municipalities.edit"
+            params="{municId: vm.municipality._id}" ng-if="!vm.isHideEditButton()"></button-edit>
+          <button-back back="admin.municipalities.list" noback="admin.municipalities.create"  ng-if="vm.isHideEditButton()">
+          </button-back>
+        </div>
+      </div>
+
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+             <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.id.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.code"></td>
+            </tr> 
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.prefecture.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.prefecture"></td>
+            </tr>
+           
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.name"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.admin_name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.admin.last_name + ' ' + vm.municipality.admin.first_name"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.department.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.admin.department"></td>
+            </tr>
+            
+             <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.phone.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.admin.phone"></td>
+            </tr>
+
+             <!-- <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.fax.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.fax"></td>
+            </tr>
+            -->
+            <!-- <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.last_name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.admin.last_name"></td>
+            </tr> -->
+            <!-- <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.phone.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.admin.phone"></td>
+            </tr> -->
+           
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.method.label' | translate }}</th>
+              <td class="col-xs-10">
+                <span ng-repeat="method in vm.municipality.methods">{{showMasterValue(vm.master.payment_methods, method)}} &nbsp;	&nbsp;</span>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.bank_code.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.bank_code"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.bank_name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.bank_name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.branch_code.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.branch_code"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.branch_name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.branch_name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.bank_type.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="showMasterValue(vm.master.bank_types, vm.municipality.bank_type)"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.bank_number.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.bank_number"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.bank_owner.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.bank_owner"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.bank_owner_kana.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.bank_owner_kana"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.email.label' | translate }}</th>
+              <td class="col-xs-10">
+                <a href="mailto:{{vm.municipality.admin.email}}">{{vm.municipality.admin.email}}</a>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.fee.label' | translate }}</th>
+              <td class="col-xs-10"> {{vm.municipality.fee}}%</td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.created.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.municipality.created | dateTimeNormal"></td>
+            </tr>
+            <!-- <tr>
+              <th class="col-xs-2">{{ 'municipalities.detail.email.label' | translate }}</th>
+              <td class="col-xs-10">
+                <a href="mailto:{{vm.municipality.admin.email}}">
+                  {{vm.municipality.admin.email}}
+                </a>
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row mg10b">
+      <div class="col-xs-4">
+      </div>
+      <div class="col-xs-4 text-center">
+        <button-edit back="admin.municipalities.list" noback="admin.municipalities.create" state="admin.municipalities.edit"
+          params="{municId: vm.municipality._id}" ng-if="!vm.isHideEditButton()"></button-edit>
+        <button-back back="admin.municipalities.list" noback="admin.municipalities.create" ng-if="vm.isHideEditButton()">
+        </button-back>
+      </div>
+    </div>
+  </div>
+</section>

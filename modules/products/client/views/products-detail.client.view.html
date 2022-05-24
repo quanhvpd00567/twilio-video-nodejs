@@ -1,0 +1,218 @@
+﻿<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span ng-if="!(vm.isAdmin || vm.requestItemId)">
+              <span class="page_title_clickable" ui-sref="municipality.products.list">{{'products.list.page.label' |
+                translate}}</span> >
+            </span>
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right" ng-if="!vm.requestItemId">
+          <button-edit back="municipality.products.list" noback="municipality.products.create"
+            state="municipality.products.edit" params="{productId: vm.product._id}" ng-if="!vm.isAdmin">
+          </button-edit>
+
+          <button-edit back="municipality.products.list" noback="municipality.products.create"
+            state="municipality.products.edit"
+            params="{productId: vm.product._id, municipalityId: vm.municipalityId, key: vm.key, isNeedAuthorize: vm.isNeedAuthorize}"
+            ng-if="vm.isAdmin && vm.key === masterdata.FEATURE_MUNICIPALITY.UPDATE_PRODUCT">
+          </button-edit>
+
+          <!-- <button-back back="municipality.products.list" noback="municipality.products.create"
+            ng-if="vm.isAdmin && vm.key === masterdata.FEATURE_MUNICIPALITY.UPDATE_PRODUCT">
+          </button-back> -->
+          
+        </div>
+        <div class="col-xs-6 text-right" ng-if="vm.requestItemId">
+          <button-back back="municipality.requests_application.list" noback="municipality.requests_application.list"></button-back>
+        </div>
+      </div>
+
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.sell_status.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="showMasterValue(masterdata.sel_status, vm.product.sell_status)"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.show_status.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="showMasterValue(masterdata.show_status, vm.product.show_status)"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.code.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.code"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.name.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.price.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.price | format_money2"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.capacity.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.capacity"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.expire_status.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-if="vm.product.expire === 2">
+                  {{showMasterValue(masterdata.expire_status, vm.product.expire)}}
+                </span>
+                <span ng-if="vm.product.expire === 1">{{ vm.product.expire_detail}}</span>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.operator.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.operator"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.stock_quantity.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-if="vm.product.is_set_stock_quantity === 1">
+                {{showMasterValue(masterdata.stock_quantity_status, vm.product.is_set_stock_quantity)}}
+                </span>
+                <span ng-if="vm.product.is_set_stock_quantity === 2">{{ vm.product.stock_quantity}}個</span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.max_quantity.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-if="vm.product.is_set_max_quantity === 1">
+                {{showMasterValue(masterdata.max_quantity_status, vm.product.is_set_max_quantity)}}
+                </span>
+                <span ng-if="vm.product.is_set_max_quantity === 2">{{ vm.product.max_quantity}}個</span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.deadline.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-if="vm.product.is_deadline === 1">
+                {{showMasterValue(masterdata.deadline_status, vm.product.is_deadline)}}
+                </span>
+                <span ng-if="vm.product.is_deadline === 2">{{ vm.product.deadline}}</span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.avatar.label' | translate }}</th>
+              <td class="col-xs-9">
+                <div class="w200 pdn">
+                  <div class="panel panel-default" style="margin-bottom: 0px;">
+                    <img class="img-responsive clickable" src="{{vm.imageUrl}}" ng-click="handleShowImage(vm.imageUrl)">
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.pictures.label' | translate }}</th>
+              <td class="col-xs-9">
+                <table ng-if="vm.product.pictures &&  vm.product.pictures.length > 0">
+                  <tbody>
+                    <tr>
+                      <td ng-repeat="img in vm.product.pictures">
+                        <div class="w150 pdn">
+                          <div class="panel panel-default" style="margin-bottom: 0px;">
+                            <img class="img-responsive clickable" src="{{img}}" ng-click="handleShowImage(img)">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.description.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.description"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.ship_method.label' | translate }}</th>
+              <td class="col-xs-9">
+                {{showMasterValue(masterdata.ship_methods, vm.product.ship_method)}}
+                
+                <!-- <span ng-if="vm.product.ship_method !== 3">
+                  <br>
+                  ※発送後、ご不在等によりお受け取りいただけず、保管期限を経過した場合は発送元に返送となります。返礼品の再発送はいたしませんのでご了承ください。また、受取人様のご都合で保管期限以降に受け取られた場合も、返礼品の交換、再発送等のご要望には対応いたしかねます。
+                </span> -->
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.ship_date.label' | translate }}</th>
+              <td class="col-xs-10 word-break break-line" ng-bind-html="vm.product.ship_date"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.ship_company.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.ship_company"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.accepted_schedule.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-if="vm.product.is_accept_schedule === 1">
+                  {{showMasterValue(masterdata.accept_schedule_status, vm.product.is_accept_schedule)}}
+                  </span>
+                <span ng-if="vm.product.is_accept_schedule === 2" ng-repeat="item in vm.product.accepted_schedule">{{item}}<br></span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.except_place.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-repeat="item in vm.product.except_place_options">
+                  <span ng-if="item === 1">{{showMasterValue(masterdata.except_place_options, item)}}</span>
+                  <span ng-if="item === 2">{{vm.product.except_place}}</span>
+                  <br>
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.except_date.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.except_date"></td>
+            </tr>
+
+            <tr ng-if="vm.municInfo.is_setting_gift_bows">
+              <th class="col-xs-3">{{ 'products.detail.is_accept_noshi.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="showMasterValue(masterdata.accept_noshi_status, vm.product.is_accept_noshi)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="row mg10b">
+      <div class="col-xs-4">
+      </div>
+      <div class="text-center col-xs-4" ng-if="!vm.requestItemId">
+        <button-edit back="municipality.products.list" noback="municipality.products.create"
+          state="municipality.products.edit" params="{productId: vm.product._id}" ng-if="!vm.isAdmin">
+        </button-edit>
+        <button-edit back="municipality.products.list" noback="municipality.products.create"
+          state="municipality.products.edit"
+          params="{productId: vm.product._id, municipalityId: vm.municipalityId, key: vm.key, isNeedAuthorize: vm.isNeedAuthorize}"
+          ng-if="vm.isAdmin && vm.key === masterdata.FEATURE_MUNICIPALITY.UPDATE_PRODUCT">
+        </button-edit>
+      </div>
+      <div class="text-center col-xs-4" ng-if="vm.requestItemId">
+        <button-back back="municipality.requests_application.list" noback="municipality.requests_application.list"></button-back>
+      </div>
+    </div>
+
+  </div>
+</section>

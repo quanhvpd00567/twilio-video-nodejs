@@ -1,0 +1,70 @@
+{
+  "name": "astena-mft",
+  "description": "ふふるシステム",
+  "homepage": "https://tattaka.fitness",
+  "license": "license",
+  "ignore": [
+    "/.*",
+    "node_modules",
+    "bower_components",
+    "composer.json",
+    "documentation"
+  ],
+  "dependencies": {
+    "angular": "~1.5.0",
+    "angular-animate": "~1.5.0",
+    "angular-bootstrap": "~1.2.1",
+    "angular-messages": "~1.5.0",
+    "angular-mocks": "~1.5.0",
+    "angular-resource": "~1.5.0",
+    "angular-ui-notification": "~0.2.0",
+    "angular-ui-router": "~0.2.18",
+    "ng-dialog": "ngDialog#^1.4.0",
+    "lodash": "^4.17.10",
+    "angular-file-upload": "^2.5.0",
+    "angular-i18n": "^1.7.3",
+    "angular-sanitize": "1.5.11",
+    "angular-moment": "^1.3.0",
+    "validator-js": "^10.9.0",
+    "angular-ui-select": "^0.19.8",
+    "bootstrap-ui-datetime-picker": "^2.6.3",
+    "bootstrap-slider": "*",
+    "bootstrap-colorpicker": "^2.5.1",
+    "bootstrap": "^3.4.0",
+    "bootstrap-select": "^1.13.18",
+    "jquery": "3.3.1",
+    "moment": "^2.18.1",
+    "fastclick": "^1.0.6",
+    "Flot": "flot#^0.8.3",
+    "fullcalendar": "^3.4.0",
+    "ion.rangeSlider": "ionrangeslider#^2.2.0",
+    "jvectormap": "^1.2.2",
+    "jquery-knob": "^1.2.13",
+    "morris.js": "^0.5.1",
+    "PACE": "pace#^1.0.2",
+    "select2": "^4.0.3",
+    "jquery-slimscroll": "slimscroll#^1.3.8",
+    "jquery-sparkline": "^2.1.3",
+    "font-awesome": "^4.7.0",
+    "Ionicons": "ionicons#^2.0.1",
+    "jquery-ui": "1.11.4",
+    "checklist-model": "^1.0.0",
+    "chart.js": "^2.9.3",
+    "angular-chart.js": "^1.1.1",
+    "ngmap": "1.18.4",
+    "ckeditor": "#full/4.15.0",
+    "angular-ckeditor": "^1.0.3"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.css",
+        "dist/css/bootstrap-theme.css",
+        "less/bootstrap.less"
+      ]
+    },
+    "jquery": {
+      "main": []
+    }
+  }
+}

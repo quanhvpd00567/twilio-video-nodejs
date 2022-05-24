@@ -1,0 +1,8 @@
+<section class="content container-fluid">
+  <div class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">エラー</span>
+    <span ng-if="vm.errorMessage" ng-bind="vm.errorMessage"></span>
+    <span ng-if="!vm.errorMessage">要求の形式が正しくありません</span>
+  </div>
+</section>

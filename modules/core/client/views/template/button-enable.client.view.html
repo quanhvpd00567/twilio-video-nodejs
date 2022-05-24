@@ -1,0 +1,8 @@
+<div class="btn-group">
+  <label class="btn btn-default"
+    ng-class="{ 'btn-danger': !model, 'active': !model, 'btn-sm': size === 'sm', 'btn-xs': size === 'xs', 'btn-md': size === 'md' }"
+    ng-model="model" uib-btn-radio="false">{{off || '無効'}}</label>
+  <label class="btn btn-default"
+    ng-class="{ 'btn-success': model, 'btn-sm': size === 'sm', 'btn-xs': size === 'xs', 'btn-md': size === 'md' }"
+    ng-model="model" uib-btn-radio="true">{{on || '有効'}}</label>
+</div>

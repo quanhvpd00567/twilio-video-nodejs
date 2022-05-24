@@ -1,0 +1,43 @@
+<!-- modal template -->
+<section class="content container-fluid">
+  <table-search>
+    <table-search-button>
+      <button class="btn btn-default btn-sm" type="button" ng-click="closeThisDialog()">閉じる</button>
+    </table-search-button>
+  </table-search>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th>表示項目名</th>
+              <th class="text-center w150">表示/非表示</th>
+              <th class="text-center w100">順次</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in dialog.data | orderBy: 'sort'">
+              <td class="text-center">{{ item.sort }}</td>
+              <td>{{ item.label }}</td>
+              <td class="text-center w150">
+                <button class="btn btn-primary btn-xs" ng-click="item.show = true;"
+                  ng-show="!item.fix && !item.show">表示</button>
+                <button class="btn btn-danger btn-xs" ng-click="item.show = false;"
+                  ng-show="!item.fix && item.show">非表示</button>
+              </td>
+              <td class="text-center w100">
+                <button class="btn btn-default btn-xs" ng-click="dialog.data = switchUp(dialog.data, item)"
+                  ng-hide="item.fix"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                <button class="btn btn-default btn-xs" ng-click="dialog.data = switchDown(dialog.data, item)"
+                  ng-hide="item.fix"><span class="glyphicon glyphicon-chevron-down"></span></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

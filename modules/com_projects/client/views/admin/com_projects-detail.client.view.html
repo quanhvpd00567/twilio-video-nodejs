@@ -1,0 +1,192 @@
+﻿<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span class="page_title_clickable" ui-sref="admin.com_projects.list">{{'com_projects.list.page.title' |
+              translate}}</span> >
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-back back="admin.com_projects.list" noback="company.com_projects.create"></button-back>
+        </div>
+      </div>
+
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.number.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.number"></td>
+              <th class="col-xs-2">{{ 'com_projects.detail.total.label' | translate }}</th>
+              <td class="col-xs-4"
+                ng-bind="vm.com_project.total | parse_donation_amount: vm.com_project.status : masterdata.EVENT_STATUS.FINISHED">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.event_name.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.event.event_name"></td>
+              <th class="col-xs-2">{{ 'com_projects.detail.project_name.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.project.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.company_name.label' | translate }}</th>
+              <td class="col-xs-4"
+                ng-bind="getFullCompanyName(vm.com_project.company.kind, vm.com_project.company.name) "></td>
+              <th class="col-xs-2">{{ 'com_projects.detail.municipality_name.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.municipality.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.magazine.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="showMasterValue(masterdata.magazine_types, vm.com_project.event.magazine)">
+              </td>
+              <th class="col-xs-2">{{ 'com_projects.detail.method.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="showMasterValue(masterdata.payment_methods, vm.com_project.event.method)">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.status.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="showMasterValue(masterdata.event_statuses, vm.com_project.status)"></td>
+              <th class="col-xs-2">{{ 'com_projects.detail.pay_status.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="showMasterValue(masterdata.pay_statuses, vm.com_project.pay_status)"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.send_status.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="showMasterValue(masterdata.sent_statuses, vm.com_project.send_status)"></td>
+              <th class="col-xs-2">{{ 'com_projects.detail.name.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.event.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.zipcode.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.event.zipcode">
+              </td>
+              <th class="col-xs-2">{{ 'com_projects.detail.address.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.event.address"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'com_projects.detail.start.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.start | dateTimeNormal"></td>
+              <th class="col-xs-2">{{ 'com_projects.detail.end.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.end | dateTimeNormal"></td>
+            </tr>
+            <tr>
+
+              <th class="col-xs-2">{{ 'com_projects.detail.number_of_participants.label' | translate }}</th>
+              <td class="col-xs-4" ng-bind="vm.com_project.number_of_participants | format_person">
+              </td>
+              <th class="col-xs-2">{{ 'com_projects.detail.created.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.com_project.created | dateTimeNormal"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <h4>{{'com_projects.detail.participants_list.title' | translate}}</h4>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <!-- <button type="button" class="btn btn-primary btn-sm" ng-disabled="!vm.paticipants || vm.paticipants.length === 0" ng-click="vm.export()">
+        <i class="fa fa-download"></i> 
+        {{'com_projects.detail.participants.btn.export.label' | translate}}
+      </button> -->
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'com_projects.detail.paticipants.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'com_projects.detail.paticipants.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+
+    </table-search-content>
+  </table-search>
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th class="w200" ng-click="vm.handleSortChanged('user_name')" tbmodel="user_name"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.user_name.label' | translate}}"
+                table-order tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('subsidiary_name')" tbmodel="subsidiary_name"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.subsidiary_name.label' | translate}}"
+                table-order tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('user_email')" tbmodel="email"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.user_email.label' | translate}}"
+                table-order tbcondition="vm.condition"></th>
+              <th class="w100 text-right" ng-click="vm.handleSortChanged('steps')" tbmodel="steps"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.steps.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-right" ng-click="vm.handleSortChanged('point')" tbmodel="point"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.point.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-right" ng-click="vm.handleSortChanged('amount')" tbmodel="amount"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.amount.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w150 text-center" ng-click="vm.handleSortChanged('created')" tbmodel="created"
+                tbtitle="{{'com_projects.detail.paticipants.list.table.header.time.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" ng-show="!vm.paticipants || vm.paticipants.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="paticipant in vm.paticipants track by $index">
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td class="text-left" ng-bind="paticipant.user_name"></td>
+              <td class="text-left" ng-bind="paticipant.subsidiary_name"></td>
+              <td class="text-left">
+                <a href="mailto:{{paticipant.user_email}}">{{paticipant.user_email}}</a>
+              </td>
+              <td class="text-right" ng-bind="paticipant.steps | format_step"></td>
+              <td class="text-right" ng-bind="paticipant.point | format_point"></td>
+              <td class="text-right" ng-bind="paticipant.amount | format_money"></td>
+              <td class="text-center" ng-bind="paticipant.created | dateTimeNormal"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+
+    <div class="row mg10b">
+      <div class="col-xs-4">
+      </div>
+      <div class="col-xs-4 text-center">
+        <button-back back="admin.com_projects.list"></button-back>
+      </div>
+    </div>
+  </div>
+</section>

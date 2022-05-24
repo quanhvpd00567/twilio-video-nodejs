@@ -1,0 +1,72 @@
+<!-- Main Header -->
+<header class="main-header" ng-controller="HeaderController as vm">
+  <!-- Logo -->
+  <a href="/" class="logo">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini">ふふるシステム</span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg">ふふるシステム</span>
+  </a>
+
+  <!-- Header Navbar -->
+  <nav class="navbar navbar-static-top" role="navigation">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <span class="sr-only">Toggle navigation</span>
+    </a>
+    <a href="#" role="button" ng-if="isMunicipality" ng-click="vm.openRequestAuthorizationPage()"
+      style="float: left;color: #fff;background-image: none;padding: 15px 15px;font-family: fontAwesome;">
+      <i class="fa fa-bell-o"></i>
+      <span class="label label-warning"
+        style="position: absolute;top: 12px;text-align: center;font-size: 9px;padding: 2px 3px;line-height: .9;">{{numberOfPendingRequests}}</span>
+    </a>
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <li>
+          <a ng-bind="Authentication.user.name" style="cursor: default !important;"></a>
+        </li>
+        <li>
+          <a ng-repeat="item in vm.menuUser.items | orderBy: 'position'" ng-switch="item.type" class="ng-binding"
+            ng-if="item.roles.indexOf(Authentication.user.roles[0]) !== -1" href="javascript:void(0)" class="mg10"
+            ui-sref="{{item.state}}">
+            {{::item.title}}
+          </a>
+        </li>
+        <li>
+          <a ng-click="logout()" class="ng-binding">
+            {{'common.label.sign_out' | translate}}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Navbar Right Menu -->
+    <!-- <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <li class="dropdown notifications-menu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            <span ng-bind="Authentication.user.name"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <ul class="menu">
+                <li>
+                  <a ng-repeat="item in vm.menuUser.items | orderBy: 'position'" ng-switch="item.type"
+                    ng-class="{ 'active': $state.includes(item.parrent_state) }"
+                    ng-if="item.roles.indexOf(Authentication.user.roles[0]) !== -1" href="javascript:void(0)"
+                    class="mg10" ui-sref="{{item.state}}">
+                    <i class="text-aqua" ng-class="item.class"></i> {{::item.title}}
+                  </a>
+                  <a href="javascript:void(0)" ng-click="logout()" class="mg10 text-red">
+                    <i class="fa fa-sign-out text-red"></i>
+                    {{'common.label.sign_out' | translate}}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div> -->
+  </nav>
+</header>

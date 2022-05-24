@@ -1,0 +1,463 @@
+﻿<section class="container-ecommerce">
+  <div id="ecommerce-header">
+    <div class="row">
+      <div id="caculate-sale-point" class="col-xs-12 d-flex content-center mg12b">
+        <div class="d-flex align-center mg6y">
+          <div class="xs-w100p">
+            <span>{{'ecommerce.home.salary_income' | translate}}</span>
+          </div>
+          <select name="salary" class="form-control mg6l mg6r" ng-model="vm.salary">
+            <option value="">{{'ecommerce.home.salary_income.placeholder' | translate}}</option>
+            <option value="300">300万円</option>
+            <option value="350">350万円</option>
+            <option value="400">400万円</option>
+            <option value="450">450万円</option>
+            <option value="500">500万円</option>
+            <option value="550">550万円</option>
+            <option value="600">600万円</option>
+            <option value="650">650万円</option>
+            <option value="700">700万円</option>
+            <option value="750">750万円</option>
+            <option value="800">800万円</option>
+            <option value="850">850万円</option>
+            <option value="900">900万円</option>
+            <option value="950">950万円</option>
+            <option value="1000">1000万円</option>
+            <option value="1500">1500万円</option>
+            <option value="2000">2000万円</option>
+            <option value="3000">3000万円</option>
+            <option value="5000">5000万円</option>
+            <option value="10000">1億円</option>
+          </select>
+        </div>
+        <div class="d-flex align-center mg6y">
+          <div class="xs-w100p">
+            <span>{{'ecommerce.home.presence_absence_spouse' | translate}}</span>
+          </div>
+          <select name="salary_status" class="form-control mg6l mg6r" ng-model="vm.salary_status">
+            <option value="">{{'ecommerce.home.presence_absence_spouse.placeholder' | translate}}</option>
+            <option value="1">独身もしくは配偶者控除のない共働き夫婦</option>
+            <option value="2">夫婦のみ(配偶者控除あり)</option>
+            <option value="3">夫婦(配偶者控除あり)と子(16歳以上19歳未満)</option>
+            <option value="4">年金暮らしの夫婦</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-12 text-center d-flex flex-wrap content-center">
+        {{'ecommerce.home.maximum_donation_amount1' | translate}}
+        <span>
+          &nbsp;
+          <span class="text-red">
+            <span class="price">
+              <span class="number">{{vm.getPointDiscount() | format_money :false : true}}</span>
+              <span class="currency">円</span>
+            </span>
+          </span>
+          &nbsp;
+          {{'ecommerce.home.maximum_donation_amount2' | translate}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 mg30b">
+      <h4>{{'ecommerce.home.notice.subtitle' | translate}}</h4>
+      <table>
+        <tbody>
+          <tr ng-if="!vm.latestNotices || vm.latestNotices.length === 0">
+            <td class="col-xs-12 text-center" colspan="10">
+              {{'ecommerce.home.notice.list.no_data.label' | translate}}
+            </td>
+          </tr>
+          <tr ng-repeat="notice in vm.latestNotices">
+            <th class="col-xs-2">{{notice.created | dateNormal}}({{getDayOfWeek(notice.created)}})</th>
+            <td class="col-xs-10"><a
+                ui-sref="company.ecommerces.notice_detail({ noticeId: notice._id })">{{notice.title}}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="float: right;"><a ui-sref="company.ecommerces.notice_list">{{'ecommerce.home.notice.list.label' |
+          translate}}</a></div>
+    </div>
+    <div class="col-xs-12">
+      <h4>{{'ecommerce.home.municipalities.subtitle' | translate}}</h4>
+      <table class="table table-bordered table-detail-ecommerce">
+        <thead>
+          <tr>
+            <th class="w150">{{'ecommerce.home.municipalities.table.header.municipality' | translate}}</th>
+            <th class="w150 text-center">{{'ecommerce.home.municipalities.table.header.expired_date' | translate}}</th>
+            <th class="w200 text-right">{{'ecommerce.home.municipalities.table.header.points' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in vm.municipalitiesHasActivePoints">
+            <td ng-bind="item.municipality_name"></td>
+            <td class="text-center">{{item.expire | formatYearMonthDay}}</td>
+            <td class="text-right">{{item.points | format_point}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mg16b">
+    <div class="col-xs-12 col-sm-4">
+      <h4>{{'ecommerce.home.product.list' | translate}}</h4>
+    </div>
+    <div class="col-xs-12 col-sm-8">
+      <div class="sort-product">
+        <div>
+          {{'ecommerce.home.product.sort' | translate}}
+        </div>
+        <div>
+          <button class="btn" ng-class="{ 'btn-default': vm.condition.sort_option === 0}" ng-click="vm.sort(0)">
+            {{'ecommerce.home.product.sort_default' | translate}}
+          </button>
+        </div>
+        <div>
+          <button class="btn" ng-class="{ 'btn-default': vm.condition.sort_option === 1}" ng-click="vm.sort(1)">
+            {{'ecommerce.home.product.sort_dest' | translate}}
+          </button>
+        </div>
+        <div>
+          <button class="btn" ng-class="{ 'btn-default': vm.condition.sort_option === 2}" ng-click="vm.sort(2)">
+            {{'ecommerce.home.product.sort_asc' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 mg12y">
+      <div class="filter-product">
+        <div class="row d-flex flex-wrap">
+          <div class="col-xs-12 col-sm-8">
+            <div class="row mg12y d-flex align-center flex-wrap">
+              <div class="col-xs-12 col-sm-4 filter-product-label">{{'ecommerce.home.product.filter' | translate}}</div>
+              <div class="col-xs-12 col-sm-8">
+                <select name="salary_status" class="form-control w100p" ng-model="vm.condition.municId">
+                  <option value="">{{'ecommerce.home.product.filter.placeholder' | translate}}</option>
+                  <option ng-repeat="munic in vm.groupMunic" value="{{munic.municipality_id}}">
+                    {{munic.municipality_name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row mg12y d-flex align-center flex-wrap">
+              <div class="col-xs-12 col-sm-4 filter-product-label">{{'ecommerce.home.product.filter_amount' |
+                translate}}</div>
+              <div class="col-xs-12 col-sm-8 d-flex space-between align-center">
+                <input type="number" placeholder="下限金額" number_only class="form-control w45p"
+                  ng-model="vm.condition.price_min" />
+                <span>～</span>
+                <input type="number" placeholder="上限金額" number_only class="form-control w45p"
+                  ng-model="vm.condition.price_max" />
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-4 d-flex content-center align-center mg12y">
+            <button class="btn btn-primary w100" ng-click="vm.handleSearch()">{{'ecommerce.home.product.search' |
+              translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12" ng-show="vm.isEmptyProduct">
+      <h4>{{'common.table.no_data_available' | translate}}</h4>
+    </div>
+    <div class="col-xs-12">
+      <div class="product-items">
+        <div ng-repeat="product in vm.products track by $index" class="product-item"
+          ui-sref="company.ecommerces.product-detail({ productId: product._id, municId: product.muniObject._id })">
+          <div class="picture">
+            <img ng-if="product.sell_status === 1" src="{{product.avatar}}" />
+            <span ng-if="product.sell_status !== 1" class="out-of-stock">
+              {{'ecommerce.home.product.reception_closed' | translate}}
+            </span>
+          </div>
+          <div class="title">{{product.muniObject.prefecture + product.muniObject.name}}</div>
+          <div class="description">{{product.name}}</div>
+          <div class="price-description bdb pd5b mg5b">
+            <span class="price-label">{{'ecommerce.home.product.price' | translate}}</span>
+            <span class="price">
+              <span class="number">{{product.price | format_money :false : true}}</span>
+              <span class="currency">{{'common.label.unit.money' | translate}}</span>
+            </span>
+          </div>
+          <div class="price-description mg5b d-block">
+            <span class="price-label">{{'ecommerce.home.product.price_after_discount' | translate}}</span>
+            <span class="price d-inline-block w100p text-right">
+              <span class="number">{{product.price_discount | format_money :false : true}}</span>
+              <span class="currency d-inline-block">{{'common.label.unit.money' | translate}}</span>
+            </span>
+          </div>
+          <button class="btn btn-primary product-order" ui-sref-ignore ng-if="product.sell_status === 1"
+            ng-click="vm.addToCart(product._id, product.muniObject._id)">
+            {{'ecommerce.home.product.button.add_to_cart' | translate}}
+          </button>
+          <button class="btn btn-default product-order" disabled ui-sref-ignore ng-if="product.sell_status !== 1">
+            {{'ecommerce.home.product.button.add_to_cart_disable' | translate}}
+          </button>
+        </div>
+      </div>
+      <div class="mg5t" ng-include="'/modules/core/client/views/pagination-ecommerce.client.view.html'"></div>
+      <!-- <div class="text-right pd30x" ng-if="vm.condition.nextPage">
+        <a ng-click="vm.loadMore()" class="clickable text-underline">もっと見る</a>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+<style scoped>
+  #ecommerce-header {
+    background-color: #e7e9d6;
+    transform: translate(-50%);
+    position: relative;
+    left: 50%;
+    width: 100vw;
+    border-bottom: 1.5px solid #c2c1c1;
+    padding: 15px;
+  }
+
+  #caculate-sale-point {
+    flex-direction: column;
+  }
+
+  #caculate-sale-point>div {
+    flex-direction: column;
+  }
+
+  #caculate-sale-point>div>select {
+    width: 100%;
+    text-align: center;
+  }
+
+  .bdb {
+    border-bottom: 1px dashed;
+  }
+
+  .table-detail-ecommerce {
+    border: 1px solid #adadad;
+  }
+
+  .table-detail-ecommerce>tbody>tr>th {
+    border: 1px solid #adadad;
+    border-left: none;
+    border-right: none;
+  }
+
+  .sort-product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .sort-product>div {
+    margin-bottom: 10px;
+  }
+
+  .sort-product>div:first-child {
+    margin-left: 0px;
+    flex: 1;
+    flex-basis: 100%;
+  }
+
+  .sort-product>div:last-child {
+    margin-right: 0px;
+  }
+
+  .filter-product {
+    background-color: #e6e9d6;
+    padding: 15px;
+  }
+
+  .filter-product-label {
+    text-align: left;
+  }
+
+  .product-items {
+    display: grid;
+    grid-template-columns: 100%;
+  }
+
+  .product-item {
+    padding: 20px;
+    transition: background-color 0.2s ease;
+  }
+
+  .product-item:hover {
+    background-color: #b2b2b270;
+  }
+
+  .product-item>.picture {
+    position: relative;
+    padding-top: 75%;
+    width: 100%;
+    margin-bottom: 5px;
+    background-color: white;
+    border: 1px solid #aeadac;
+  }
+
+  .product-item>.picture>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto auto;
+  }
+
+  .product-item>.picture>.out-of-stock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #aeadac;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+
+  .product-item>.title {
+    text-decoration: underline;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 20px;
+  }
+
+  .product-item>.description {
+    font-weight: bold;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 40px;
+  }
+
+  .product-item>.price-description {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .product-item>.price-description>.price-label {
+    margin-right: 15px;
+  }
+
+  .product-item>.price-description>.price {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .product-item>.price-description>.price>.currency {
+    justify-content: end;
+    display: flex;
+    flex: 1;
+  }
+
+  .product-item>.price-description>.price>.number {
+    font-weight: bold;
+    color: red;
+  }
+
+  .product-item>.price-description>.price>.number::after {
+    content: '\00a0';
+  }
+
+  .product-item>.product-order {
+    width: 100%;
+    height: 30px;
+    border: none;
+    outline: none;
+    border-radius: 2px;
+  }
+
+  .btn-default {
+    background-color: #aeadac;
+  }
+
+  @media (min-width: 576px) {
+    .sort-product {
+      justify-content: end;
+    }
+
+    .sort-product>div {
+      margin: 8px;
+    }
+
+    .sort-product>div:first-child {
+      text-align: right;
+      flex-basis: auto;
+    }
+  }
+
+  @media (min-width: 767px) {
+    #caculate-sale-point>div>select {
+      width: 300px;
+    }
+
+    .sort-product {
+      justify-content: start;
+    }
+
+    .sort-product>div {
+      margin: 8px;
+    }
+
+    .sort-product>div>button {
+      width: 125px;
+    }
+
+    .sort-product>div:first-child {
+      text-align: right;
+    }
+
+    .filter-product-label {
+      text-align: right;
+    }
+
+    .product-items {
+      grid-template-columns: 50% 50%;
+    }
+  }
+
+  @media (min-width: 991px) {
+    .product-items {
+      grid-template-columns: 33.3333% 33.3333% 33.3333%;
+    }
+  }
+
+  @media (min-width: 1199px) {
+    #caculate-sale-point {
+      flex-direction: row;
+    }
+
+    #caculate-sale-point>div {
+      flex-direction: row;
+      margin: 0 40px;
+    }
+
+    #caculate-sale-point>div>select {
+      width: 300px;
+      text-align: left;
+    }
+
+    .product-items {
+      grid-template-columns: 25% 25% 25% 25%;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .xs-w100p {
+      width: 100%;
+    }
+  }
+</style>

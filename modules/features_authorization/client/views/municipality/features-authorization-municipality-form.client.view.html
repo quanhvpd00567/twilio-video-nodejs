@@ -1,0 +1,82 @@
+﻿<section class="content container-fluid">
+  <form name="vm.featureForm" class="form-edit employee-form" ng-submit="vm.update(vm.featureForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <form-title-only></form-title-only>
+            </h4>
+            <p>{{'features_authorization.municipality_form.note.label' | translate}}</p>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-save></button-save>
+          </div>
+        </div>
+
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <thead>
+              <tr>
+                <th rowspan="2" class="col-index" style="vertical-align: middle;">
+                  {{'features_authorization.form.table.header.no' | translate}}</th>
+                <th rowspan="2" class="w500 text-center" style="vertical-align: middle;">
+                  {{'features_authorization.form.table.header.function_name' |
+                  translate}}
+                </th>
+                <th colspan="2" class="w200 text-center">
+                  {{'features_authorization.form.table.header.function_selection' |
+                  translate}}</th>
+              </tr>
+              <tr>
+                <th class="w100 text-center">{{'features_authorization.form.table.header.option_confirmation_required' |
+                  translate}}</th>
+                <th class="w100 text-center">
+                  {{'features_authorization.form.table.header.option_no_confirmation_required'
+                  |
+                  translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in vm.features track by $index">
+                <td class="text-center">
+                  <span ng-if="item.id === vm.ALL_ID" style="font-weight: bold;">{{ $index < 10 ? '0' + $index : $index
+                      }}</span>
+                      <span ng-if="item.id !== vm.ALL_ID">{{ $index < 10 ? '0' + $index : $index }}</span>
+                </td>
+                <td>
+                  <span ng-if="item.id === vm.ALL_ID" style="font-weight: bold;">{{item.value}}</span>
+                  <span ng-if="item.id !== vm.ALL_ID">{{item.value}}</span>
+                </td>
+                <td class="text-center">
+                  <input type="checkbox" id="required_{{$index}}" class="clickable" ng-if="!item.isOnlyNoNeedAuthorize"
+                    ng-model="item.isCheckedNeedAuthorize"
+                    ng-change="vm.onCheckFeature(item, vm.OPTION_TYPE.NEED_AUTHORIZE)"
+                    ng-disabled="item.id !== vm.ALL_ID && vm.allItem && vm.allItem.isCheckedNeedAuthorize">
+                </td>
+                <td class="text-center"> <input type="checkbox" id="no_required_{{$index}}" class="clickable"
+                    ng-model="item.isCheckedNoNeedAuthorize"
+                    ng-change="vm.onCheckFeature(item, vm.OPTION_TYPE.NO_NEED_AUTHORIZE)"
+                    ng-disabled="item.id !== vm.ALL_ID && vm.allItem && (vm.allItem.isCheckedNoNeedAuthorize || (item.isOnlyNoNeedAuthorize && vm.allItem.isCheckedNeedAuthorize))">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group mgnb mg20b text-center">
+          <button-save></button-save>
+        </div>
+
+        <div class="row mg10t" ng-if="vm.errorFeatures && vm.errorFeatures.length > 0">
+          <div class="col-sm-12">
+            <div class="form-group mg5t">
+              <b class="text-red">以下の機能は未処理の申請があるため、変更できません。</b>
+              <li class="text-red" ng-repeat="error in vm.errorFeatures track by ($index+error)">{{ error }}</li>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,52 @@
+<!-- /.login-logo -->
+<div class="login-box-body">
+  <div class="login-logo text-center">
+    <img width="100px" src="/modules/core/client/img/brand/logo.png" class="img-responsive" alt="">
+  </div>
+  <form name="vm.loginForm" ng-submit="vm.signin(vm.loginForm.$valid)" class="signin" novalidate autocomplete="off">
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <div class="mg20b" style="font-size: 24px;"><strong>{{'sign_in.form.title' | translate}}</strong></div>
+      </div>
+    </div>
+
+    <div class="form-group has-feedback" show-errors>
+      {{'sign_in.form.login_id.label' | translate}}
+      <input type="text" id="login_id" name="login_id" class="form-control" ng-model="vm.credentials.usernameOrEmail"
+        placeholder="{{'sign_in.form.login_id.placeholder' | translate}}" required autofocus>
+    </div>
+    <div class="form-group has-feedback" show-errors>
+      {{'sign_in.form.password.label' | translate}}
+      <input type="password" id="password" name="password" class="form-control" ng-model="vm.credentials.password"
+        placeholder="{{'sign_in.form.password.placeholder' | translate}}" required>
+    </div>
+    <div class="row">
+      <div class="col-xs-6 col-xs-offset-3">
+        <button type="submit" class="btn btn-block btn-mcd btn-flat btn-lg">{{'sign_in.form.button.sign_in' |
+          translate}}</button>
+      </div>
+    </div>
+  </form>
+  <p class="mg20t text-center">
+    <a ui-sref="authentication.reset_password">{{'sign_in.form.link.reset_password' | translate}}</a>
+  </p>
+</div>
+<!-- <div class="row">
+  <div class="col-xs-12 mg30t text-center">
+    <a ng-click="vm.openCompanyRegistrationPage()">{{'sign_in.form.link.register_company'
+      | translate}}</a>
+  </div>
+  <div class="col-xs-12 mg20t text-center">
+    <a ng-click="vm.openMunicipalityRegistrationPage()">{{'sign_in.form.link.register_municipality' | translate}}</a>
+  </div>
+</div> -->
+
+<div class="messages mg30t" ng-if="vm.isSaveClick">
+  <div ng-messages="vm.loginForm.login_id.$error" role="alert">
+    <li class="text-red" ng-message="required">{{'sign_in.form.login_id.error.required' | translate}}</li>
+  </div>
+  <div ng-messages="vm.loginForm.password.$error" role="alert">
+    <li class="text-red" ng-message="required"> {{'sign_in.form.password.error.required' | translate}} </li>
+  </div>
+</div>
+<!-- /.login-box-body -->

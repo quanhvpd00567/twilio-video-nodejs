@@ -1,0 +1,163 @@
+﻿<section class="content container-fluid">
+  <form name="vm.municForm" class="form-edit notice-form" ng-submit="vm.createOrUpdate(vm.municForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+        </div>
+
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.form.prefecture.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <select name="prefecture" class="form-control" ng-model="vm.munic.prefecture"
+                    ng-options="item as item for item in vm.master.prefectures">
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-1">
+                  {{'municipalities.form.name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="text" name="name" class="form-control" ng-model="vm.munic.name"
+                    placeholder="{{'municipalities.form.name.placeholder' | translate}}" required maxlength="60" ng-maxlength="60">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.form.department.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors >
+                  <input type="text" name="department" class="form-control" ng-model="vm.munic.admin.department"
+                    placeholder="{{'municipalities.form.department.placeholder' | translate}}" required>
+                </td>
+
+                <th class="col-xs-2">
+                  {{'municipalities.form.number.label' | translate}}
+                  <!-- <span class="text-red">*</span> -->
+                </th>
+                <td class="col-xs-4 form-group" show-errors colspan="3">
+                  <input type="text" name="number" class="form-control" ng-model="vm.munic.admin.number"
+                    placeholder="{{'municipalities.form.number.placeholder' | translate}}">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.form.last_name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input type="text" name="last_name" class="form-control" ng-model="vm.munic.admin.last_name"
+                  placeholder="{{'municipalities.form.last_name.placeholder' | translate}}" required ng-maxlength="16"
+                  maxlength="16">
+                  
+                </td>
+
+                <th class="col-xs-2">
+                  {{'municipalities.form.first_name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors colspan="3">
+                  <input type="text" name="first_name" class="form-control" ng-model="vm.munic.admin.first_name"
+                  placeholder="{{'municipalities.form.first_name.placeholder' | translate}}" required
+                  ng-maxlength="16" maxlength="16">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.form.phone.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input name="phone" class="form-control" ng-model="vm.munic.admin.phone"
+                    placeholder="{{'municipalities.form.phone.placeholder' | translate}}" minlength="9" maxlength="13" required  input-validator="tel">
+                </td>
+              </tr>
+              
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.form.email.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="email" name="email" class="form-control" ng-model="vm.munic.admin.email"
+                    placeholder="{{'municipalities.form.email.placeholder' | translate}}" required
+                    input-validator="email">
+                </td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-group mgnb mg50b text-center">
+          <button-back back="admin.municipalities.list"></button-back>
+          <button-save></button-save>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.municForm.name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'municipalities.form.name.error.max_length' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.department.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.department.error.required' | translate}}
+            </li>
+          </div>
+
+          <div ng-messages="vm.municForm.number.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.number.error.required' | translate}}
+            </li>
+          </div>
+          
+          <div ng-messages="vm.municForm.last_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.last_name.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="maxlength">{{'municipalities.form.last_name.error.max_length' | translate}}
+            </li>
+          </div>
+
+          <div ng-messages="vm.municForm.first_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.first_name.error.required' | translate}}
+            </li>
+            <li class="text-red" ng-message="maxlength">{{'municipalities.form.first_name.error.max_length' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.phone.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.phone.error.required' | translate}}</li>
+            <li class="text-red" ng-message="tel">{{'municipalities.form.phone.error.invalid' | translate}}</li>
+          </div>
+
+          <!-- <div ng-messages="vm.municForm.fax.$error" role="alert">
+            <li class="text-red" ng-message="pattern">{{'municipalities.form.fax.error.invalid' | translate}}</li>
+          </div> -->
+          
+          <div ng-messages="vm.municForm.email.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.email.error.required' | translate}}</li>
+            <li class="text-red" ng-message="email">{{'municipalities.form.email.error.invalid' | translate}}</li>
+          </div>
+    
+
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

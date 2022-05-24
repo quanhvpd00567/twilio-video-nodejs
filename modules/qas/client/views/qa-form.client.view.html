@@ -1,0 +1,80 @@
+<section class="content container-fluid">
+  <form name="vm.qaForm" class="form-edit qa-form" ng-submit="vm.update(vm.qaForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <span class="page_title_clickable" ui-sref="admin.qas.list">
+                {{'qa.list.page.title' | translate}}
+              </span>&nbsp;>
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-back back="admin.qas.list"></button-back>
+            <button-save></button-save>
+          </div>
+        </div>
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'qa.form.question.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <input type="text" name="question" class="form-control" ng-model="vm.qa.question"
+                    placeholder="{{'qa.form.question.placeholder' | translate}}" required>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'qa.form.answer.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <textarea name="answer" class="form-control" rows="10" ng-model="vm.qa.answer"
+                    placeholder="{{'qa.form.answer.placeholder' | translate}}" required>
+                  </textarea>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'qa.form.display_order.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <input type="number" name="display_order" class="form-control"
+                    placeholder="{{'setting.form.display_order.placeholder' | translate}}"
+                    ng-model="vm.qa.display_order" required input-validator="number"
+                    ng-keydown="preventPressCommaKey($event)" number-integer-only min="0" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <button-back back="admin.qas.list"></button-back>
+          <button-save></button-save>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.qaForm.question.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'qa.form.question.error.required' | translate}}</li>
+          </div>
+          <div ng-messages="vm.qaForm.answer.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'qa.form.answer.error.required' | translate}}</li>
+          </div>
+          <div ng-messages="vm.qaForm.display_order.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'qa.form.display_order.error.required' | translate}}</li>
+            <li class="text-red" ng-message="number">{{'qa.form.display_order.error.number' | translate}}</li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

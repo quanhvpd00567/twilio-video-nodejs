@@ -1,0 +1,161 @@
+﻿<section class="content container-fluid">
+  <form name="vm.employeeForm" class="form-edit" ng-submit="vm.createOrUpdate(vm.employeeForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-xs-6">
+        <h4>
+          <form-title-only></form-title-only>
+        </h4>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 0px !important;">
+      <div class="card-body bg-white">
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{'employees.form.last_name.label' | translate}}
+            <span class="text-red">*</span>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <input type="text" name="last_name" class="form-control" ng-model="vm.employee.last_name"
+              placeholder="{{'employees.form.last_name.placeholder' | translate}}" required ng-maxlength="16"
+              maxlength="16">
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{'employees.form.first_name.label' | translate}}
+            <span class="text-red">*</span>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <input type="text" name="first_name" class="form-control" ng-model="vm.employee.first_name"
+              placeholder="{{'employees.form.first_name.placeholder' | translate}}" required ng-maxlength="16"
+              maxlength="16">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{'employees.form.number.label' | translate}}
+            <span class="text-red">*</span>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <input type="text" name="number" class="form-control" ng-model="vm.employee.number"
+              placeholder="{{'employees.form.number.placeholder' | translate}}" required>
+          </div>
+
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{'employees.form.department.label' | translate}}
+          </div>
+
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <select name="e_department" class="form-control" ng-model="vm.employee.e_department"
+              ng-options="item._id as item.name for item in vm.departments">
+              <option value='' selected>{{"employees.form._department.default.label" | translate}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{ 'employees.form.subsidiary.label' | translate }}
+            <span class="text-red">*</span>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <select name="subsidiary" disabled class="form-control" ng-model="vm.employee.subsidiary"
+              ng-options="subsidiary._id as subsidiary.name for subsidiary in vm.subsidiaries">
+            </select>
+          </div>
+
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{'employees.form.email.label' | translate}}
+            <span class="text-red">*</span>
+          </div>
+
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <input type="email" name="email" class="form-control" ng-model="vm.employee.email"
+              placeholder="{{'employees.form.email.placeholder' | translate}}" required input-validator="email">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{ 'employees.form.password.label' | translate }}
+            <span class="text-red">*</span>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 form-group" show-errors>
+            <input type="password" name="password" class="form-control" ng-model="vm.employee.password"
+              placeholder="{{'employees.form.password.placeholder' | translate}}" required min="8" max="16"
+              maxlength="16" minlength="8">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+            {{ 'employees.form.note.label' | translate }}
+          </div>
+
+          <div class="col-xs-12 col-sm-10 col-md-10 form-group" show-errors>
+            <textarea name="note" class="form-control" rows="5" ng-model="vm.employee.note"
+              placeholder="{{'employees.form.note.placeholder' | translate}}" maxlength="20000">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group mgnb text-center">
+            <button type="submit" ng-disabled="vm.isDisableButtonSave" class="btn btn-success btn-sm">
+              <i class="fa fa-save"></i>
+              {{'common.button.save' | translate}}
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="messages mg30t" ng-if="vm.isSaveClick">
+              <div ng-messages="vm.employeeForm.last_name.$error" role="alert">
+                <li class="text-red" ng-message="required">{{'employees.form.last_name.error.required' | translate}}
+                </li>
+                <li class="text-red" ng-message="maxlength">{{'employees.form.last_name.error.max_length' | translate}}
+                </li>
+              </div>
+
+              <div ng-messages="vm.employeeForm.first_name.$error" role="alert">
+                <li class="text-red" ng-message="required">{{'employees.form.first_name.error.required' | translate}}
+                </li>
+                <li class="text-red" ng-message="maxlength">{{'employees.form.first_name.error.max_length' | translate}}
+                </li>
+              </div>
+
+              <div ng-messages="vm.employeeForm.e_department.$error" role="alert">
+                <li class="text-red" ng-message="required">{{'employees.form.e_department.error.required' | translate}}
+                </li>
+              </div>
+
+              <div ng-messages="vm.employeeForm.subsidiary.$error" role="alert">
+                <li class="text-red" ng-message="sub_required">{{'employees.form.subsidiary.error.required' |
+                  translate}}
+                </li>
+              </div>
+
+              <div ng-messages="vm.employeeForm.number.$error" role="alert">
+                <li class="text-red" ng-message="required">{{'employees.form.number.error.required' | translate}}</li>
+              </div>
+
+              <div ng-messages="vm.employeeForm.email.$error" role="alert">
+                <li class="text-red" ng-message="required">{{'employees.form.email.error.required' | translate}}</li>
+                <li class="text-red" ng-message="email">{{'employees.form.email.error.invalid' | translate}}</li>
+              </div>
+              <div ng-messages="vm.employeeForm.password.$error" role="alert">
+                <li class="text-red" ng-message="required">{{'employees.form.password.error.required' | translate}}</li>
+                <li class="text-red" ng-message="minlength">{{'employees.form.password.error.min_length' | translate}}
+                </li>
+                <li class="text-red" ng-message="maxlength">{{'employees.form.password.error.max_length' | translate}}
+                </li>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

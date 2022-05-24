@@ -1,0 +1,15 @@
+<!-- modal template -->
+<script type="text/ng-template" id="download.html">
+    <div class="modal-header">
+        <h4 class="modal-title">ダウンロード</h4>
+    </div>
+    <div class="modal-body text-center mg20" id="modal-body" >
+        <a class="btn btn-info" target="_blank" href="{{:: dialog.href}}">{{:: dialog.text}}</a>
+        <span ng-if='dialog.text2'> | </span>
+        <a ng-if='dialog.text2' class="btn btn-info" target="_blank" href="{{:: dialog.href2}}">{{:: dialog.text2}}</a>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="closeThisDialog()">閉じる</button>
+    </div>
+</script>
+<!-- #modal template -->

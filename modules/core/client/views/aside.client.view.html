@@ -1,0 +1,37 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar" ng-controller="HeaderController as vm" ng-if="Authentication.user"
+  ng-if="(Authentication.user);">
+
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar Menu -->
+    <ul class="sidebar-menu" data-widget="tree">
+      <li class="header">メニュー</li>
+
+      <li ng-repeat="item in vm.menu.items"
+        ng-class="{ 'active': $state.includes(item.parrent_state) || (item.state === 'admin.home' && $state.current && $state.current.url === '/'), 'treeview': isTree(item.items.length) }">
+        <a ng-if="item.items.length == 0 && item.roles.indexOf(Authentication.user.roles[0]) !== -1
+        || (item.state === 'admin.settings_version.config' && Authentication.user.is_can_config_version)"
+          ui-sref="{{item.state}}">
+          <i ng-class="item.class" aria-hidden="true"></i> <span>{{item.title}}</span>
+        </a>
+        <a ng-if="item.items.length > 0" href="#">
+          <i class="fa fa-clone" aria-hidden="true"></i> <span>{{item.title}}</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul ng-if="item.items.length > 0" class="treeview-menu1">
+          <li ng-repeat="subItem in item.items" ng-class="{ 'active': $state.includes(subItem.parrent_state) }">
+            <a ui-sref="{{subItem.state}}">
+              <i ng-class="subItem.class" aria-hidden="true"></i> {{subItem.title}}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <!-- /.sidebar-menu -->
+
+  </section>
+  <!-- /.sidebar -->
+</aside>

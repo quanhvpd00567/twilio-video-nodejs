@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="ja"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="ja"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="ja"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ja" class="no-js" ng-strict-di ng-controller="AppController">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title page-title></title>
+  <meta name="description" content="{{description}}">
+  <meta name="fragment" content="!">
+
+  <!-- Apple META -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Fav Icon -->
+  <!-- <link href="/{{favicon}}" rel="shortcut icon" type="image/x-icon"> -->
+  <link rel="shortcut icon" type="image/x-icon">
+  <!-- CSS 
+    ================================================== -->
+  <link rel="stylesheet" href="/modules/core/client/css/framework.css">
+
+  <!-- Google font
+    ================================================== -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Manifest -->
+  <link href="/manifest.json" rel="manifest">
+  <style>
+    .text-center {
+      text-align: center;
+    }
+
+    .mar-30 {
+      margin: 30px;
+    }
+
+    .background-white {
+      background-color: white;
+    }
+
+    .text {
+      font-family: arial;
+      color: rgba(153, 153, 153, 1);
+      font-size: 17px;
+      padding-top: 30px;
+    }
+  </style>
+</head>
+
+<body class="hold-transition">
+  <div class="mar-30 text-center" uk-alert ng-if="vm.videos && !vm.videos.length">
+    <!-- <img src="/modules/core/client/img/sorry-image2.png" style="max-width: 1500px; height: auto;"> -->
+    <p class="text">Internet Explorer での操作はサポートしておりません
+      Edge、Chrome、FirefoxもしくはSafariのいずれかをご利用ください</p>
+  </div>
+  <script src="/modules/core/client/js/framework.js"></script>
+</body>
+
+</html>

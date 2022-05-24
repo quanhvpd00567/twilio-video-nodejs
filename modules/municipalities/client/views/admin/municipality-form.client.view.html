@@ -1,0 +1,206 @@
+﻿<section class="content container-fluid">
+  <form name="vm.municForm" class="form-edit employee-form" ng-submit="vm.update(vm.municForm.$valid)" novalidate
+    autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+          <!-- <div class="col-xs-6 text-right">
+            <button-save></button-save>
+          </div> -->
+        </div>
+
+        <div class="table-custom" ng-class="{'view-only': vm.requestStatus === 'detail'}">
+          <h4 >{{ 'municipalities.settings.form.header_1.label'| translate }}</h4>
+          <table class="table table-detail table-bordered" >
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.settings.form.method.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" colspan="3" show-errors ng-class="vm.classX">
+                  <input type="hidden" name="methods" ng-model="vm.munic.methods" value="{{vm.munic.methods}}">
+                  <div class="form-check inline-block" ng-repeat="(key, item) in vm.master.payment_methods">
+                    <input name="methods_x" type="checkbox" id="method_{{item.id}}" type="checkbox" value="{{item.id}}"
+                      ng-checked="vm.munic.methods.indexOf(item.id) > -1" ng-click="toggleSelection(item.id)">
+                    <label class="form-check-label" style="margin-top: 5px;"
+                      for="method_{{item.id}}">{{item.value}}</label>&nbsp;&nbsp;
+                  </div>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>{{ 'municipalities.settings.form.header_2.label'| translate }}</h4>
+
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.settings.form.bank_code.label' | translate}}
+                  <span class="text-red"> {{'municipalities.settings.form.bank_code_note.label' | translate}}
+                    <span ng-if="vm.isRequiredNumberBank">*</span>
+                  </span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <input type="text" name="bank_code" class="form-control" ng-model="vm.munic.bank_code"
+                    placeholder="{{'municipalities.settings.form.bank_code.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank" ng-pattern="/^[0-9]{4}$/" minlength='4' maxlength="4">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.settings.form.bank_name.label' | translate}}
+                  <span class="text-red" ng-if="vm.isRequiredNumberBank">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <input type="text" name="bank_name" class="form-control" ng-model="vm.munic.bank_name"
+                    placeholder="{{'municipalities.settings.form.bank_name.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.settings.form.branch_code.label' | translate}}
+                  <span class="text-red" ng-if="vm.isRequiredNumberBank">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <input type="text" name="branch_code" class="form-control" ng-model="vm.munic.branch_code"
+                    placeholder="{{'municipalities.settings.form.branch_code.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank">
+                </td>
+
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.settings.form.branch_name.label' | translate}}
+                  <span class="text-red" ng-if="vm.isRequiredNumberBank">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <input type="text" name="branch_name" class="form-control" ng-model="vm.munic.branch_name"
+                    placeholder="{{'municipalities.settings.form.branch_name.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.settings.form.bank_type.label' | translate}}
+                  <span class="text-red" ng-if="vm.isRequiredNumberBank">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <select name="bank_type" class="form-control" ng-model="vm.munic.bank_type"
+                    ng-options="item.id as item.value for item in vm.master.bank_types">
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{ 'municipalities.settings.form.bank_number.label' | translate }}
+                  <span class="text-red">{{ 'municipalities.settings.form.bank_number_note.label' | translate }}
+                    <span ng-if="vm.isRequiredNumberBank">*</span>
+                  </span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="text" name="bank_number" class="form-control" ng-model="vm.munic.bank_number"
+                    placeholder="{{'municipalities.settings.form.bank_number.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank" ng-pattern="/^[0-9]{7}$/" minlength='7' maxlength="7">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{ 'municipalities.settings.form.bank_owner.label' | translate }}
+                  <span class="text-red" ng-if="vm.isRequiredNumberBank">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="text" name="bank_owner" class="form-control" ng-model="vm.munic.bank_owner"
+                    placeholder="{{'municipalities.settings.form.bank_owner.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{ 'municipalities.settings.form.bank_owner_kana.label' | translate }}
+                  <span class="text-red" ng-if="vm.isRequiredNumberBank">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="text" name="bank_owner_kana" class="form-control" ng-model="vm.munic.bank_owner_kana"
+                    placeholder="{{'municipalities.settings.form.bank_owner_kana.placeholder' | translate}}"
+                    ng-required="vm.isRequiredNumberBank" input-validator='kana'>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <button ng-if="!vm.requestStatus || vm.requestStatus === 'update'" type="submit" class="btn btn-success btn-sm ng-binding">
+            <i class="fa fa-save"></i>
+            <span ng-if="vm.isNeedAuthorize === 'true'">申請登録</span>
+            <span ng-if="vm.isNeedAuthorize !== 'true'">保存</span>
+          </button>
+          <button-back back="municipality.requests_application.list" noback="municipality.requests_application.list"
+            ng-if="vm.requestStatus === 'detail'"></button-back>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+
+          <div ng-messages="vm.municForm.methods.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.methods.error.required' |
+              translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.bank_code.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.bank_code.error.required' |
+              translate}}</li>
+            <li class="text-red" ng-message="pattern">{{'municipalities.settings.form.bank_code.error.invalid' |
+              translate}}</li>
+          </div>
+          <div ng-messages="vm.municForm.bank_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.bank_name.error.required' |
+              translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.branch_code.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.branch_code.error.required' |
+              translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.branch_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.branch_name.error.required' |
+              translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.bank_number.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.bank_number.error.required' |
+              translate}}</li>
+            <li class="text-red" ng-message="pattern">{{'municipalities.settings.form.bank_number.error.invalid' |
+              translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.bank_owner.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.bank_owner.error.required' |
+              translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.bank_owner_kana.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.settings.form.bank_owner_kana.error.required'
+              |
+              translate}}</li>
+            <li class="text-red" ng-message="kana">{{'municipalities.settings.form.bank_owner_kana.error.kana' |
+              translate}}</li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

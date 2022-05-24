@@ -1,0 +1,217 @@
+﻿<section class="content container-fluid">
+  <form name="vm.companyForm" class="form-edit notice-form" ng-submit="vm.createOrUpdate(vm.companyForm.$valid)"
+    novalidate autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+        </div>
+
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.kind.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10" colspan="3">
+                  <div class="form-check inline-block" ng-repeat="(key, item) in vm.master.kind_statuses">
+                    <input class="form-check-input" ng-value="item.id" ng-model="vm.company.kind"
+                      ng-checked="item.id === vm.company.kind" type="radio" name="kind" id="kind_{{item.id}}">
+                    <label class="form-check-label" for="kind_{{item.id}}">{{item.value}}</label>&nbsp;&nbsp;
+                  </div>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input type="text" name="name" class="form-control" ng-model="vm.company.name"
+                    placeholder="{{'companies.form.name.placeholder' | translate}}" required ng-maxlength="60"
+                    maxlength="60">
+                </td>
+                <td class="col-xs-4" colspan="3">
+                  <button class="btn btn-success btn-sm pull-left" ng-click="vm.onGetNumberCompany()"
+                    ng-disabled="!vm.company.name" type="button">法人番号を取得</button>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.number.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input name="number" class="form-control" ng-model="vm.company.number"
+                    placeholder="{{'companies.form.number.placeholder' | translate}}" required>
+                  <a href="https://www.houjin-bangou.nta.go.jp/" target="_blank">国税庁 法人番号公表サイト</a>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.last_name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input type="text" name="last_name" class="form-control" ng-model="vm.company.admin.last_name"
+                    placeholder="{{'companies.form.last_name.placeholder' | translate}}" required ng-maxlength="16"
+                    maxlength="16">
+                </td>
+
+                <th class="col-xs-2">
+                  {{'companies.form.first_name.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input type="text" name="first_name" class="form-control" ng-model="vm.company.admin.first_name"
+                    placeholder="{{'companies.form.first_name.placeholder' | translate}}" required ng-maxlength="16"
+                    maxlength="16">
+                </td>
+              </tr>
+
+              <tr>
+                <!-- <th class="col-xs-2">
+                  {{'companies.form.department.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <input name="department" class="form-control" ng-model="vm.company.admin.department" required
+                    placeholder="{{'companies.form.department.placeholder' | translate}}">
+                </td> -->
+
+                <th class="col-xs-2">
+                  {{'companies.form.employee_no.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input name="employee_no" class="form-control" ng-model="vm.company.admin.employee_no" required
+                    placeholder="{{'companies.form.employee_no.placeholder' | translate}}">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.phone.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input name="phone" class="form-control" ng-model="vm.company.admin.phone"
+                    placeholder="{{'companies.form.phone.placeholder' | translate}}" input-validator="tel"
+                    maxlength="13" required>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.email.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="email" name="email" class="form-control" ng-model="vm.company.admin.email"
+                    placeholder="{{'companies.form.email.placeholder' | translate}}" required input-validator="email">
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
+                  {{'companies.form.password.label' | translate}}
+                  <span class="text-red" ng-if="!vm.company._id">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="password" name="password" class="form-control" ng-model="vm.company.password"
+                    placeholder="{{'companies.form.password.placeholder' | translate}}" ng-required="!vm.company._id"
+                    ng-minlength="8" ng-maxlength="16" maxlength="16"
+                    ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/">
+                  <span><small>半角英大文字・英子文字・数字を含む8～16文字</small></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" ng-model="vm.accept" id="accept">
+
+            <label class="form-check-label">
+              <a href="/term" target="_blank">利用規約・</a>
+              <a href="/policy" target="_blank">プライバシーポリシー</a>
+              に同意する
+            </label>
+          </div>
+          <br>
+          <button class="btn btn-success btn-sm" ng-disabled="!vm.accept" type="submit">登録する</button>
+
+          <div class="col-xs-12 mg30t text-center">
+            <a ng-click="vm.openLoginPage()">{{'companies.form.link.back_to_login' | translate}}</a>
+          </div>
+        </div>
+
+        <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <!-- 会社名  -->
+          <div ng-messages="vm.companyForm.name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.name.error.max_length' | translate}}</li>
+          </div>
+
+          <!-- 法人番号  -->
+          <div ng-messages="vm.companyForm.number.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.number.error.required' | translate}}</li>
+          </div>
+
+          <!-- 部署名   -->
+          <div ng-messages="vm.companyForm.department.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.department.error.required' | translate}}</li>
+          </div>
+
+          <!-- 担当者社員No   -->
+          <div ng-messages="vm.companyForm.employee_no.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.employee_no.error.required' | translate}}</li>
+          </div>
+
+          <!-- 部署名 last name -->
+          <div ng-messages="vm.companyForm.last_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.last_name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.last_name.error.max_length' | translate}}</li>
+          </div>
+
+          <!-- 部署名 first name -->
+          <div ng-messages="vm.companyForm.first_name.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.first_name.error.required' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.first_name.error.max_length' | translate}}
+            </li>
+          </div>
+
+          <!-- 電話番号  -->
+          <div ng-messages="vm.companyForm.phone.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.phone.error.required' | translate}}</li>
+            <li class="text-red" ng-message="tel">{{'companies.form.phone.error.invalid' | translate}}
+            </li>
+          </div>
+
+          <!-- メールアドレス -->
+          <div ng-messages="vm.companyForm.email.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.email.error.required' | translate}}</li>
+            <li class="text-red" ng-message="email">{{'companies.form.email.error.invalid' | translate}}</li>
+          </div>
+
+          <!-- パスワード -->
+          <div ng-messages="vm.companyForm.password.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'companies.form.password.error.required' | translate}}</li>
+            <li class="text-red" ng-message="minlength">{{'companies.form.password.error.maxlength' | translate}}</li>
+            <li class="text-red" ng-message="maxlength">{{'companies.form.password.error.maxlength' | translate}}</li>
+            <li class="text-red" ng-message="pattern">{{'companies.form.password.error.invalid' | translate}}</li>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

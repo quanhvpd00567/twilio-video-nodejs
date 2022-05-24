@@ -1,0 +1,113 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="company.departments.create">
+        <span class="glyphicon glyphicon-plus"></span> 登録
+      </a>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'departments.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'departments.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'departments.list.search.company.label' | translate}}</label>
+          <select name="subsidiary" class="form-control" ng-model="vm.condition.subsidiary">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in vm.subsidiaries" value="{{item._id}}"> {{item.name}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+
+    </table-search-content>
+  </table-search>
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <!-- <th class="w100 text-center" ng-click="vm.handleSortChanged('code')" tbmodel="code"
+                tbtitle="{{'companies.list.table.header.code.label' | translate}}" table-order
+                tbcondition="vm.condition"></th> -->
+              <th class="w200" ng-click="vm.handleSortChanged('subsidiary_name')" tbmodel="subsidiary_name"
+                tbtitle="{{'departments.list.table.header.company.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('code')" tbmodel="code"
+                tbtitle="{{'departments.list.table.header.code.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w200" ng-click="vm.handleSortChanged('name')" tbmodel="name"
+                tbtitle="{{'departments.list.table.header.name.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+             
+              <th class="w150" ng-click="vm.handleSortChanged('created')" tbmodel="created"
+                tbtitle="{{'departments.list.table.header.created.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" ng-show="!vm.departments || vm.departments.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="department in vm.departments track by $index" class="clickable"
+              ui-sref="company.departments.detail({ departmentId: department._id })">
+              <td class="text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <!-- <td class="text-center w100" ng-bind="company.code"></td> -->
+              <td class="text-left" ng-bind="department.subsidiary_name"></td>
+              <td class="text-left" ng-bind="department.code"></td>
+              <td class="text-left" ng-bind="department.name"></td>
+              <!-- <td class="text-center w200" ng-bind="showMasterValue(vm.master.kind_statuses, company.kind)"></td> -->
+              <td class="text-left" ng-bind="department.created | dateTimeNormal"></td>
+              <td class="text-center w150" ui-sref-ignore>
+                <button class="btn btn-xs btn-primary" ui-sref="company.departments.edit({departmentId: department._id})">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                  {{'common.button.edit' | translate}}
+                </button>
+
+                <button class="btn btn-xs btn-danger" ng-if="department.user_count === 0" ng-click="vm.remove(department._id)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                  {{'common.button.del' | translate}}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

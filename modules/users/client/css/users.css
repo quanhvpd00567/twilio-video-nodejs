@@ -1,0 +1,30 @@
+
+.log-off-wrap {
+  padding:3em 2em 2em;
+  margin:4em auto 2em;
+  border:1px solid #337ab7;
+  background: #fff; }
+  
+  .log-off-wrap .form-control {
+  margin-bottom:12px; }
+  
+  .log-off-wrap button.btn.btn-logoff {
+    display:table;
+    margin:10px auto 0;
+    min-width:140px;
+    padding:10px 20px;
+    border-radius:50px;
+    color:#fff;
+    font-size:17px;
+    background:#337ab7;
+    border:1px solid #337ab7;
+    }
+  .log-off-wrap button.btn.btn-logoff:hover,
+  .log-off-wrap button.btn.btn-logoff:focus {
+    background:#337ab7;
+    border:1px solid #337ab7; }
+  
+  .log-off-wrap img {
+    margin:0 auto 20px;
+    max-width:177px;
+    display:table; }

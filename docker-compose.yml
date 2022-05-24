@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  ep_cms:
+    image: ep_cms
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000

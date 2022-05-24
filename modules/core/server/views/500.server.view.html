@@ -1,0 +1,20 @@
+{{!< layout}}
+
+{{#contentFor 'content'}}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>Server Error</h1>
+</section>
+
+<!-- Main content -->
+<section class="content container-fluid">
+  <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <pre>
+                    {{error}}
+          </pre>
+        </div>
+      </section>
+      <!-- /.content -->
+{{/contentFor}}

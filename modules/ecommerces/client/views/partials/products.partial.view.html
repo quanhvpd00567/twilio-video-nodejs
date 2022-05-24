@@ -1,0 +1,480 @@
+<h5><b>お届け先の設定</b></h5>
+<div class="card" ng-if="vm.municInfo.is_usage_system !== 1">
+  <div class="card-body">
+    <div class="d-flex">
+      <h5><b>お礼の品のお届け先</b></h5>
+    </div>
+    <div class="item_cary" ng-repeat="item in vm.cart.products track by $index">
+      <div class="border-split" style="border: 1px solid #ccc"></div>
+      <h5><b>{{item.product.name}}</b></h5>
+      <div class="row mg12y">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.product_ship_date.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 word-break break-line" ng-bind-html="item.product.ship_date"></div>
+      </div>
+      <div class="row mg12y">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.product_address_option.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+          <div class="option-group">
+            <input class="option-input" style="cursor: pointer;" type="radio" name="address-option_{{item.product._id}}"
+              ng-model="vm.data.products[item.product._id].is_same_resident"
+              id="address-option_{{item.product._id}}_1"
+              value="1"
+              ng-click="vm.onProductChangeAddress(item.product._id, 'old')" id="address-option_{{item.product._id}}_1"
+              ng-checked="vm.data.products[item.product._id].is_same_resident === 1">
+            <label style="cursor: pointer;" for="address-option_{{item.product._id}}_1">{{'ecommerce.follow.two.product_address_option_1.label' | translate}}</label>
+          </div>
+          <div class="option-group">
+            <input class="option-input" style="cursor: pointer;" type="radio" ng-click="vm.onProductChangeAddress(item.product._id, 'new')"
+              ng-model="vm.data.products[item.product._id].is_same_resident"
+              value="2"
+              id="address-option_{{item.product._id}}_2"
+              ng-checked="vm.data.products[item.product._id].is_same_resident === 2"
+              name="address-option_{{item.product._id}}" id="address-option_{{item.product._id}}_2">
+            <label style="cursor: pointer;" for="address-option_{{item.product._id}}_2">{{'ecommerce.follow.two.product_address_option_2.label' | translate}}</label>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="vm.listProductId.includes(item.product._id)">
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label>{{'ecommerce.follow.two.product_last_name.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" name="product_{{item.product._id}}_last_name"
+              ng-model="vm.data.products[item.product._id].last_name" required />
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_last_name'].$error"
+              role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_last_name.error.required' | translate}}</small>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_first_name.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" name="product_{{item.product._id}}_first_name"
+              ng-model="vm.data.products[item.product._id].first_name" required />
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_first_name'].$error"
+              role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_first_name.error.required' | translate}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_last_name_kana.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" class="form-control pay-input w100p"
+              name="product_{{item.product._id}}_last_name_kana" ng-model="vm.data.products[item.product._id].last_name_kana" required
+              input-validator='hiragana' />
+              <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_last_name_kana'].$error" role="alert">
+                <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_last_name_kana.error.required' | translate}}</small>
+                <small class="text-red" ng-message="hiragana">{{'ecommerce.follow.two.product_last_name_kana.error.kana' | translate}}</small>
+              </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_first_name_kana.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" class="form-control pay-input w100p"
+              name="product_{{item.product._id}}_first_name_kana" ng-model="vm.data.products[item.product._id].first_name_kana" required
+              input-validator='hiragana' />
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_first_name_kana'].$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_first_name_kana.error.required' | translate}}</small>
+              <small class="text-red" ng-message="hiragana">{{'ecommerce.follow.two.product_first_name_kana.error.kana' | translate}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_zipcode.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" ng-model="vm.data.products[item.product._id].zipcode"
+              ng-change="vm.getAddressByZipcode(vm.data.products[item.product._id].zipcode, 'product', item.product._id)" required
+              name="product_{{item.product._id}}_zipcode" minlength="7" ng-pattern="/^[0-9]*$/" ng-maxlength="7" maxlength="7" />
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_zipcode'].$error"
+              role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_zipcode.error.required' | translate}}</small>
+              <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.product_zipcode.error.invalid' | translate}}</small>
+              <small class="text-red" ng-message="maxlength">{{'ecommerce.follow.two.product_zipcode.error.invalid' | translate}}</small>
+              <small class="text-red" ng-message="minlength">{{'ecommerce.follow.two.product_zipcode.error.invalid' | translate}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_prefecture.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <select  class="form-control"
+              name="product_{{item.product._id}}_prefecture"
+              ng-model="vm.data.products[item.product._id].prefecture"
+              required
+              >
+              <option value="{{prefecture}}" ng-selected="prefecture === vm.data.products[item.product._id].prefecture" ng-repeat="prefecture in vm.prefectures">{{prefecture}}</option>
+            </select>
+
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_prefecture'].$error"
+              role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_prefecture.error.required' | translate}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_city.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" name="product_{{item.product._id}}_city"
+              ng-model="vm.data.products[item.product._id].city" required />
+  
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_city'].$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_city.error.required' | translate}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_address.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p" name="product_{{item.product._id}}_address"
+              ng-model="vm.data.products[item.product._id].address" required />
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_address'].$error"
+              role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_address.error.required' | translate}}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+            <label for="">{{'ecommerce.follow.two.product_building.label' | translate}}</label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <input type="text" class="form-control pay-input w100p" ng-model="vm.data.products[item.product._id].building" />
+          </div>
+        </div>
+
+        <div class="row mg12y align-center">
+          <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+           <label> {{'ecommerce.follow.two.product_tel.label' | translate}}<small class="text-red">*</small></label>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+            <input type="text" class="form-control pay-input w100p"
+              name="product_{{item.product._id}}_tel"
+              ng-model="vm.data.products[item.product._id].tel"
+              required
+              phone-validator
+            />
+            <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_tel'].$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_tel.error.required' | translate}}</small>
+              <small class="text-red" ng-message="onlynumber">{{'ecommerce.follow.two.product_tel.error.onlynumber' | translate}}</small>
+              <small class="text-red" ng-message="not_has-">{{'ecommerce.follow.two.product_tel.error.not_has-'| translate}}</small>
+              <small class="text-red" ng-message="format_phone">{{'ecommerce.follow.two.product_tel.error.format_phone'| translate}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="row mg12y align-center" ng-if="vm.municInfo.is_setting_gift_bows && item.product.is_accept_noshi === 2">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.product_is_note.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <input class="form-check-input" type="checkbox"
+            id="product_{{item.product._id}}_is_show_note_address"
+            ng-model="vm.data.products[item.product._id].is_show_note_address" 
+            ng-change="vm.onProductChangeShowNote(item.product._id)"
+            >
+          <label for="product_{{item.product._id}}_is_show_note_address">のしをつける</label>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center" ng-if="vm.data.products[item.product._id].is_show_note_address">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label"></div>
+        <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0">
+          <textarea class="form-control"
+            name="product_{{item.product._id}}_tel"
+            ng-model="vm.data.products[item.product._id].note_detail_address",
+            placeholder="のしの詳細はこちらに記載してください。"
+            cols="30" rows="5"
+          >
+          </textarea>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center" ng-if="item.product.is_accept_schedule === 2">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.product_accept_schedule.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0">
+          <select
+            class="form-control"
+            name="product_{{item.product._id}}_accepted_schedule"
+            ng-model="vm.data.products[item.product._id].accepted_schedule"
+            >
+            <option value="指定なし">指定なし</option>
+            <option ng-repeat="item in item.product.accepted_schedule" value="{{item}}">{{item}}</option>
+          </select>
+          <!-- <multiselect class="input-xlarge" 
+        <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+          <!-- <select name="" id=""  ></select> -->
+          <!-- <multiselect class="input-xlarge" 
+            ng-model="vm.data.products[item.product._id].accepted_schedule"
+            placeholder="{{'products.form.accepted_schedule.placeholder' | translate}}"
+            option-default="指定なし"
+            name="product_{{item.product._id}}_accepted_schedule"
+            required
+            options="item.product.accepted_schedule">
+          </multiselect> --> 
+
+          <small class="word-break break-line">
+            状況により配達希望に添えない場合があります。
+            お届け日を指定することができません。
+          </small>
+          <div ng-if="vm.isSaveClick && vm.data.products[item.product._id].is_show_error" ng-messages="vm.follow2Info['product_' + item.product._id + '_accepted_schedule'].$error"
+              role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_accepted_schedule.error.required' | translate}}</small>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" ng-if="vm.municInfo.is_usage_system === 1">
+  <div class="card-body">
+    <div class="d-flex">
+      <h5><b>お礼の品</b></h5>
+    </div>
+    <div class="item_cary" ng-repeat="item in vm.cart.products track by $index">
+      <h5><b>{{item.product.name}}</b></h5>
+      <div class="row mg12y">
+        <div class="col-xs-12 col-sm-4 col-md-2 pay-label">
+          <label>{{'ecommerce.follow.two.product_ship_date.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 word-break break-line" ng-bind-html="item.product.ship_date"></div>
+      </div>
+    </div>
+
+    <div class="row mg12y" ng-if="!vm.isProductSchedule ">
+      <div class="col-xs-12 col-sm-4 col-md-2 text-left">
+        <label for="">配達希望時間帯：</label>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0">
+        <select
+          class="form-control"
+          name="product_system_accepted_schedule"
+          ng-model="vm.data.product_system.accepted_schedule"
+          >
+          <option value="指定なし">指定なし</option>
+          <option ng-repeat="item in vm.scheduleTime" value="{{item}}">{{item}}</option>
+        </select>
+        <small class="word-break break-line">
+          状況により配達希望に添えない場合があります。
+          お届け日を指定することができません。
+        </small>
+      </div>
+    </div>
+
+    <div class="row mg12y">
+      <div class="col-xs-12 col-sm-4 col-md-2 text-left">
+        <label>{{'ecommerce.follow.two.product_address_option.label' | translate}}</label>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="option-group">
+          <input class="option-input" style="cursor: pointer;" type="radio"
+            name="address-option-system"
+            ng-model="vm.data.product_system.is_same_resident"
+            id="p-address-option_1"
+            value="1"
+            ng-checked="vm.data.product_system.is_same_resident === '1'">
+          <label style="cursor: pointer;" for="p-address-option_1">{{'ecommerce.follow.two.product_address_option_1.label' | translate}}</label>
+        </div>
+        <div class="option-group">
+          <input class="option-input" style="cursor: pointer;" type="radio"
+            name="address-option-system"
+            ng-model="vm.data.product_system.is_same_resident"
+            id="p-address-option_2"
+            value="2"
+            ng-checked="vm.data.product_system.is_same_resident === '2'">
+          <label style="cursor: pointer;" for="p-address-option_2">{{'ecommerce.follow.two.product_address_option_2.label' | translate}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="vm.data.product_system.is_same_resident === '2'">
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.product_last_name.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" name="product_system_last_name"
+            ng-model="vm.data.product_system.last_name" required />
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_last_name.$error"
+            role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_last_name.error.required' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_first_name.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" name="product_system_first_name"
+            ng-model="vm.data.product_system.first_name" required />
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_first_name.$error"
+            role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_first_name.error.required' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_last_name_kana.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" class="form-control pay-input w100p"
+            name="product_system_last_name_kana" ng-model="vm.data.product_system.last_name_kana" required
+            input-validator='hiragana' />
+            <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_last_name_kana.$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_last_name_kana.error.required' | translate}}</small>
+              <small class="text-red" ng-message="hiragana">{{'ecommerce.follow.two.product_last_name_kana.error.kana' | translate}}</small>
+            </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_first_name_kana.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" class="form-control pay-input w100p"
+            name="product_system_first_name_kana" ng-model="vm.data.product_system.first_name_kana" required
+            input-validator='hiragana' />
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_first_name_kana.$error" role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_first_name_kana.error.required' | translate}}</small>
+            <small class="text-red" ng-message="hiragana">{{'ecommerce.follow.two.product_first_name_kana.error.kana' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_zipcode.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" ng-model="vm.data.product_system.zipcode"
+            ng-change="vm.getAddressByZipcode(vm.data.product_system.zipcode, 'product_system', null)" required
+            name="product_system_zipcode" minlength="7" ng-pattern="/^[0-9]*$/" ng-maxlength="7" maxlength="7" />
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_zipcode.$error"
+            role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_zipcode.error.required' | translate}}</small>
+            <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.product_zipcode.error.invalid' | translate}}</small>
+            <small class="text-red" ng-message="maxlength">{{'ecommerce.follow.two.product_zipcode.error.invalid' | translate}}</small>
+            <small class="text-red" ng-message="minlength">{{'ecommerce.follow.two.product_zipcode.error.invalid' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_prefecture.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <select  class="form-control"
+            name="product_system_prefecture"
+            ng-model="vm.data.product_system.prefecture"
+            required
+            >
+            <option value="{{prefecture}}" ng-selected="prefecture === vm.data.product_system.prefecture" ng-repeat="prefecture in vm.prefectures">{{prefecture}}</option>
+          </select>
+
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_prefecture.$error"
+            role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_prefecture.error.required' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_city.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" name="product_system_city"
+            ng-model="vm.data.product_system.city" required />
+
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_city.$error" role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_city.error.required' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_address.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p" name="product_system_address"
+            ng-model="vm.data.product_system.address" required />
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_address.$error"role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_address.error.required' | translate}}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label for="">{{'ecommerce.follow.two.product_building.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+          <input type="text" class="form-control pay-input w100p" ng-model="vm.data.product_system.building" />
+        </div>
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+         <label> {{'ecommerce.follow.two.product_tel.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p"
+            name="product_system_tel"
+            ng-model="vm.data.product_system.tel"
+            required
+            phone-validator
+          />
+          <div ng-if="vm.isSaveClick" ng-messages="vm.follow2Info.product_system_tel.$error" role="alert">
+            <small class="text-red" ng-message="required">{{'ecommerce.follow.two.product_tel.error.required' | translate}}</small>
+            <small class="text-red" ng-message="onlynumber">{{'ecommerce.follow.two.product_tel.error.onlynumber' | translate}}</small>
+            <small class="text-red" ng-message="not_has-">{{'ecommerce.follow.two.product_tel.error.not_has-'| translate}}</small>
+            <small class="text-red" ng-message="format_phone">{{'ecommerce.follow.two.product_tel.error.format_phone'| translate}}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

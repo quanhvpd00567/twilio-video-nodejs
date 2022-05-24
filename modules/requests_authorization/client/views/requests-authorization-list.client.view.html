@@ -1,0 +1,144 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <!-- <table-search-button>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'project.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'project.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'project.list.search.start_min.label' | translate}}</label>
+          <input type="text" name="start_min" datetime-picker="" datepicker-options="vm.dateOptionsStartMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'start_min')" placeholder="YYYY/MM/DD HH:mm"
+            is-open="open.start_min" class="form-control" ng-model="vm.condition.start_min"
+            ng-change="vm.onChangeStartMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'project.list.search.start_max.label' | translate}}</label>
+          <input type="text" name="start_max" datetime-picker="" datepicker-options="vm.dateOptionsStartMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'start_max')" placeholder="YYYY/MM/DD HH:mm"
+            is-open="open.start_max" class="form-control" ng-model="vm.condition.start_max" ng-change="vm.handleConditionChanged(false, 'start_max', {{
+              vm.condition.start_max || 'null'
+            }}); vm.onChangeStartMax()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'project.list.search.end_min.label' | translate}}</label>
+          <input type="text" name="end_min" datetime-picker="" datepicker-options="vm.dateOptionsEndMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'end_min')" placeholder="YYYY/MM/DD HH:mm"
+            is-open="open.end_min" class="form-control" ng-model="vm.condition.end_min"
+            ng-change="vm.onChangeEndMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'project.list.search.end_max.label' | translate}}</label>
+          <input type="text" name="end_max" datetime-picker="" datepicker-options="vm.dateOptionsEndMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'end_max')" placeholder="YYYY/MM/DD HH:mm"
+            is-open="open.end_max" class="form-control" ng-model="vm.condition.end_max" ng-change="vm.handleConditionChanged(false, 'end_max', {{
+              vm.condition.end_max || 'null'
+            }}); vm.onChangeEndMax()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content> -->
+  </table-search>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <p>
+        承認待ち<span style="font-size:20px">{{vm.condition.total}}</span>件
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list request">
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr>
+              <td colspan="10" ng-show="!vm.docs || vm.docs.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="item in vm.docs track by $index">
+              <td class="text-center" style="padding: 10px 4px;">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td style="padding: 10px;">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-md-7" style="display: inline;">{{vm.buildRequestTitle(item)}}</div>
+                    <div class="col-md-5">
+                      <span class="clickable delete-btn"
+                        ng-click="vm.deleteRequest(item._id)">{{'request_authorization.list.button.delete' |
+                        translate}}</span>
+                      <span class="clickable reject-btn"
+                        ng-click="vm.rejectRequest(item._id)">{{'request_authorization.list.button.reject' |
+                        translate}}</span>
+                      <span class="clickable approve-btn"
+                        ng-click="vm.approveRequest(item._id)">{{'request_authorization.list.button.approve' |
+                        translate}}</span>
+                      <span ng-click="vm.collapseRequest(item)"
+                        class="clickable collapse-btn">{{'request_authorization.list.button.collapse' |
+                        translate}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div style="margin-top: 10px; padding: 20px; border-top: 1px solid #d8cdb8;" ng-if="item.isShow">
+                      <p ng-if="item.resubmitted_reason"><strong>{{'request_authorization.list.resubmit_reason.label' |
+                          translate}}: {{item.resubmitted_reason}} </strong></p>
+                      <p>{{buildRequestSubtitle(item)}}</p>
+                      <table class="table table-bordered table-hover">
+                        <tbody>
+                          <tr ng-repeat="requestItem in item.request_items track by $index">
+                            <td style="padding: 10px;" class="text-center">
+                              {{buildRequestItemName(requestItem)}}
+                              <span style="float: right;" class='clickable'
+                                ng-click="vm.goDetailRequestItem(item, requestItem)">{{'request_authorization.list.button.detail_request_item'
+                                | translate}}</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

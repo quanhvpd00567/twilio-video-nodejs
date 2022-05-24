@@ -1,0 +1,98 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'request_registration.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'request_registration.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'request_registration.list.search.type.label' | translate}}</label>
+          <select name="type" class="form-control" ng-model="vm.condition.type">
+            <option value="">{{'common.label.option_all' | translate}}</option>
+            <option ng-repeat="item in vm.feature_autho_types" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="table-custom table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th colspan="4" class="text-left">代理入力する自治体・企業を選択してください。</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in vm.requests track by $index">
+              <td class="w50 text-center">
+                {{ tableIndex(vm.condition, $index) }}
+              </td>
+              <td class="w100 text-center">{{item.type === 'company' ? '企業' : '自治体'}}</td>
+              <td> {{item.type === 'company' ? getFullCompanyName(item.company_kind, item.company_name) :
+                item.munic_name}} </td>
+              <td class="w150 text-center">
+                <a ng-click="vm.onShowFeatures(item)">代理入力する</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+
+    <div class="col-lg-12" ng-if="vm.features_authorized.length > 0">
+      <div class="table-custom">
+        <table class="table table-detail table-bordered">
+          <thead>
+            <tr>
+              <th class="text-left" colspan="2">メニューを選択してください。</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in vm.features_authorized track by $index">
+              <td class="w100 text-center">{{ $index < 9 ? '0' + ($index + 1) : ($index + 1) }}</td>
+              <td class="text-left">
+                <a href="{{vm.getNamePath(item)}}">
+                  {{vm.getNameFeature(item.feature)}}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,46 @@
+<uib-pagination class="mg10t" total-items="vm.condition.total" ng-model="vm.condition.page" max-size="5"
+  boundary-links="true" items-per-page="vm.condition.limit" ng-click="vm.handlePageChanged()" first-text="&#60;"
+  last-text="&#62;">
+</uib-pagination>
+
+<style scoped>
+  .pagination-prev,
+  .pagination-next {
+    display: none !important;
+  }
+
+  .pagination > .active > a {
+    background-color: #000;
+    border-color: transparent;
+    border-radius: 10px;
+  }
+
+  .pagination > .active > a:hover,
+  .pagination > li > a:hover {
+    color: #000000;
+    background-color: #fdcf9e;
+    border-color: #facaac;
+  }
+
+  .pagination>li:first-child>a,
+  .pagination>li:last-child>a,
+  .pagination>li:last-child>span {
+    border: none;
+    background: none;
+    width: 20px;
+    margin: 0;
+  }
+
+  .pagination>li>a {
+    padding: inherit;
+    font-size: inherit;
+    margin: 0 8px;
+    border-radius: 50px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #00000080;
+  }
+</style>

@@ -1,0 +1,41 @@
+﻿<section class="content container-fluid">
+  <form name="vm.companyFormRanking" class="form-edit employee-form" ng-submit="vm.update(vm.companyFormRanking.$valid)"
+    novalidate autocomplete="off">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row mg10b">
+          <div class="col-xs-6">
+            <h4>
+              <form-title-only></form-title-only>
+            </h4>
+          </div>
+          <div class="col-xs-6 text-right">
+            <button-save></button-save>
+          </div>
+        </div>
+
+        <div class="table-custom">
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <td class="col-xs-12">
+                  <div class="form-check inline-block" ng-repeat="(key, item) in masterdata.company_setting_rankings"
+                    style="margin-left: 10px;margin-right: 20px;">
+                    <input class="form-check-input clickable" ng-value="item.id" ng-model="vm.company.ranking_to_show"
+                      ng-checked="item.id === vm.company.ranking_to_show" type="radio" name="kind"
+                      id="kind_{{item.id}}">
+                    <label class="form-check-label clickable" for="kind_{{item.id}}">{{item.value}}</label>&nbsp;&nbsp;
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+        <div class="form-group mgnb mg50b text-center">
+          <button-save></button-save>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>

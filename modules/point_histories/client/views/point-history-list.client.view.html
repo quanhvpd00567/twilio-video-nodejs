@@ -1,0 +1,193 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <div class="row point_history">
+    <!-- active points -->
+    <div class="col-xs-12">
+      <div class="table-custom">
+        <div class="row mg10t mg10b">
+          <div class="col-xs-12">
+            <div class="subtitle">
+              {{'point_history.detail.current.subtitle' | translate}}　<span>{{vm.totalCurrentPoints |
+                format_point : false : true}}</span>{{'common.label.unit.point' | translate}}
+            </div>
+          </div>
+        </div>
+        <div class="row mg10t mg10b">
+          <div class="col-xs-12">
+            <div class="breakdown">{{'point_history.detail.breakdown.label' | translate}}</div>
+          </div>
+        </div>
+        <div class="title-group">
+          <p class="mgn title-group__inline-title">
+            {{ tableReport(vm.conditionForCurrentPoints) }}
+          </p>
+        </div>
+        <table class="table table-detail table-bordered">
+          <tbody>
+            <tr>
+              <td colspan="10" ng-show="!vm.currentPoints || vm.currentPoints.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="item in vm.currentPoints track by $index">
+              <td class="col-index text-center">
+                {{ tableIndex(vm.conditionForCurrentPoints, $index) }}
+              </td>
+              <td class="w200 text-center">
+                {{item.expire | formatYearMonthDay}}{{'point_history.detail.expected_to_expired.label' | translate}}
+              </td>
+              <td class="w200" ng-bind="item.municipality_name">
+              </td>
+              <td class="w100 text-right" ng-bind="item.points | format_point">
+              </td>
+              <td class="w100 text-right" ng-bind="item.points | format_money">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <uib-pagination class="mg10t" style="margin-bottom: 10px;" total-items="vm.conditionForCurrentPoints.total"
+            ng-model="vm.conditionForCurrentPoints.page" max-size="5" boundary-links="true"
+            items-per-page="vm.conditionForCurrentPoints.limit" ng-click="vm.handlePageChanged()" previous-text="前"
+            next-text="次" first-text="最初" last-text="最後"></uib-pagination>
+        </div>
+      </div>
+    </div>
+
+    <!-- used points -->
+    <div class="col-xs-12">
+      <div class="table-custom">
+        <div class="row mg10t mg10b">
+          <div class="col-xs-12">
+            <div class="subtitle">
+              <select name="year" class="form-control" style="display: inline-block; width: 130px; margin-right: 10px;"
+                ng-model="vm.yearOfPointsUsedSelected" ng-change="vm.changeYearOfUsedPoints()">
+                <option ng-repeat="year in vm.economicYears" value="{{year}}">
+                  {{year}}{{'point_history.detail.suffix_year.label' | translate}}
+                </option>
+              </select>
+              {{'point_history.detail.used.subtitle' | translate}}　<span>{{vm.totalUsedPointsOfYear |
+                format_point : false : true}}</span>{{'common.label.unit.point' | translate}}
+              <div style="display: inline; float: right; margin-top: 8px;">
+                <span>{{vm.totalPaymentAmountsOfYear | format_money :false : true}}</span>{{'common.label.unit.money' |
+                translate}}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 mg10t">
+            <select name="month" class="form-control" style="display: inline-block; width: 110px; margin-right: 10px;"
+              ng-model="vm.monthOfPointsUsedSelected" ng-change="vm.changeMonthOfUsedPoints()">
+              <option ng-repeat="month in vm.monthsOfPointsUsed" value="{{month.id}}">
+                {{month.value}}
+              </option>
+            </select>
+            <span>{{'point_history.detail.used.payment_list.label' | translate}}</span>
+            <div style="display: inline; float: right; margin-top: 8px; margin-right: 6px;">
+              <span style="font-weight: bold;">{{vm.totalPaymentAmountsOfMonth | format_money}}</span>
+            </div>
+
+            <div class="mg10t" style="border-bottom: 1px solid #d8cdb8;"></div>
+          </div>
+        </div>
+        <div class="row mg10t mg10b">
+          <div class="col-xs-12">
+            <div class="breakdown">{{'point_history.detail.breakdown.label' | translate}}</div>
+          </div>
+        </div>
+        <table class="table table-detail table-bordered">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th class="w150">{{'point_history.detail.used.table.header.payment_destination' | translate}}</th>
+              <th class="w200 text-center">{{'point_history.detail.used.table.header.aggregation_period' | translate}}
+              </th>
+              <th class="w100 text-center">{{'point_history.detail.used.table.header.payment_date' | translate}}</th>
+              <th class="w100 text-center">{{'point_history.detail.used.table.header.payment_status' | translate}}</th>
+              <th class="w100 text-right">{{'point_history.detail.used.table.header.usage_points' | translate}}</th>
+              <th class="w100 text-right">{{'point_history.detail.used.table.header.payment_amount' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="10" ng-show="!vm.paymentHistories || vm.paymentHistories.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="item in vm.paymentHistories track by $index">
+              <td class="col-index text-center">
+                {{ $index + 1 }}
+              </td>
+              <td ng-bind="item.municipality.name"></td>
+              <td class="text-center" ng-bind="vm.generateAggregationPeriod()"></td>
+              <td class="text-center" ng-bind="vm.generatePaymentDate()">
+              </td>
+              <td class="text-center" ng-bind="showMasterValue(masterdata.payment_statuses, item.is_paid)"
+                ng-click="vm.updatePaymentStatus(item._id, item.is_paid)"
+                ng-class="{'paid': item.is_paid, unpaid: !item.is_paid}"></td>
+              <td class="text-right" ng-bind="item.points | format_point">
+              </td>
+              <td class="text-right" ng-bind="item.amount | format_money">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- expired points -->
+    <div class="col-xs-12">
+      <div class="table-custom">
+        <div class="row mg10t mg10b">
+          <div class="col-xs-12">
+            <div class="subtitle">
+              <select name="year" class="form-control" style="display: inline-block; width: 130px; margin-right: 10px;"
+                ng-model="vm.yearOfPointsExpired" ng-change="vm.changeYearOfExpiredPoints()">
+                <option ng-repeat="year in vm.economicYears" value="{{year}}">
+                  {{year}}{{'point_history.detail.suffix_year.label' | translate}}
+                </option>
+              </select>
+              {{'point_history.detail.expired.subtitle' | translate}}　<span>{{vm.totalExpiredPoints |
+                format_point : false : true}}</span>{{'common.label.unit.point' | translate}}
+              <div style="display: inline; float: right; margin-top: 8px;">
+                <span>{{vm.totalExpiredPoints | format_money :false : true}}</span>{{'common.label.unit.money' |
+                translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mg10t mg10b">
+          <div class="col-xs-12">
+            <div class="breakdown">{{'point_history.detail.breakdown.label' | translate}}</div>
+          </div>
+        </div>
+        <table class="table table-detail table-bordered">
+          <tbody>
+            <tr>
+              <td colspan="10" ng-show="!vm.expiredPoints || vm.expiredPoints.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="item in vm.expiredPoints track by $index">
+              <td class="col-index text-center">
+                {{ $index + 1 }}
+              </td>
+              <td class="w200 text-center">
+                {{item.created | formatYearMonthDay}}{{'point_history.detail.expired.label' | translate}}
+              </td>
+              <td class="w200" ng-bind="item.municipality_name">
+              </td>
+              <td class="w100 text-right" ng-bind="item.points | format_point">
+              </td>
+              <td class="w100 text-right" ng-bind="item.points | format_money">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

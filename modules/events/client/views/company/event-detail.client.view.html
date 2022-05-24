@@ -1,0 +1,241 @@
+<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4 ng-if="!isAdminOrSubAdmin"><span class="page_title_clickable"
+              ui-sref="company.events.list">{{'event.page_title.list' |
+              translate}}</span> >
+            <form-title-only></form-title-only>
+          </h4>
+          <h4 ng-if="isAdminOrSubAdmin">
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-back back="company.events.list" noback="company.events.projects_apply" nohistory="true"
+            params="{companyId: vm.companyId}">
+          </button-back>
+        </div>
+      </div>
+      <div class="table-responsive event-form">
+        <table class="table table-bordered table-detail" style="margin-bottom: 5px;">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                {{'event.detail.event_name.label' | translate}}
+              </th>
+              <td class="col-xs-4" ng-bind="vm.event.event_name"></td>
+              <th class="col-xs-2">
+                {{'event.detail.donation_amount.label' | translate}}
+              </th>
+              <td class="col-xs-4"
+                ng-bind="vm.event.total | parse_donation_amount: vm.event.status : masterdata.EVENT_STATUS.FINISHED : vm.event.type : vm.event.donation_amount">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'event.detail.municipality_name.label' | translate}}
+              </th>
+              <td class="col-xs-4" ng-bind-html="vm.event.municipality_name">
+              </td>
+              <th class="col-xs-2">
+                {{'event.detail.project_names.label' | translate}}
+              </th>
+              <td class="col-xs-4" ng-bind="vm.concatProjectNames(vm.event.project_names)">
+              </td>
+            </tr>
+            <tr ng-if="vm.event.type === masterdata.event_type.FLOATING">
+              <th class="col-xs-2">
+                {{'event.detail.min_donation_amount.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.event.min_donation_amount | format_money">
+              </td>
+              <th class="col-xs-2">
+                {{'event.detail.max_donation_amount.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.event.max_donation_amount | format_money">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2" ng-if="vm.event.type === masterdata.event_type.FLOATING">
+                {{'event.detail.aps.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.event.aps | format_money : true"
+                ng-if="vm.event.type === masterdata.event_type.FLOATING">
+              </td>
+              <th class="col-xs-2">
+                {{'event.detail.pps.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.event.pps | format_point : true">
+              </td>
+
+              <th class="col-xs-2" ng-if="vm.event.type === masterdata.event_type.FIXED">
+                {{'event.detail.created.label' | translate}}
+              </th>
+              <td class="col-xs-10" colspan="3" ng-bind="vm.event.created | dateTimeNormal"
+                ng-if="vm.event.type === masterdata.event_type.FIXED">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'event.detail.start.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.event.start | dateTimeNormal">
+              </td>
+              <th class="col-xs-2">
+                {{'event.detail.end.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="vm.event.end | dateTimeNormal">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'event.detail.status.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="showMasterValue(masterdata.event_statuses, vm.event.status)">
+              </td>
+              <th class="col-xs-2">
+                {{'event.detail.method.label' | translate}}
+              </th>
+              <td class="col-xs-4 form-group" ng-bind="showMasterValue(masterdata.payment_methods, vm.event.method)">
+              </td>
+            </tr>
+            <tr ng-if="vm.event.method !== masterdata.PAYMENT_METHOD.BANK_TRANSFER">
+              <th class="col-xs-2">
+                {{'event.detail.destination.label' | translate}}
+              </th>
+              <td class="col-xs-10" colspan="3">
+                {{vm.event.zipcode}} {{vm.event.address}} {{vm.event.name}}
+              </td>
+            </tr>
+            <tr ng-if="vm.event.type === masterdata.event_type.FLOATING">
+              <th class="col-xs-2">
+                {{'event.detail.created.label' | translate}}
+              </th>
+              <td class="col-xs-10" colspan="3" ng-bind="vm.event.created | dateTimeNormal">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mg30b">
+        <pre class="break-line" ng-if="vm.event.method === masterdata.PAYMENT_METHOD.PAYMENT_SLIP">
+          {{'event.project_apply.form.payment_method.payment_slip.note' | translate}}</pre>
+        <pre class="break-line" ng-if="vm.event.method === masterdata.PAYMENT_METHOD.POSTAL_TRANSFER">
+          {{'event.project_apply.form.payment_method.postal_transfer.note' | translate}}</pre>
+        <pre class="break-line" ng-if="vm.event.method === masterdata.PAYMENT_METHOD.BANK_TRANSFER">
+          {{vm.bankTransferPaymentMethodNote}}</pre>
+      </div>
+
+      <table-search>
+        <table-search-button>
+        </table-search-button>
+        <table-search-content>
+          <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+            <div class="form-group">
+              <label>{{'com_projects.company.list.search.keyword.label' | translate}}</label>
+              <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+                placeholder="{{'com_projects.list.search.keyword.placeholder' | translate}}"
+                event-enter="vm.handleConditionChanged(true)" />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="form-group">
+              <label>{{'com_projects.list.search.magazine.label' | translate}}</label>
+              <select name="magazine" class="form-control" ng-model="vm.condition.magazine">
+                <option value="">{{'common.label.option_all' | translate}}</option>
+                <option ng-repeat="item in masterdata.magazine_types" value="{{item.id}}"> {{item.value}}</option>
+              </select>
+            </div>
+          </div>
+          <!-- max row in page -->
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="form-group">
+              <label>{{'common.label.max_row_in_page' | translate}}</label>
+              <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+                placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+            </div>
+          </div>
+        </table-search-content>
+      </table-search>
+
+      <div class="row">
+        <!-- 各ボタン -->
+        <div class="col-xs-12">
+          <div class="title-group">
+            <p class="mgn title-group__inline-title">
+              {{ tableReport(vm.condition) }}
+            </p>
+          </div>
+        </div>
+        <!-- #各ボタン -->
+        <div class="col-xs-12">
+          <div class="table-responsive table-list">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th class="col-index">#</th>
+                  <th class="text-center w100" tbtitle="{{'com_projects.list.table.header.number.label' | translate}}"
+                    tbmodel="number" ng-click="vm.handleSortChanged('number')" table-order tbcondition="vm.condition">
+                  </th>
+                  <th class="text-left w150"
+                    tbtitle="{{'com_projects.list.table.header.project_name.label' | translate}}" tbmodel="project_name"
+                    ng-click="vm.handleSortChanged('project_name')" table-order tbcondition="vm.condition"></th>
+                  <th class="text-center w100" tbtitle="{{'com_projects.list.table.header.total.label' | translate}}"
+                    tbmodel="total" ng-click="vm.handleSortChanged('total')" table-order tbcondition="vm.condition">
+                  </th>
+                  <th class="text-center w100"
+                    tbtitle="{{'com_projects.list.table.header.number_of_participants.label' | translate}}"
+                    tbmodel="number_of_participants" ng-click="vm.handleSortChanged('number_of_participants')"
+                    table-order tbcondition="vm.condition">
+                  </th>
+                  <th class="text-center w100">{{'com_projects.list.table.header.magazine.label' | translate}}</th>
+                  <th class="text-center w100">{{'common.table.header.action' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="20" ng-show="!vm.docs || vm.docs.length === 0">
+                    {{'common.table.no_data_available' | translate}}
+                  </td>
+                </tr>
+                <tr ng-repeat="item in vm.docs track by $index"
+                  ui-sref="company.events.comproject_detail({ eventId: vm.event._id, comProjectId: item._id })"
+                  class="clickable">
+                  <td class="text-center">
+                    {{ tableIndex(vm.condition, $index) }}
+                  </td>
+                  <td class="text-center" ng-bind="item.number"></td>
+                  <td ng-bind="item.project_name"></td>
+                  <td class="text-center"
+                    ng-bind="item.total | parse_donation_amount: item.status : masterdata.EVENT_STATUS.FINISHED"></td>
+                  <td class="text-center" ng-bind="item.number_of_participants | format_person"></td>
+                  <td class="text-center" ng-bind="showMasterValue(masterdata.magazine_types, item.magazine)"></td>
+                  <td class="text-center" ui-sref-ignore>
+                    <button class="btn btn-xs btn-primary"
+                      ui-sref="company.events.comproject_detail({ eventId: vm.event._id, comProjectId: item._id })">
+                      <i class="fa fa-info" aria-hidden="true"></i>
+                      {{'com_projects.list.button.list_participants' | translate}}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+        </div>
+      </div>
+
+      <div class="row mg10b">
+        <div class="col-xs-4">
+        </div>
+        <div class="col-xs-4 text-center">
+          <button-back back="company.events.list" noback="company.events.projects_apply" nohistory="true"
+            params="{companyId: vm.companyId}">
+          </button-back>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

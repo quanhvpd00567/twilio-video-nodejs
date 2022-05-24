@@ -1,0 +1,248 @@
+﻿<section class="container-ecommerce">
+  <!-- cart item 1 -->
+  <div class="row">
+    <div class="card" class="col-xs-12" ng-if="!vm.carts || vm.carts.length === 0">
+      <div class="card-body">
+        <span>{{'ecommerce.cart.error.no_items' | translate}}</span>
+      </div>
+    </div>
+    <div class="card" ng-repeat="cart in vm.carts track by $index">
+      <div class="card-body">
+        <div>
+          <form name="vm.cartForm{{$index}}" class="form-edit notice-form"
+            ng-submit="vm.save(vm['cartForm' + $index].$valid, cart)" novalidate autocomplete="off">
+            <div class="col-xs-12 mg30b">
+              <h4>{{cart.municipality.prefecture + cart.municipality.name}}</h4>
+              <div class="text-right mg12b d-xs-none">{{'ecommerce.cart.donation_amount.label' | translate}}</div>
+
+              <div class="cart-item row" ng-repeat="item in cart.products">
+                <div class="col-xs-4 col-sm-2">
+                  <div class="picture-wrapper">
+                    <div class="picture">
+                      <img src="{{item.product.avatar}}" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-8 col-sm-10 row">
+                  <div class="col-xs-12 col-md-8">
+                    <div class="cart-item-info">
+                      <div><b>{{item.product.name}}</b></div>
+                      <div class="d-flex flex-row align-center flex-1 space-between flex-wrap">
+                        <div class="d-flex">
+                          <span class="price mg40r">
+                            <span class="number">{{item.product.price | format_money : false : true}}</span>
+                            <span class="currency">{{'common.label.unit.money' | translate}}</span>
+                          </span>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <div class="d-flex align-center flex-row">
+                            <span>{{'ecommerce.cart.quantity.label' | translate}}:</span>
+                            <span>
+                              <input type="number" class="form-control quantity-input mg6l mg6r"
+                                name="quantity_{{item._id}}" ng-change="vm.recalculateTotalAmountAndSubtotal(cart)"
+                                ng-model="item.quantity" required number-integer-only min="1"
+                                ng-disabled="item.product.isStoppedSell"
+                                ng-blur="vm.setDefaultValueQuantity($event, item, cart)" />
+                            </span>
+                            <span>
+                              <button class="btn btn-danger" type="button"
+                                ng-click="vm.removeProduct(item.product._id, cart._id)">{{'ecommerce.cart.button.delete'
+                                |translate}}</button>
+                            </span>
+                          </div>
+                          <div ng-if="item.product.isStoppedSell">
+                            <small class="text-red">{{'ecommerce.cart.product.stopped_sell.label' | translate}}</small>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="vm.isSaveClick" ng-messages="vm['cartForm' + $index]['quantity_' + item._id].$error"
+                        role="alert">
+                        <small class="text-red" ng-message="required">{{'ecommerce.cart.quantity.error.required' |
+                          translate}}</small>
+                        <small class="text-red" ng-message="number">{{'ecommerce.cart.quantity.error.number' |
+                          translate}}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-md-4 d-xs-none">
+                    <div class="price-description">
+                      <span class="price">
+                        <span class="number">
+                          {{(item.quantity * item.product.price) | format_money : false : true}}
+                        </span>
+                        <span class="currency">{{'common.label.unit.money' | translate}}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="border-split text-right pd16t">
+                <span class="mg20r">{{'ecommerce.cart.total.label' | translate}}</span>
+                <span class="price">
+                  <span class="number">{{cart.subtotal | format_money : false : true}}</span>
+                  <span class="currency">{{'common.label.unit.money' | translate}}</span>
+                </span>
+              </div>
+
+              <div>
+                <h5><b>{{'ecommerce.cart.point_usage.subtitle' | translate}}</b></h5>
+                <div class="option-group">
+                  <input class="option-input" type="radio" name="point-method-2"
+                    value="{{vm.POINT_USE_TYPE.NOT_USE_POINT}}" ng-model="cart.pointUseTypeSelected"
+                    ng-click="vm.recalculateTotalAmountAndSubtotal(cart)">
+                  {{'ecommerce.cart.payment_method.not_use_point.label' | translate}}
+                </div>
+                <div class="option-group flex-wrap">
+                  <input class="option-input" type="radio" name="point-method-2"
+                    value="{{vm.POINT_USE_TYPE.USE_SOME_POINT}}" ng-model="cart.pointUseTypeSelected"
+                    ng-click="vm.recalculateTotalAmountAndSubtotal(cart)">
+                  {{'ecommerce.cart.payment_method.use_some_point.label' | translate}}
+                  <span class="d-flex align-center mg12l">
+                    <input type="number" class="form-control w100 mg6l mg6r" name="points_input_{{cart._id}}"
+                      ng-disabled="cart.pointUseTypeSelected !== vm.POINT_USE_TYPE.USE_SOME_POINT"
+                      ng-change="vm.recalculateTotalAmountAndSubtotal(cart)" ng-model="cart.pointsInput"
+                      ng-required="cart.pointUseTypeSelected === vm.POINT_USE_TYPE.USE_SOME_POINT" number-integer-only
+                      ng-blur="vm.setDefaultValuePointsInput($event, cart)" />
+                    <span">
+                      pt&nbsp;&nbsp;&nbsp;&nbsp;({{'ecommerce.cart.maximum_point.label' | translate}} :
+                      {{cart.maxPoints | format_point}}{{'ecommerce.cart.available.label' | translate}})
+                  </span>
+                  </span>
+                </div>
+                <div ng-if="vm.isSaveClick" ng-messages="vm['cartForm' + $index]['points_input_' + cart._id].$error"
+                  role="alert">
+                  <small class="text-red" ng-message="required">{{'ecommerce.cart.points_input.error.required' |
+                    translate}}</small>
+                  <small class="text-red" ng-message="number">{{'ecommerce.cart.points_input.error.number' |
+                    translate}}</small>
+                </div>
+                <div class="option-group">
+                  <input class="option-input" type="radio" name="point-method-2"
+                    value="{{vm.POINT_USE_TYPE.USE_ALL_POINT}}" ng-model="cart.pointUseTypeSelected"
+                    ng-click="vm.recalculateTotalAmountAndSubtotal(cart)">
+                  {{'ecommerce.cart.payment_method.use_all_point.label' | translate}}
+                </div>
+
+                <div class="text-right pd16b">
+                  <span class="mg20r">{{'ecommerce.cart.points_used.label' | translate}}</span>
+                  <span class="price">
+                    <span class="number">{{cart.pointsUsed | format_point : false : true}}</span>
+                    <span class="currency">{{'common.label.unit.point' | translate}}</span>
+                  </span>
+                </div>
+
+                <div class="text-right border-split pd16t">
+                  <span class="mg20r">{{'ecommerce.cart.total_amount_remain.label' | translate}}</span>
+                  <span class="price">
+                    <span class="number text-red">{{cart.totalAmount | format_money : false : true}}</span>
+                    <span class="currency">{{'common.label.unit.money' | translate}}</span>
+                  </span>
+                </div>
+
+                <div class="row cart-actions mg16t">
+                  <div class="col-xs-6 action-btn">
+                    <button class="btn btn-mcd btn-sm w100p" ui-sref="company.ecommerces.home" type="button">
+                      {{'ecommerce.cart.button.continue_order' | translate}}
+                    </button>
+                  </div>
+                  <div class="col-xs-6 action-btn">
+                    <button class="btn btn-primary btn-sm w100p" type="submit">
+                      {{'ecommerce.cart.button.apply' | translate}}
+                    </button>
+                  </div>
+                </div>
+                <div class="row messages mg20t">
+                  <div class="text-red" ng-repeat="message in vm.errorMessages track by $index">{{message}}</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</section>
+
+<style scoped>
+  .card {
+    background-color: white;
+  }
+
+  .cart-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-top: 1px dashed rgba(0, 0, 0, .09);
+    padding: 10px 0;
+  }
+
+  .cart-item .picture-wrapper {
+    display: flex;
+    height: auto;
+    min-width: 100px;
+    max-width: 150px;
+    align-items: center;
+    border: 1px solid #aeadac;
+    background: white;
+  }
+
+  .cart-item .cart-item-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-bottom: 20px;
+  }
+
+  .cart-item .cart-item-info .quantity-input {
+    width: 70px;
+  }
+
+  .cart-item .picture-wrapper>.picture {
+    position: relative;
+    padding-top: 75%;
+    width: 100%;
+  }
+
+  .cart-item .picture-wrapper>.picture>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto auto;
+  }
+
+  .price>.number {
+    font-weight: bold;
+  }
+
+  .price>.number::after {
+    content: '\00a0';
+  }
+
+  .border-split {
+    border-top: 1px dashed rgba(0, 0, 0, .09);
+  }
+
+  .cart-actions {
+    margin-top: 30px;
+    max-width: 500px;
+    margin: auto;
+  }
+
+  @media (min-width: 970px) {
+    .cart-item .price-description {
+      text-align: right;
+    }
+  }
+
+  @media (min-width: 767px) {
+    .cart-item .cart-item-info .quantity-input {
+      width: 150px;
+    }
+  }
+</style>

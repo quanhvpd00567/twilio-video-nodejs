@@ -1,0 +1,80 @@
+﻿<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4 ng-if="!isAdminOrSubAdmin">
+            <span class="page_title_clickable" ui-sref="company.employees.list">{{'employees.list.page.title' |
+              translate}}</span> >
+            <form-title-only></form-title-only>
+          </h4>
+          <h4 ng-if="isAdminOrSubAdmin">
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="company.employees.list" noback="company.employees.create" state="company.employees.edit"
+            params="{employeeId: vm.employee._id}" ng-if="!isAdminOrSubAdmin"></button-edit>
+          <button-back back="company.employees.list" noback="company.employees.create" ng-if="isAdminOrSubAdmin">
+          </button-back>
+        </div>
+      </div>
+
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.number.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.employee.number"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.last_name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.employee.last_name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.first_name.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.employee.first_name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.email.label' | translate }}</th>
+              <td class="col-xs-10">
+                <a href="mailto:{{vm.employee.email}}">{{vm.employee.email}}</a>
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.subsidiary.label' | translate }}</th>
+              <td class="col-xs-10"
+                ng-bind="getFullCompanyName(vm.employee.subsidiary.kind, vm.employee.subsidiary.name)">
+              </td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.department.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.employee.e_department.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.role.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="showMasterValue(masterdata.company_roles, vm.employee.roles[0])"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">{{ 'employees.detail.note.label' | translate }}</th>
+              <td class="col-xs-10" ng-bind="vm.employee.note"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="row mg10b">
+      <div class="col-xs-4">
+      </div>
+      <div class="col-xs-4 text-center">
+        <button-edit back="company.employees.list" noback="company.employees.create" state="company.employees.edit"
+          params="{employeeId: vm.employee._id}" ng-if="!isAdminOrSubAdmin"></button-edit>
+        <button-back back="company.employees.list" noback="company.employees.create" ng-if="isAdminOrSubAdmin">
+        </button-back>
+      </div>
+    </div>
+
+  </div>
+</section>

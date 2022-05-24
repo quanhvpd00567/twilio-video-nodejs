@@ -1,0 +1,218 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+
+  <!-- REQUEST -->
+  <div class="row" ng-repeat="request in vm.requests track by $index">
+    <div class='col-xs-12'>
+      {{request.name}}
+    </div>
+    <div class="col-xs-12">
+      <div class="table-responsive table-list request">
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr ng-repeat="groups in request.groupTypes track by $index" ng-if="groups.length">
+              <td style="padding: 10px;">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-md-7" style="display: inline;">
+                      {{vm.buildRequestTitleForPendingRequestItem(groups[0].type)}}</div>
+                    <div class="col-md-5">
+                      <!-- <button class="btn btn-xs btn-primary" ng-click="vm.submit(groups)"
+                        style="float: right; margin-left: 30px;">
+                        申請する
+                      </button> -->
+                      <span ng-click="vm.submit(groups)" class="clickable approve-btn">申請する</span>
+
+                      <span ng-click="vm.collapseRequest(groups[0])"
+                        class="clickable collapse-btn">{{'request_authorization.list.button.collapse' |
+                        translate}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div style="margin-top: 10px; padding: 20px; border-top: 1px solid #d8cdb8;"
+                      ng-if="groups[0].isShow">
+                      <table class="table table-bordered table-hover">
+                        <tbody>
+                          <tr ng-repeat="item in groups track by $index">
+                            <td style="padding: 10px;" class="text-center">
+                              {{buildRequestItemName(item)}}
+
+                              <!-- <span style="float: right; margin-left: 30px;" class='color-yellow clickable'
+                                ng-if='item.isAuthorization' ng-click="vm.removeRequestItem(item)">取り戻し</span>
+                              <span style="float: right;" class='clickable' ng-if='vm.isShowEditOrDetail(item)'
+                                ng-click="vm.goDetail(item, item)">詳細を見る</span> -->
+
+                              <button class="btn btn-xs btn-danger" style="float: right;margin-left: 5px;"
+                                ng-if='item.isAuthorization' ng-click="vm.removeRequestItem(item)">
+                                取り消す
+                              </button>
+                              <button class="btn btn-xs btn-success" style="float: right;margin-left: 30px;"
+                                ng-if='item.isAuthorization && vm.isShowEditOrDetail(item)'
+                                ng-click="vm.updateRequestItem(item, item)">
+                                {{'common.button.edit' | translate}}
+                              </button>
+
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <!-- REJECT -->
+  <h4>却下された申請{{vm.rejecteds.length}} 件</h4>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive table-list request">
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr ng-repeat="rejected in vm.rejecteds track by $index">
+              <td style="padding: 10px;">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-md-7" style="display: inline;">{{vm.buildRequestTitle(rejected)}}</div>
+                    <div class="col-md-5">
+                      <span class="color-warning clickable" style="float: right;margin-left: 30px;"
+                        ng-if='rejected.isAuthorization' ng-click="vm.removeRequest(rejected)">申請を破棄する</span>
+
+                      <span class="color-blue clickable" style="float: right;margin-left: 30px;"
+                        ng-if='rejected.isAuthorization' ng-click="vm.resubmit(rejected)">再申請する</span>
+
+                      <span data-toggle="collapse" ng-click="vm.collapseRequest(rejected)"
+                        class="clickable collapse-btn">{{'request_authorization.list.button.collapse' |
+                        translate}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div style="margin-top: 10px; padding: 20px; border-top: 1px solid #d8cdb8;"
+                      ng-if="rejected.isShow">
+                      <p> <strong>却下理由: {{rejected.rejected_reason}}</strong></p>
+                      <p>{{buildRequestSubtitle(rejected)}}</p>
+                      <table class="table table-bordered table-hover">
+                        <tbody>
+                          <tr ng-repeat="requestItem in rejected.request_items track by $index" class='h40'>
+                            <td style="padding: 10px;" class="text-center">
+                              {{buildRequestItemName(requestItem)}}
+
+                              <button class="btn btn-xs btn-danger" style="float: right;margin-left: 5px;"
+                                ng-if='rejected.isAuthorization' ng-click="vm.removeRequestItem(requestItem)">
+                                取り消す
+                              </button>
+                              <button class="btn btn-xs btn-success" style="float: right;margin-left: 30px;"
+                                ng-if='rejected.isAuthorization && vm.isShowEditOrDetail(rejected)'
+                                ng-click="vm.updateRequestItem(rejected, requestItem)">
+                                {{'common.button.edit' | translate}}
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <!-- WAITING -->
+  <h4>承認待ち{{vm.waitings.length}} 件</h4>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive table-list request">
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr ng-repeat="waiting in vm.waitings track by $index">
+              <td style="padding: 10px;">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-md-7" style="display: inline;">{{vm.buildRequestTitle(waiting)}}</div>
+                    <div class="col-md-5">
+                      <span class="color-yellow clickable" style="float: right;margin-left: 30px;"
+                        ng-if='waiting.isAuthorization' ng-click="vm.removeRequest(waiting)">取り戻し</span>
+                      <span data-toggle="collapse" ng-click="vm.collapseRequest(waiting)"
+                        class="clickable collapse-btn">{{'request_authorization.list.button.collapse' |
+                        translate}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div style="margin-top: 10px; padding: 20px; border-top: 1px solid #d8cdb8;" ng-if="waiting.isShow">
+                      <p>{{buildRequestSubtitle(waiting)}}</p>
+                      <table class="table table-bordered table-hover">
+                        <tbody>
+                          <tr ng-repeat="requestItem in waiting.request_items track by $index">
+                            <td style="padding: 10px;" class="text-center">
+                              {{buildRequestItemName(requestItem)}}
+                              <span style="float: right;" class='clickable'
+                                ng-click="vm.goDetail(waiting, requestItem)">{{'request_authorization.list.button.detail_request_item'
+                                | translate}}</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style scoped>
+  .group-border {
+    border: 2px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px;
+    background: white;
+  }
+
+  .border-radius-0 {
+    border-radius: 0px;
+  }
+
+  .color-gray {
+    color: #808080;
+  }
+
+  .color-yellow {
+    color: #c08f00;
+  }
+
+  .color-blue {
+    color: #4380bb;
+  }
+
+  .color-warning {
+    color: #c85d1c;
+  }
+
+  .table-collapse tr {
+    border: 1px solid #dadada;
+  }
+
+  .table-collapse tr td {
+    border-top: 1px solid #dadada !important;
+  }
+</style>

@@ -1,0 +1,41 @@
+﻿<section class="container-ecommerce">
+  <div class="row mg20t notice_list">
+    <div class="col-xs-12 mg20t" ng-show="!vm.docs || vm.docs.length === 0">
+      <h4>{{'common.table.no_data_available' | translate}}</h4>
+    </div>
+    <div class="col-xs-12 mg10t" ng-repeat="item in vm.docs"
+      style="border-bottom: 1px solid #e3e3e1; padding-bottom: 18px;">
+      <h4 class="clickable" ng-class="{'unread' : !item.isRead}"
+        ui-sref="company.ecommerces.notice_detail({ noticeId: item._id })"
+        style="border-left: 10px solid #aeadac;padding-left: 14px;">{{item.title}}</h4>
+      <div class="text-md">{{item.created | dateTimeNormal}}</div>
+    </div>
+
+    <div class="col-xs-12 mg20t" ng-show="vm.docs && vm.docs.length !== 0">
+      <div ng-include="'/modules/core/client/views/pagination-ecommerce.client.view.html'"></div>
+    </div>
+
+    <div class="col-xs-12 action-btn mg20t mg20b">
+      <button class="btn btn-primary btn-sm w100p" ui-sref="company.ecommerces.home" type="button">
+        {{'ecommerce.notice.button.top' | translate}}
+      </button>
+    </div>
+  </div>
+</section>
+
+<style scoped>
+  .notice-items {
+    text-align: center;
+    padding-left: 0;
+  }
+
+  @media (min-width: 767px) {
+    .notice-items {
+      text-align: left;
+    }
+
+    .action-btn {
+      width: 200px;
+    }
+  }
+</style>

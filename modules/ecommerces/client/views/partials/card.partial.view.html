@@ -1,0 +1,156 @@
+<div class="card">
+  <div class="card-body">
+    <div>
+      <h5><b>お支払い方法の選択</b></h5>
+      <p class="text-red" ng-if="vm.messageCard">{{vm.messageCard}}</p>
+    </div>
+    <div class="border-split"></div>
+
+    <div class="row mg12y align-center" style="margin-bottom: 9px !important;">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <label class="flex-1 text-left">クレジットカード払い</label>
+      </div>
+    </div>
+
+    <div class="border-split"  style="border-bottom:2px solid #ccc"></div>
+    
+    <div class="row mg12y align-center" style="margin-bottom: 9px !important;" ng-if="vm.cards && vm.cards.length > 0">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <span class="flex-1 text-left">保存したクレジットカードを選択する</span>
+      </div>
+    </div>
+
+    <div class="row mg12y align-center" ng-if="vm.cards && vm.cards.length > 0" ng-repeat="card in vm.cards">
+        <div class="col-xs-10 col-sm-9 col-md-4 mb-0"  >
+          <div class="option-group form-group" style="margin-top: 0">
+            <input class="option-input" type="radio" name="your_card"
+              ng-click="vm.onChangeCard(card._id)"
+              ng-checked="vm.data.card.old_card_id === card._id"
+              ng-model="vm.data.card.old_card_id"
+            />
+            <input type="text" class="form-control" value="{{vm.hashNumberCard(card.card_number)}}" readonly />
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-3 col-md-6  mb-0">
+          <a ng-click="vm.onRemoveCard(card._id)" class="text-red" >削除</a>
+        </div>
+    </div>
+
+    <div class="row mg12y align-center">
+      <div class="col-xs-12 col-sm-12 col-md-12 form-group mb-0">
+        <div class="option-group" style="margin-top: 0">
+          <input class="option-input" type="radio" name="your_card"
+            id="new_card"
+            ng-click="vm.onChangeCard('')"
+            ng-checked="vm.data.card.is_new_card === true"
+            ng-model="vm.data.card.is_new_card"
+          />
+          <label for="new_card">新しいクレジットカードを入力する</label>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="vm.data.card.is_new_card">
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.card_number.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="text" class="form-control pay-input w100p"
+            name="card_number"
+            ng-model="vm.data.card.card_number"
+            ng-pattern="/\d/"
+            required />
+            <div ng-if="vm.isSaveClick && vm.isChangeNewCard" ng-messages="vm.follow2Info.card_number.$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.card_number.error.required' | translate}}</small>
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.card_number.error.invalid' | translate}}</small>
+            </div>
+        </div>
+      </div>
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.card_expire.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-9 d-flex">
+          <div class="col-xs-12 col-sm-6 col-md-2 form-group mb-0" style="padding-left: 0; padding-right: 5px;" show-errors>
+            <input type="text" class="form-control pay-input w100p"
+              name="cart_month"
+              ng-model="vm.data.card.cart_month"
+              required 
+              ng-pattern="/\d/"
+              placeholder="月"
+              minlength="2"
+              maxlength="2"
+              expire-card="month"
+              year="{{vm.data.card.cart_year}}"
+            />
+            <div ng-if="vm.isSaveClick && vm.isChangeNewCard" ng-messages="vm.follow2Info.cart_month.$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.card_expire_m.error.required' | translate}}</small>
+              <small class="text-red" ng-message="month">{{'ecommerce.follow.two.card_expire_m.error.expired' | translate}}</small>
+              <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.card_expire_m.error.invalid' | translate}}</small>
+              <small class="text-red" ng-message="minlength">{{'ecommerce.follow.two.card_expire_m.error.invalid' | translate}}</small>
+            </div>
+          </div>
+          <div style="padding-top: 4px;">／</div>
+          <div class="col-xs-12 col-sm-6 col-md-2 form-group mb-0" style="padding-left: 5px; padding-right: 0;" show-errors>
+            <input type="text" class="form-control pay-input w100p"
+              name="cart_year"
+              ng-model="vm.data.card.cart_year"
+              required 
+              ng-pattern="/\d/"
+              placeholder="年"
+              minlength="2"
+              maxlength="2"
+              expire-card="year"
+              month="{{vm.data.card.cart_month}}"
+            />
+            <div ng-if="vm.isSaveClick && vm.isChangeNewCard" ng-messages="vm.follow2Info.cart_year.$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.card_expire_y.error.required' | translate}}</small>
+              <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.card_expire_y.error.invalid' | translate}}</small>
+              <small class="text-red" ng-message="minlength">{{'ecommerce.follow.two.card_expire_y.error.invalid' | translate}}</small>
+              <small class="text-red" ng-message="year">{{'ecommerce.follow.two.card_expire_m.error.expired' | translate}}</small>
+            </div>
+          </div>
+
+        </div>
+      
+      </div>
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.card_cvv.label' | translate}}<small class="text-red">*</small></label>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4 form-group mb-0" show-errors>
+          <input type="password" class="form-control pay-input w100p" style="width: 30% !important"
+            name="card_cvv"
+            ng-model="vm.data.card.card_cvv"
+            required 
+            ng-pattern="/^[0-9]{3,4}$/"
+            minlength="3"
+            maxlength="4"
+            />
+            <div ng-if="vm.isSaveClick && vm.isChangeNewCard"  ng-messages="vm.follow2Info.card_cvv.$error" role="alert">
+              <small class="text-red" ng-message="required">{{'ecommerce.follow.two.card_cvv.error.required' | translate}}</small>
+                <small class="text-red" ng-message="minlength">{{'ecommerce.follow.two.card_cvv.error.length' | translate}}</small>
+                <small class="text-red" ng-message="maxlength">{{'ecommerce.follow.two.card_cvv.error.length' | translate}}</small>
+                <small class="text-red" ng-message="pattern">{{'ecommerce.follow.two.card_cvv.error.invalid' | translate}}</small>
+            </div>
+        </div>
+        
+      </div>
+
+      <div class="row mg12y align-center">
+        <div class="col-xs-12 col-sm-4 col-md-3 pay-label">
+          <label>{{'ecommerce.follow.two.card_is_save_card.label' | translate}}</label>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-2 form-group mb-0" show-errors>
+          <input type="checkbox" class="text-left"
+            name="is_save_card"
+            ng-model="vm.data.card.is_save_card"
+            />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

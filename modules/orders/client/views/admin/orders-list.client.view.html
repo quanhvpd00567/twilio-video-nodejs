@@ -1,0 +1,145 @@
+﻿<section class="content container-fluid">
+  <div class="row mg10b">
+    <div class="col-xs-6">
+      <form-title></form-title>
+    </div>
+  </div>
+  <table-search>
+    <table-search-button>
+      <button class="btn btn-primary btn-sm pull-right mg5r" type="button"
+        ng-click="vm.onAdminDownloadCsvAll()">
+        <i class="fa fa-download"></i> CSV一覧 DL
+      </button>
+    </table-search-button>
+    <table-search-content>
+      <!-- <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+        <div class="form-group">
+          <label>{{'orders.list.search.keyword.label' | translate}}</label>
+          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
+            placeholder="{{'orders.list.search.keyword.placeholder' | translate}}"
+            event-enter="vm.handleConditionChanged(true)" />
+        </div>
+      </div> -->
+
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'orders.list.search.number.label' | translate}}</label>
+          <input type="text" name="number" class="form-control" ng-model="vm.condition.number"
+            placeholder="{{'orders.list.search.number.placeholder' | translate}}" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'orders.list.search.munic_name.label' | translate}}</label>
+          <input type="text" name="munic_name" class="form-control" ng-model="vm.condition.munic_name"
+            placeholder="{{'orders.list.search.munic_name.placeholder' | translate}}" />
+        </div>
+      </div>
+
+    
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>利用システム{{'municipalities.list.search.system_type.label' | translate}}</label>
+          <select name="type" class="form-control" ng-model="vm.condition.is_usage_system">
+            <option value="all">すべて </option>
+            <option ng-repeat="item in vm.master.usage_system" value="{{item.id}}"> {{item.value}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'orders.list.search.created_min.label' | translate}}</label>
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min" class="form-control"
+            ng-model="vm.condition.created_min" ng-change="vm.onChangeCreatedMin()" />
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'orders.list.search.created_max.label' | translate}}</label>
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max" class="form-control"
+            ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
+              vm.condition.created_max || 'null'
+            }}); vm.onChangeCreatedMax()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'common.label.max_row_in_page' | translate}}</label>
+          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
+            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+
+  <div class="row">
+    <!-- 各ボタン -->
+    <div class="col-xs-12">
+      <div class="title-group">
+        <p class="mgn title-group__inline-title">
+          {{ tableReport(vm.condition) }}
+        </p>
+      </div>
+    </div>
+    <!-- #各ボタン -->
+    <div class="col-xs-12">
+      <div class="table-responsive table-list">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <!-- <th class="col-index">#</th> -->
+              <th class="text-center w150" ng-click="vm.handleSortChanged('number')" tbmodel="number"
+                tbtitle="{{'orders.list.table.header.number.label' | translate}}" table-order
+                tbcondition="vm.condition"></th>
+              <th ng-click="vm.handleSortChanged('munic_name')" class="text-center"
+                tbmodel="munic_name" table-order tbcondition="vm.condition"
+                tbtitle="{{'orders.list.table.header.munic_name.label' | translate}}"></th>
+              <th ng-click="vm.handleSortChanged('total')" class="text-center w200"
+                tbmodel="total" table-order tbcondition="vm.condition"
+                tbtitle="{{'orders.list.table.header.total_amount_2.label' | translate}}"></th>
+              <th ng-click="vm.handleSortChanged('point')" class="text-center w200"
+                tbmodel="point" table-order tbcondition="vm.condition"
+                tbtitle="{{'orders.list.table.header.point.label' | translate}}"></th>
+              <th ng-click="vm.handleSortChanged('munic_fee')" class="text-center w200"
+                tbmodel="munic_fee" table-order tbcondition="vm.condition"
+                tbtitle="{{'orders.list.table.header.fee.label' | translate}}"></th>
+              <th ng-click="vm.handleSortChanged('created')" tbmodel="created" table-order
+                tbcondition="vm.condition" class="text-center w200"
+                tbtitle="{{'orders.list.table.header.created.label' | translate}}"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="20" ng-show="!vm.orders || vm.orders.length === 0">
+                {{'common.table.no_data_available' | translate}}
+              </td>
+            </tr>
+            <tr ng-repeat="order in vm.orders track by $index">
+              <td class="text-center w150" style="vertical-align: middle;" ng-bind="order.number"></td>
+              <td class="text-center" style="vertical-align: middle;"
+                ng-bind="order.munic_name"></td>
+              <td class="text-center w200" style="vertical-align: middle;"
+                ng-bind="order.total | format_money2"></td>
+              <td class="text-center w200" style="vertical-align: middle;"
+                ng-bind="order.point | format_money2"></td>
+              <td class="text-center w200" style="vertical-align: middle;"
+                ng-bind="vm.getOrderFee(order) | format_money2"></td>
+              <td class="text-center w200" style="vertical-align: middle;"
+                ng-bind="order.created | dateTimeNormal"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+    </div>
+  </div>
+</section>

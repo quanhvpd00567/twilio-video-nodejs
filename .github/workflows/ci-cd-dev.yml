@@ -1,0 +1,23 @@
+name: CI/CD - DTest
+
+on: 
+  push: # tells github to run this on any push to the repository
+    branches: [ dtest ]
+
+jobs:
+  deploy_cms:
+    name: Deploy CMS 
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dtest' # we tell Github to only execute this step if we're on our master branch (so we don't put unfinished branches in production)
+    steps:
+      - name: Deploying to CMS Server
+        uses: appleboy/ssh-action@master # An action made to control Linux servers
+        with: # We set all our secrets here for the action, these won't be shown in the action logs
+          host: ${{ secrets.HOST_CMS_DEV }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY_DEV }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            cd /usr/local/astena-mft-web
+            git pull
+            sudo systemctl restart fufuru-dtest.service 
