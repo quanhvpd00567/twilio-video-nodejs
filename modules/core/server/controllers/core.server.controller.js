@@ -42,16 +42,6 @@ exports.renderIndex = function (req, res) {
       });
     }
 
-    // return ecommerce layout
-    if (req.user.roles[0] === 'employee' || (req.user.roles.includes('employee') && (req.originalUrl.match('^/ecommerces') || req.originalUrl.match('^/ec')))) {
-      return res.render('modules/core/server/views/ecommerce-layout', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    }
-
     if (req.url.match('/company/register') || req.url.match('/municipality/register') || req.url.match('/term') || req.url.match('/policy')) {
       res.render('modules/core/server/views/company-guest', {
         user: JSON.stringify(safeUserObject),
@@ -68,7 +58,6 @@ exports.renderIndex = function (req, res) {
       });
     }
   } else {
-
     if ((req.url.match('/guest/employees/'))) {
       res.render('modules/core/server/views/company-guest', {
         user: JSON.stringify(safeUserObject),

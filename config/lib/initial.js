@@ -17,29 +17,6 @@ function initConfig() {
       new_conf.save();
     }
   });
-
-  var AddressMaster = mongoose.model('AddressMaster');
-  let existAddressMaster = AddressMaster.findOne()
-    .exec((err, data) => {
-      if (data === null) {
-        const fileCsv = config.uploads.ecommerces.csv.template;
-        let listData = [];
-        fs.createReadStream(fileCsv)
-          .pipe(csv(['code', 'code2', 'zipcode', 'prefecture_kana', 'city_kana', 'town_kana', 'prefecture', 'city', 'town']))
-          .on('data', (row) => {
-            listData.push(row);
-          })
-          .on('end', () => {
-            AddressMaster.insertMany(listData).then(function () {
-              console.log('Data inserted');
-            }).catch(function (error) {
-              console.log(error);
-            });
-
-            console.log('CSV file successfully processed');
-          });
-      }
-    });
 }
 
 function initFolder() {
@@ -52,31 +29,8 @@ function initFolder() {
   });
 }
 
-async function initEvent() {
-  var Event = mongoose.model('Event');
-  try {
-    const condition = {
-      deleted: false,
-      $or: [
-        { status: EVENT_STATUS.PREPARING },
-        { status: EVENT_STATUS.OPENING },
-        { status: EVENT_STATUS.CLOSED }
-      ]
-    };
-    let event = await Event.findOne(condition).lean();
-    if (!event) {
-      event = await new Event().save();
-    }
-    console.log('Create event if not exist: ', event);
-    return true;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 function start() {
   initConfig();
   initFolder();
-  // initEvent();
 }
 exports.start = start;

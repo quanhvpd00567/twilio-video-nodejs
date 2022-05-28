@@ -11,23 +11,14 @@ var _ = require('lodash'),
   helper = require(path.resolve('./mobiles/controllers/help.mobile.controller')),
   logger = require(path.resolve('./mobiles/controllers/logger.mobile.controller')),
   User = mongoose.model('User'),
-  Event = mongoose.model('Event'),
-  Comproject = mongoose.model('Comproject'),
-  Daily = mongoose.model('Daily'),
   Device = mongoose.model('Device'),
   Company = mongoose.model('Company'),
   Config = mongoose.model('Config'),
-  Participant = mongoose.model('Participant'),
-  Point = mongoose.model('Point'),
-  PointLog = mongoose.model('PointLog'),
-  StepHistory = mongoose.model('StepHistory'),
-  Department = mongoose.model('Department'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   mailerServerUtils = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   master_data = require(path.resolve('./config/lib/master-data')),
   translate = require(path.resolve('./config/locales/mobile/ja.json')),
   simulationServerController = require(path.resolve('./modules/core/server/controllers/simulation.server.controller')),
-  rankServerController = require(path.resolve('./modules/core/server/controllers/rank.server.controller')),
   helperServer = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 mongoose.Promise = require('bluebird');
@@ -531,14 +522,6 @@ exports.home_info = async function (req, res) {
       user.totalPointsOfUser = totalPointsOfUser;
     }
 
-    // return latest finished event if admin set days_show_finished_event
-    // and do not have any events preparing or opening
-    if (user && !user.comproject_joining && configObject.days_show_finished_event) {
-      const comprojectId = await helper.getComprojectJoiningId(req.user);
-      if (comprojectId) {
-        user.comproject_joining = comprojectId;
-      }
-    }
 
     let returnData = {};
     if (user && user.comproject_joining) {
@@ -547,8 +530,7 @@ exports.home_info = async function (req, res) {
       let [comproject, dailyRecord] = await Promise.all([
         Comproject.findById(user.comproject_joining).populate([
           { path: 'project' },
-          { path: 'municipality', select: 'name prefecture' },
-          { path: 'event', select: 'current_total max_donation_amount' }
+          { path: 'municipality', select: 'name prefecture' }
         ]).lean(),
         Daily.findOne({ deleted: false, user: req.user._id, date: dateKey }).lean()
       ]);
@@ -778,15 +760,6 @@ exports.updateDailyActivity = async function (req, res) {
     await session.commitTransaction();
     session.endSession();
 
-    try {
-      if (isEventOpening(comprojectIdJoining, comproject)) {
-        // 4
-        rankServerController.recalculateRanksForComproject(comprojectIdJoining, user.company);
-      }
-    } catch (error) {
-      logger.error(error);
-    }
-
     return res.json(true);
   } catch (error) {
     abortTransaction();
@@ -966,15 +939,6 @@ exports.updateDailyActivityV2 = async function (req, res) {
 
     await session.commitTransaction();
     session.endSession();
-
-    try {
-      if (isEventOpening(comprojectIdJoining, comproject)) {
-        // 4
-        rankServerController.recalculateRanksForComproject(comprojectIdJoining, user.company);
-      }
-    } catch (error) {
-      logger.error(error);
-    }
 
     return res.json(true);
   } catch (error) {

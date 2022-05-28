@@ -5,10 +5,7 @@ var path = require('path'),
   locale = require(path.resolve('./config/lib/locale')),
   User = mongoose.model('User'),
   Company = mongoose.model('Company'),
-  FeatureAuthorized = mongoose.model('FeatureAuthorized'),
   Municipality = mongoose.model('Municipality'),
-  Project = mongoose.model('Project'),
-  Request = mongoose.model('Request'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   master_data = require(path.resolve('./config/lib/master-data'));
 
@@ -90,9 +87,6 @@ module.exports = {
       } else if (key === 'company') {
         const company = await Company.findOne({ code: string, deleted: false }).select('_id').lean();
         isExisting = !!company;
-      } else if (key === 'project') {
-        const project = await Project.findOne({ code: string, deleted: false }).select('_id').lean();
-        isExisting = !!project;
       }
 
       if (key === 'munic') {
@@ -192,23 +186,6 @@ module.exports = {
     return new Intl.NumberFormat().format(number);
   },
 
-  checkPermission: async function (key, type, id) {
-    let condition = { company: new mongoose.Types.ObjectId(id) };
-    if (type === 'municipality') {
-      condition = { municipality: new mongoose.Types.ObjectId(id) };
-    }
-
-    return await FeatureAuthorized.findOne(condition)
-      .exec()
-      .then(async authorize => {
-        let feature = authorize.features_authorized.find(item => item.feature === key);
-        if (feature === undefined) {
-          return { perrmision_error: true };
-        }
-        return { perrmision_error: false, is_need_authorize: feature.is_need_authorize };
-      });
-  },
-
   isAdminOrSubAdmin: function (roles) {
     if (!roles || roles.length === 0) {
       return false;
@@ -223,11 +200,6 @@ module.exports = {
     }
 
     return roles.indexOf(constants.ROLE.MUNIC_ADMIN) !== -1 || roles.indexOf(constants.ROLE.MUNIC_MEMBER) !== -1;
-  },
-
-  emitNumberOfPendingRequests: async function (municipalityId) {
-    const numberOfPendingRequests = await Request.countDocuments({ deleted: false, municipality: municipalityId, status: constants.REQUEST_STATUS.PENDING });
-    global.io.emit('number_of_pending_requests', { municipalityId, numberOfPendingRequests });
   },
 
   isEventStartedOver7Days(start) {

@@ -44,19 +44,12 @@ var UserSchema = new Schema({
     type: [{ type: String, enum: ROLES }],
     required: true
   },
-  // status: {
-  //   type: Number,
-  //   enum: [constants.USER_STATUS.PENDING, constants.USER_STATUS.CONFIRMED],
-  //   default: constants.USER_STATUS.PENDING
-  // },
-
   height: { type: Number }, // cm
   stride: { type: Number }, // cm
   weight: { type: Number }, // kg
   target_steps_per_day: { type: Number },
 
-  company: { type: Schema.ObjectId, ref: 'Company' }, // require if role is employee
-  subsidiary: { type: Schema.ObjectId, ref: 'Subsidiary' }, // require if role is employee
+  location: { type: Schema.ObjectId, ref: 'Location' }, // require if role is employee
   municipality: { type: Schema.ObjectId, ref: 'Municipality' },
 
   // last update os steps to calculate new steps

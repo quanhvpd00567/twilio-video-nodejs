@@ -3,9 +3,6 @@ var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Device = mongoose.model('Device'),
   Config = mongoose.model('Config'),
-  Event = mongoose.model('Event'),
-  Participant = mongoose.model('Participant'),
-  Department = mongoose.model('Department'),
   path = require('path'),
   moment = require('moment-timezone'),
   master_data = require(path.resolve('./config/lib/master-data')).masterdata,
@@ -54,9 +51,6 @@ module.exports = {
       } else if (type === 'device') {
         const device = await Device.findOne({ code: string }).select('_id').lean();
         isExisting = !!device;
-      } else if (type === 'department') {
-        const department = await Department.findOne({ code: string }).select('_id').lean();
-        isExisting = !!department;
       }
 
     } while (isExisting);
@@ -123,41 +117,5 @@ module.exports = {
     }
 
     return Math.ceil(Math.abs(moment(date2).valueOf() - moment(date1).valueOf()) / constants.DAY_IN_MILLISECONDS);
-  },
-
-  async getComprojectJoiningId(user) {
-    if (!user) {
-      return null;
-    }
-    if (user.comproject_joining) {
-      return user.comproject_joining;
-    }
-
-    const configObject = await Config.findOne({});
-    if (configObject.days_show_finished_event) {
-      const [eventOpeningOrPreparing, latestEventFinished, latestParticipant] = await Promise.all([
-        Event.findOne({
-          deleted: false, status: { $in: [constants.EVENT_STATUS.OPENING, constants.EVENT_STATUS.PREPARING] },
-          company: user.company
-        }).select('_id').lean(),
-        Event.findOne({
-          deleted: false, status: constants.EVENT_STATUS.FINISHED,
-          company: user.company
-        }).select('_id').sort('-end').lean(),
-        Participant.findOne({ user: user._id, deleted: false }).sort('-created')
-          .populate({ path: 'comproject', select: 'end' })
-          .lean()
-      ]);
-      if (!eventOpeningOrPreparing && latestParticipant) {
-        if (latestEventFinished._id.toString() === latestParticipant.event.toString()) {
-          const daysFromEndOfEvent = this.getDaysBetweenTwoDate(latestParticipant.comproject.end, moment());
-          if (configObject.days_show_finished_event >= daysFromEndOfEvent) {
-            return latestParticipant.comproject._id;
-          }
-        }
-      }
-    }
-
-    return null;
   }
 };

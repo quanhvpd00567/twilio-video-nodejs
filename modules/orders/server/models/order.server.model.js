@@ -21,9 +21,6 @@ var orderSchema = new Schema({
 
   card: { type: Schema.ObjectId, ref: 'Card' },
 
-  // 寄付金の使い道
-  using: { type: Schema.ObjectId, ref: 'Using' },
-
   // 注文番号
   number: { type: String, unique: true, required: true },
   // 合計 = pay_amount + point

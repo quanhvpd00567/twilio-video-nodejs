@@ -6,20 +6,14 @@
 var mongoose = require('mongoose'),
   Company = mongoose.model('Company'),
   User = mongoose.model('User'),
-  Subsidiary = mongoose.model('Subsidiary'),
-  Event = mongoose.model('Event'),
-  Comproject = mongoose.model('Comproject'),
   encoding = require('encoding-japanese'),
   path = require('path'),
-  fs = require('fs'),
   _ = require('lodash'),
-  https = require('https'),
   request = require('request'),
   xml2js = require('xml2js'),
   queryString = require('query-string'),
   generator = require('generate-password'),
   config = require(path.resolve('./config/config')),
-  mailerServerUtil = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
@@ -80,17 +74,6 @@ exports.create = async function (req, res) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'companies.form.number.error.exists') });
     }
 
-    // const isExistsNumberUser = await User.findOne({ number: dataAccount.number, deleted: false }).lean();
-    // if (isExistsNumberUser) {
-    //   return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
-    // }
-
-    // const isExistsNumberSub = await Subsidiary.findOne({ number: dataCompany.number, deleted: false }).lean();
-
-    // if (isExistsNumberSub) {
-    //   return res.status(422).send({ message: help.getMsLoc(lang, 'companies.form.number.error.exists') });
-    // }
-
     let company = new Company(dataCompany);
     let account = new User(dataAccount);
     company.code = await help.getRandomCode(6, 'company');
@@ -98,16 +81,8 @@ exports.create = async function (req, res) {
     session.startTransaction();
 
     company = await company.save({ session });
-
-    let subsidiary = new Subsidiary(dataSub);
-    subsidiary.company = company._id;
-    let sub = await subsidiary.save({ session });
-
     // set company
     account.company = company._id;
-    // set subsidiary
-    account.subsidiary = sub._id;
-
     account = await account.save({ session });
 
     // update company
@@ -115,27 +90,6 @@ exports.create = async function (req, res) {
 
     await session.commitTransaction();
     session.endSession();
-
-    try {
-      if (isAdminCreate) {
-        // send mail to company account just created
-        let companyName = company.name;
-        if (company.kind === 1) {
-          companyName = '株式会社' + companyName;
-        } else if (company.kind === 2) {
-          companyName = companyName + '株式会社';
-        }
-
-        mailerServerUtil.sendMailAdminCreateCompanyMunic(dataAccount.email, dataAccount.password, dataAccount.first_name, dataAccount.last_name, companyName, req.user.email);
-
-        // admin create company: also send mail to admin
-        mailerServerUtil.sendMailAdminCreateCompanyToAdmin(req.user.email, dataAccount.email);
-      } else {
-        mailerServerUtil.sendMailCreateCompanyOrMunic(dataAccount.email, dataAccount.password, dataAccount.first_name, dataAccount.last_name);
-      }
-    } catch (error) {
-      logger.error(error);
-    }
 
     return res.json(company);
   } catch (error) {
@@ -281,12 +235,6 @@ exports.update = async function (req, res) {
       if (isExistsNumber) {
         return res.status(422).send({ message: help.getMsLoc(lang, 'companies.form.number.error.exists') });
       }
-
-      // const isExistsNumberSub = await Subsidiary.findOne({ number: data.number, deleted: false }).lean();
-
-      // if (isExistsNumberSub) {
-      //   return res.status(422).send({ message: help.getMsLoc(lang, 'companies.form.number.error.exists') });
-      // }
       let dataToUpdate = {};
       if (data.name) { dataToUpdate.name = data.name; }
       if (data.number) { dataToUpdate.number = data.number; }
@@ -362,15 +310,6 @@ exports.delete = async function (req, res) {
 
     // 1: Remove all employee and company admin
     await User.updateMany({ company: company._id, deleted: false }, { $set: { deleted: true } }).session(session);
-
-    // 2: Remove all subcompany
-    await Subsidiary.updateMany({ company: company._id, deleted: false }, { $set: { deleted: true } }).session(session);
-
-    // 3: Remove event of company
-    await Event.updateMany({ company: company._id, deleted: false }, { $set: { deleted: true } }).session(session);
-
-    // 4: Remove conpany project of company
-    // Comproject.updateMany({ company: company._id, deleted: false }, { $set: { deleted: true } }),
 
     // 5: Delete company info
     await Company.updateOne({ _id: company._id, deleted: false }, { deleted: true }).session(session);

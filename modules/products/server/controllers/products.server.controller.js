@@ -6,9 +6,6 @@
 var mongoose = require('mongoose'),
   Product = mongoose.model('Product'),
   User = mongoose.model('User'),
-  Event = mongoose.model('Event'),
-  Using = mongoose.model('Using'),
-  RequestItem = mongoose.model('RequestItem'),
   Municipality = mongoose.model('Municipality'),
   path = require('path'),
   config = require(path.resolve('./config/config')),
@@ -42,64 +39,12 @@ exports.create = async function (req, res) {
     if (isExistsCodeInProduct || isExistsCodeInRequestItem) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'products.form.code.error.exists') });
     }
+    let product = new Product(data);
+    product.municipality = auth.municipality;
+    product.except_place_options = product.except_place_options.sort((a, b) => a - b);
 
-    if (help.isAdminOrSubAdmin(req.user.roles)) {
-      // Check permission
-      let result = await help.checkPermission(FEATURE_MUNICIPALITY.CREATE_PRODUCT, 'municipality', data.municipalityId);
-
-      // Add req.body.requestItemId in case munic rollback permission and admin update existing request items
-      if (!req.body.requestItemId && result.perrmision_error) {
-        return res.status(422).json(result);
-      }
-
-      if (req.body.requestItemId || result.is_need_authorize) {
-        let product = new Product(data);
-        product.municipality = data.municipalityId;
-        product.except_place_options = product.except_place_options.sort((a, b) => a - b);
-
-        if (req.body.requestItemId) {
-          await RequestItem.updateOne(
-            { _id: req.body.requestItemId },
-            { $set: { data: product, product_code: product.code } }
-          );
-        } else {
-          let dataRequestItem = {
-            municipality: data.municipalityId,
-            data: product,
-            type: FEATURE_MUNICIPALITY.CREATE_PRODUCT,
-            product_code: product.code
-          };
-          let requestItem = new RequestItem(dataRequestItem);
-          await requestItem.save();
-        }
-
-        return res.json(true);
-      } else {
-        let product = new Product(data);
-        product.municipality = data.municipalityId;
-        product.except_place_options = product.except_place_options.sort((a, b) => a - b);
-
-        await product.save();
-        return res.json(product);
-      }
-
-    } else {
-      let product = new Product(data);
-      // // 取扱い数量
-      // if (product.is_set_stock_quantity === 1) {
-      //   product.stock_quantity = 0;
-      // }
-
-      // // 購入上限
-      // if (product.is_set_max_quantity === 1) {
-      //   product.max_quantity = 0;
-      // }
-      product.municipality = auth.municipality;
-      product.except_place_options = product.except_place_options.sort((a, b) => a - b);
-
-      await product.save();
-      return res.json(product);
-    }
+    await product.save();
+    return res.json(product);
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });
@@ -135,10 +80,6 @@ exports.list = async function (req, res) {
     Product.paginate(query, {
       sort: sort,
       page: page,
-      // populate: {
-      //   path: 'subsidiary',
-      //   select: 'name'
-      // },
       limit: limit,
       collation: { locale: 'ja' }
     }).then(function (result) {
@@ -188,113 +129,10 @@ exports.update = async function (req, res) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'products.form.code.error.exists') });
     }
 
-    if (help.isAdminOrSubAdmin(req.user.roles)) {
-      // Check permission
-      let result = await help.checkPermission(FEATURE_MUNICIPALITY.UPDATE_PRODUCT, 'municipality', data.municipalityId);
+    product = prepareDataUpdate(product, data);
+    await product.save();
 
-      if (result.perrmision_error) {
-        return res.status(422).json(result);
-      }
-
-      if (result.is_need_authorize) {
-        const isRequestExists = await RequestItem.findOne({
-          type: FEATURE_MUNICIPALITY.UPDATE_PRODUCT,
-          product: product._id,
-          municipality: data.municipalityId,
-          status: { $in: [constants.REQUEST_ITEM_STATUS.PENDING, constants.REQUEST_ITEM_STATUS.SUBMITTED] },
-          deleted: false
-        }).lean();
-
-        console.log(isRequestExists);
-        if (isRequestExists && !req.body.requestItemId) {
-          return res.status(422).send({ message: help.getMsLoc(lang, 'request_registration.server.error.request_update_product_existing') });
-        }
-
-        let dataChanged = {};
-        _.forEach(Object.keys(data), (key) => {
-          let value1 = product[key];
-          let value2 = data[key];
-
-          if (_.isArray(value2)) {
-            if (!_.isArray(value1)) {
-              value1 = [];
-            }
-
-            // Compare pictures, accepted_schedule, except_place_options
-            if (arrayEquals(value2, value1)) {
-              value1 = true;
-              value2 = true;
-            } else {
-              value1 = false;
-              value2 = true;
-            }
-          }
-
-          if (value1) {
-            value1 = value1.toString();
-          }
-          if (value2) {
-            value2 = value2.toString();
-          }
-
-          if (value1 !== value2 && key !== 'created') {
-            dataChanged[key] = data[key];
-
-            if (key === 'is_set_stock_quantity' && value2 === 1) {
-              dataChanged.stock_quantity = 0;
-            }
-
-            if (key === 'is_set_max_quantity' && value2 === 1) {
-              dataChanged.max_quantity = 0;
-            }
-
-            if (key === 'sell_status' && value2 !== 1) {
-              dataChanged.sell_status = 2;
-            }
-
-            if (key === 'show_status' && value2 !== 1) {
-              dataChanged.show_status = 2;
-            }
-
-            if (key === 'except_place_options') {
-              dataChanged.except_place_options = dataChanged.except_place_options.sort((a, b) => a - b);
-            }
-          }
-        });
-
-        if (req.body.requestItemId) {
-          product = prepareDataUpdate(product, data);
-          await RequestItem.updateOne(
-            { _id: req.body.requestItemId },
-            { $set: { data: dataChanged, product_code: dataChanged.code } }
-          );
-        } else {
-          let dataRequestItem = {
-            municipality: product.municipality,
-            data: dataChanged,
-            type: FEATURE_MUNICIPALITY.UPDATE_PRODUCT,
-            product: product._id
-          };
-          if (dataChanged.code) {
-            dataRequestItem.product_code = dataChanged.code;
-          }
-          let requestItem = new RequestItem(dataRequestItem);
-          await requestItem.save();
-        }
-
-        return res.json(true);
-      } else {
-        product = prepareDataUpdate(product, data);
-        await product.save();
-
-        return res.json(product);
-      }
-    } else {
-      product = prepareDataUpdate(product, data);
-      await product.save();
-
-      return res.json(product);
-    }
+    return res.json(product);
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });
@@ -376,21 +214,6 @@ exports.uploadPictures = async function (req, res) {
         logger.error(err);
         return res.status(422).send({ message: 'サーバーでエラーが発生しました。' });
       });
-  } catch (error) {
-    logger.error(error);
-    return res.status(422).send({ message: help.getMsLoc() });
-  }
-};
-
-exports.hasUsing = async function (req, res) {
-  try {
-    let municipalityId = req.user.municipality;
-    if (req.user.roles[0] === constants.ROLE.ADMIN || req.user.roles[0] === constants.ROLE.SUB_ADMIN) {
-      municipalityId = req.query.municipalityId;
-    }
-    Using.findOne({ deleted: false, municipality: municipalityId })
-      .exec()
-      .then(data => res.json(!!data));
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });

@@ -144,16 +144,7 @@
     };
 
     vm.goToCreate = function () {
-      ProductApi.hasUsing()
-        .success(function (status) {
-          if (status) {
-            $state.go('municipality.products.create');
-          } else {
-            $scope.handleCloseWaiting();
-            var message = '寄付金の使い道を登録してください';
-            $scope.handleShowToast(message, true);
-          }
-        });
+      $state.go('municipality.products.create');
     };
   }
 }());

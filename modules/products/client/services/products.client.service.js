@@ -66,11 +66,6 @@
       return $http.post('/api/munic-members/remove-multi', { ids: ids });
     };
 
-    // Check has using
-    this.hasUsing = function (municipalityId) {
-      return $http.get('/api/products/has-using', { params: { municipalityId: municipalityId } });
-    };
-
     this.getMunicipality = function (municipalityId) {
       return $http.get('/api/municipality', { params: { municipalityId: municipalityId } });
     };

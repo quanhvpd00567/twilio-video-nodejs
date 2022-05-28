@@ -36,21 +36,6 @@
       }
 
       if (vm.municipalityId) {
-        // RequestRegistrationApi.checkPermissionRequest({ municipalityId: vm.municipalityId })
-        //   .success(function (res) {
-        //     vm.featureAuthor = res;
-        //     var features_authorized = vm.featureAuthor.features_authorized;
-        //     features_authorized.filter(function (item) {
-        //       if (item.feature === 'update_tax_payment_13' && vm.key === 'update_tax_payment_13') {
-        //         vm.isKey13 = true;
-        //       }
-        //       if (item.feature === 'update_tax_payment_14' && vm.key === 'update_tax_payment_14') {
-        //         vm.isKey14 = true;
-        //       }
-
-        //       return true;
-        //     });
-        //   });
         if (vm.key === 'update_tax_payment_13') {
           vm.isKey13 = true;
         }

@@ -7,7 +7,6 @@ var mongoose = require('mongoose'),
   Order = mongoose.model('Order'),
   User = mongoose.model('User'),
   Municipality = mongoose.model('Municipality'),
-  Using = mongoose.model('Using'),
   path = require('path'),
   _ = require('lodash'),
   config = require(path.resolve('./config/config')),
@@ -89,9 +88,6 @@ exports.exportOrder = async function (req, res) {
       .sort(sort)
       .populate({
         path: 'products.product'
-      })
-      .populate({
-        path: 'using'
       })
       .lean();
 
@@ -1216,13 +1212,13 @@ function getQueryAggregate(condition) {
   }, {
     $match: matchUser
   },
-  {
-    $addFields: {
-      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
-      munic_name: { $convert: { input: '$munic.name', to: 'string' } },
-      munic_fee: '$munic.fee'
+    {
+      $addFields: {
+        munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+        munic_name: { $convert: { input: '$munic.name', to: 'string' } },
+        munic_fee: '$munic.fee'
+      }
     }
-  }
   );
 
   let second_and_arr = [];

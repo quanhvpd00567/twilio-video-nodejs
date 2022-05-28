@@ -13,7 +13,6 @@ module.exports = function (app) {
   app.route('/api/municipalities/info').get(policy.isAllowed, municController.info);
   app.route('/api/municipalities/update-info').post(policy.isAllowed, municController.updateInfo);
   app.route('/api/municipalities/check-update-payment-method').post(policy.isAllowed, municController.isUpdatedPaymentMethod);
-  app.route('/api/municipalities/list-has-project-in-period').get(policy.isAllowed, municController.listHasProjectsInPeriod);
   app.route('/api/municipalities/update-munic').post(policy.isAllowed, municController.updateMunic);
   app.route('/api/municipalities/:municipalityId/contact-info').get(policy.isAllowed, municController.getMunicipalityContactInfo);
 

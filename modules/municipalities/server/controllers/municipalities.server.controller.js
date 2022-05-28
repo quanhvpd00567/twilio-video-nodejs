@@ -6,14 +6,7 @@
 var mongoose = require('mongoose'),
   Municipality = mongoose.model('Municipality'),
   User = mongoose.model('User'),
-  Using = mongoose.model('Using'),
   Product = mongoose.model('Product'),
-  Project = mongoose.model('Project'),
-  Point = mongoose.model('Point'),
-  Event = mongoose.model('Event'),
-  PointLog = mongoose.model('PointLog'),
-  RequestItem = mongoose.model('RequestItem'),
-  Comproject = mongoose.model('Comproject'),
   generator = require('generate-password'),
   path = require('path'),
   moment = require('moment'),
@@ -21,9 +14,6 @@ var mongoose = require('mongoose'),
   mailerServerUtil = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
-  eventsHelper = require(path.resolve('./modules/events/server/helpers/events.server.helper')),
-  check_point_expire = require(path.resolve('./config/jobs/check-point-expire')),
-  FEATURE_MUNICIPALITY = require(path.resolve('./config/lib/master-data')).masterdata.FEATURE_MUNICIPALITY,
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 const lang = 'ja';
@@ -256,42 +246,20 @@ exports.delete = async function (req, res) {
   let session = null;
   try {
     const munic = req.model;
-
-
-    let isExitstEvent = await Event.findOne({ municipality: munic._id, deleted: false, status: { $in: [constants.EVENT_STATUS.PREPARING, constants.EVENT_STATUS.OPENING] } }).lean();
-    if (isExitstEvent) {
-      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.list.controller.message.event_exists') });
-    }
-
     session = await mongoose.startSession();
     session.startTransaction();
 
     // 1: Remove all munic member and munic admin
     await User.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
 
-    // 2: Remove all using
-    await Using.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
-
     // 3: Remove all product
     await Product.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
-
-    // 4: Remove project of munic
-    await Project.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
-
-    // 5: Change expire of points
-    await Point.updateMany({ municipality: munic._id, deleted: false }, { expire: moment() }).session(session);
 
     // 7: Delete munic info
     await Municipality.updateOne({ _id: munic._id, deleted: false }, { deleted: true }).session(session);
 
     await session.commitTransaction();
     session.endSession();
-
-    try {
-      check_point_expire.execute();
-    } catch (error) {
-      logger.error(error);
-    }
 
     return res.json(true);
   } catch (error) {
@@ -306,11 +274,6 @@ exports.info = async function (req, res) {
     let municId = req.user.municipality;
 
     if (req.user.roles[0] === constants.ROLE.ADMIN || req.user.roles[0] === constants.ROLE.SUB_ADMIN) {
-      // let result = await help.checkPermission('delete_project', 'municipality', project.municipality);
-
-      // if (result.perrmision_error) {
-      //   return res.status(422).json(result);
-      // }
       municId = req.query.municipalityId;
     }
     if (!mongoose.Types.ObjectId.isValid(municId)) {
@@ -366,93 +329,8 @@ exports.updateInfo = async function (req, res) {
       bank_owner_kana: body.bank_owner_kana
     };
 
-    if (help.isAdminOrSubAdmin(req.user.roles)) {
-      let result = await help.checkPermission(body.key, 'municipality', body.municipalityId);
-
-      // Add req.body.requestItemId in case munic rollback permission and admin update existing request items
-      if (!req.body.requestItemId && result.perrmision_error) {
-        return res.status(422).json(result);
-      }
-
-      if (req.body.requestItemId || result.is_need_authorize) {
-        // Check request update is exists
-        let isExistsRequest = await RequestItem.findOne({
-          type: body.key,
-          municipality: body.municipalityId,
-          status: { $in: [constants.REQUEST_ITEM_STATUS.PENDING, constants.REQUEST_ITEM_STATUS.SUBMITTED] },
-          deleted: false
-        });
-
-        if (isExistsRequest && !req.body.requestItemId) {
-          return res.status(422).send({ message: help.getMsLoc(lang, 'request_registration.server.error.request_update_munic_info_15_existing') });
-        }
-
-        let data = bankUpdate;
-
-        let dataChanged = {};
-
-        let munic = await Municipality.findById(body.municipalityId).lean();
-
-        _.forEach(Object.keys(bankUpdate), (key) => {
-          let value1 = munic[key];
-          let value2 = bankUpdate[key];
-
-          if (_.isArray(value2)) {
-            if (!_.isArray(value1)) {
-              value1 = [];
-            }
-
-            // Compare methods
-            if (arrayEquals(value2, value1)) {
-              value1 = true;
-              value2 = true;
-            } else {
-              value1 = false;
-              value2 = true;
-            }
-          }
-
-          if (value1) {
-            value1 = value1.toString();
-          }
-          if (value2) {
-            value2 = value2.toString();
-          }
-
-          if (value1 !== value2 && key !== 'created') {
-            dataChanged[key] = data[key];
-          }
-
-        });
-
-        if (req.body.requestItemId) {
-          await RequestItem.updateOne(
-            { _id: req.body.requestItemId },
-            { $set: { data: data } }
-          );
-        } else {
-          let dataRequestItem = {
-            municipality: body.municipalityId,
-            data: dataChanged,
-            type: body.key
-          };
-
-          let requestItem = new RequestItem(dataRequestItem);
-          await requestItem.save();
-        }
-
-        return res.json(true);
-      } else {
-        const munic = await Municipality.updateOne({ _id: body.municipalityId }, bankUpdate);
-
-        return res.json(munic);
-      }
-    } else {
-      const munic = await Municipality.updateOne({ _id: auth.municipality }, bankUpdate);
-
-      return res.json(munic);
-    }
-
+    const munic = await Municipality.updateOne({ _id: auth.municipality }, bankUpdate);
+    return res.json(munic);
   } catch (error) {
 
     logger.error(error);
@@ -483,29 +361,6 @@ exports.municById = function (req, res, next, id) {
       req.model = event;
       next();
     });
-};
-
-exports.listHasProjectsInPeriod = async function (req, res) {
-  try {
-    let condition = req.query || {};
-    const companyId = req.user.company || condition.companyId;
-    const isHasEventInPeriod = await eventsHelper.isHasEventInPeriod(condition.start, condition.end, companyId);
-    if (isHasEventInPeriod) {
-      return res.status(422).send({ message: help.getMsLoc(lang, 'event.project_apply.form.server.error.start_end_selected_unavailable') });
-    }
-
-    const page = condition.page || 1;
-    const limit = help.getLimit(condition);
-    const options = { page: page, limit: limit };
-    const aggregates = getQueryAggregateForListHasProjectsInPeriod(condition);
-    let result = await Municipality.aggregatePaginate(Municipality.aggregate(aggregates).allowDiskUse(true).collation({ locale: 'ja' }), options);
-    result = help.parseAggregateQueryResult(result, page);
-
-    return res.json(result);
-  } catch (error) {
-    logger.error(error);
-    return res.status(422).send({ message: help.getMsLoc() });
-  }
 };
 
 exports.updateMunic = async function (req, res) {
@@ -565,96 +420,8 @@ exports.updateMunic = async function (req, res) {
     }
     updateData.is_usage_system = body.is_usage_system;
 
-    if (help.isAdminOrSubAdmin(req.user.roles)) {
-      let result = await help.checkPermission(body.key, 'municipality', municipality);
-
-      // Add req.body.requestItemId in case munic rollback permission and admin update existing request items
-      if (!req.body.requestItemId && result.perrmision_error) {
-        return res.status(422).json(result);
-      }
-
-      if (req.body.requestItemId || result.is_need_authorize) {
-        // Check request update is exists
-        let isExistsRequest = await RequestItem.findOne({
-          type: body.key,
-          municipality: municipality,
-          status: { $in: [constants.REQUEST_ITEM_STATUS.PENDING, constants.REQUEST_ITEM_STATUS.SUBMITTED] },
-          deleted: false
-        });
-
-        if (isExistsRequest && !req.body.requestItemId) {
-          if (body.key === FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_13) {
-            return res.status(422).send({ message: help.getMsLoc(lang, 'request_registration.server.error.request_update_tax_payment_13_existing') });
-          } else {
-            return res.status(422).send({ message: help.getMsLoc(lang, 'request_registration.server.error.request_update_tax_payment_14_existing') });
-          }
-        }
-
-        let munic = await Municipality.findById(municipality);
-
-        let data = updateData;
-        let dataChanged = {};
-        if (body.key === FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_14) {
-          data = {
-            contact_name: data.contact_name,
-            contact_tel: data.contact_tel,
-            contact_mail: data.contact_mail,
-            fax: data.fax
-          };
-        }
-
-        if (body.key === FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_13) {
-          delete data.contact_name;
-          delete data.contact_tel;
-          delete data.contact_name;
-          delete data.contact_mail;
-          delete data.fax;
-          delete data.key;
-          delete data.municipalityId;
-        }
-
-        _.forEach(Object.keys(data), (key) => {
-          let value1 = munic[key];
-          let value2 = data[key];
-
-          if (value1) {
-            value1 = value1.toString();
-          }
-          if (value2) {
-            value2 = value2.toString();
-          }
-
-          if (value1 !== value2 && key !== 'created') {
-            dataChanged[key] = data[key];
-          }
-        });
-
-        let dataRequestItem = {
-          municipality: municipality,
-          data: dataChanged,
-          type: body.key
-        };
-
-        if (req.body.requestItemId) {
-          await RequestItem.updateOne(
-            { _id: req.body.requestItemId },
-            { $set: { data: data } }
-          );
-        } else {
-          let requestItem = new RequestItem(dataRequestItem);
-          await requestItem.save();
-        }
-
-        return res.json(true);
-      } else {
-        const munic = await Municipality.updateOne({ _id: municipality }, updateData);
-
-        return res.json(munic);
-      }
-    } else {
-      const munic = await Municipality.updateOne({ _id: municipality }, updateData);
-      return res.json(munic);
-    }
+    const munic = await Municipality.updateOne({ _id: municipality }, updateData);
+    return res.json(munic);
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });
@@ -801,75 +568,6 @@ function getQueryAggregate(condition) {
   aggregates.push({
     $project: {
       account: 0
-    }
-  });
-
-  const sort = help.getSortAggregate(condition);
-  if (sort) {
-    aggregates.push({
-      $sort: sort
-    });
-  }
-
-  return aggregates;
-}
-
-function getQueryAggregateForListHasProjectsInPeriod(condition) {
-  let and_arr = [{
-    deleted: false,
-    $or: [
-      { is_testing: null },
-      { is_testing: false }
-    ]
-  }];
-  let aggregates = [];
-  aggregates.push({
-    $match: {
-      $and: and_arr
-    }
-  });
-
-  aggregates.push({
-    $lookup: {
-      from: 'projects',
-      let: { municipality_id: '$_id' },
-      pipeline: [{
-        $match: {
-          $expr: {
-            $and: [
-              { $eq: ['$municipality', '$$municipality_id'] },
-              { $lt: ['$start', new Date(condition.start)] },
-              { $gt: ['$end', new Date(condition.end)] },
-              { $eq: ['$deleted', false] }
-            ]
-          }
-        }
-      }, {
-        $group: {
-          _id: {},
-          total: { $sum: 1 }
-        }
-      }],
-      as: 'projectsGroup'
-    }
-  }, {
-    $unwind: {
-      path: '$projectsGroup',
-      preserveNullAndEmptyArrays: false
-    }
-  }, {
-    $addFields: {
-      numberOfProjects: { $cond: ['$projectsGroup', '$projectsGroup.total', 0] }
-    }
-  }, {
-    $match: {
-      numberOfProjects: { $gt: 0 }
-    }
-  });
-
-  aggregates.push({
-    $project: {
-      projectsGroup: 0
     }
   });
 
