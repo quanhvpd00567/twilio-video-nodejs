@@ -38,8 +38,8 @@
       })
       .state('admin.municipalities.edit', {
         url: '/:municId/edit',
-        templateUrl: '/modules/municipalities/client/views/admin/municipality-edit.client.view.html',
-        controller: 'MunicipalityAdminEditController',
+        templateUrl: '/modules/municipalities/client/views/admin/municipality-form.client.view.html',
+        controller: 'MunicipalityAdminFormController',
         controllerAs: 'vm',
         resolve: {
           municipality: getDetail
@@ -51,27 +51,17 @@
       })
       .state('admin.municipalities.create', {
         url: '/create',
-        templateUrl: '/modules/municipalities/client/views/admin/municipality-add.client.view.html',
-        controller: 'MunicipalityAdminCreateController',
+        templateUrl: '/modules/municipalities/client/views/admin/municipality-form.client.view.html',
+        controller: 'MunicipalityAdminFormController',
         controllerAs: 'vm',
         resolve: {
-          munic: newMunic
+          municipality: newMunic
         },
         data: {
           roles: ['admin', 'sub_admin'],
           pageTitle: '自治体登録'
         }
       });
-    // .state('admin.municipalities.settings', {
-    //   url: '/settings',
-    //   templateUrl: '/modules/municipalities/client/views/admin/municipality-form.client.view.html',
-    //   controller: 'MunicipalityAdminFormController',
-    //   controllerAs: 'vm',
-    //   data: {
-    //     roles: ['munic_admin'],
-    //     pageTitle: '自治体情報の編集'
-    //   }
-    // });
 
     getDetail.$inject = ['$stateParams', 'MunicipalitiesService'];
     function getDetail($stateParams, MunicipalitiesService) {

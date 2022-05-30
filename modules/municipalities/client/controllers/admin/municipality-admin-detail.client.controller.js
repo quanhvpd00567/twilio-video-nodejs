@@ -11,6 +11,5 @@
     var vm = this;
     vm.master = $scope.masterdata;
     vm.municipality = municipality;
-    vm.isAdminAndSubAdmin = ['admin', 'sub_admin'].includes($scope.Authentication.user.roles[0]);
   }
 }());

@@ -26,7 +26,6 @@ var UserSchema = new Schema({
 
   // パスワード
   password: { type: String, required: true },
-  is_required_update_password: { type: Boolean, default: false },
 
   first_name: { type: String },
   last_name: { type: String },

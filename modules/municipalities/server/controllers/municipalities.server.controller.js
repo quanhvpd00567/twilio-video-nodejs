@@ -7,9 +7,7 @@ var mongoose = require('mongoose'),
   Municipality = mongoose.model('Municipality'),
   User = mongoose.model('User'),
   Product = mongoose.model('Product'),
-  generator = require('generate-password'),
   path = require('path'),
-  moment = require('moment'),
   _ = require('lodash'),
   mailerServerUtil = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
@@ -26,16 +24,9 @@ exports.create = async function (req, res) {
       return res.status(422).send({ message: help.getMsLoc() });
     }
 
-    const isAdminCreate = req.user && req.user.roles[0] === constants.ROLE.ADMIN;
-    // Admin create company and generator password
-    if (isAdminCreate) {
-      data.password = generator.generate({ length: 8, numbers: true });
-    }
-
     const dataMunic = {
       name: data.name,
       prefecture: data.prefecture,
-      // fax: data.fax,
       code: await help.getRandomCode(6, 'munic')
     };
 
@@ -51,49 +42,38 @@ exports.create = async function (req, res) {
       number: data.admin.number
     };
 
-    dataAccount.is_required_update_password = (req.user && req.user.roles[0] === constants.ROLE.ADMIN);
-
-    // Check email exists;
     const email_lower = trimAndLowercase(dataAccount.email);
-    const user = await User.findOne({ email_lower, deleted: false }).lean();
-    if (user) {
+    const [isEmailExisting, isNumberExisting] = await Promise.all([
+      User.findOne({ email_lower, deleted: false }).lean(),
+      User.findOne({ number: dataAccount.number, roles: constants.ROLE.MUNIC_ADMIN, deleted: false }).lean()
+    ]);
+
+    if (isEmailExisting) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
     }
-
-    const isExistNumber = await User.findOne({ number: dataAccount.number, roles: [constants.ROLE.MUNIC_ADMIN, constants.ROLE.MUNIC_MEMBER], deleted: false }).lean();
-    if (isExistNumber) {
-      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.number.error.exists') });
+    if (isNumberExisting) {
+      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.number_exists') });
     }
 
     let munic = new Municipality(dataMunic);
     let account = new User(dataAccount);
+
     session = await mongoose.startSession();
     session.startTransaction();
 
+    munic.admin = account._id;
     munic = await munic.save({ session });
 
     // set municipality
     account.municipality = munic._id;
-
     account = await account.save({ session });
-
-    // update municipality
-    await Municipality.updateOne({ _id: munic._id }, { admin: account._id }).session(session);
 
     await session.commitTransaction();
     session.endSession();
 
     // Send mail
     try {
-      if (isAdminCreate) {
-        // send mail to munic account just created
-        mailerServerUtil.sendMailAdminCreateCompanyMunic(dataAccount.email, dataAccount.password, dataAccount.first_name, dataAccount.last_name, munic.name, req.user.email);
-
-        // admin create munic: also send mail to admin
-        mailerServerUtil.sendMailAdminCreateMunicToAdmin(req.user.email, dataAccount.email);
-      } else {
-        mailerServerUtil.sendMailCreateCompanyOrMunic(dataAccount.email, dataAccount.password, dataAccount.first_name, dataAccount.last_name);
-      }
+      // mailerServerUtil.sendMailCreateCompanyOrMunic(dataAccount.email, dataAccount.password, dataAccount.first_name, dataAccount.last_name);
     } catch (error) {
       logger.error(error);
     }
@@ -105,38 +85,19 @@ exports.create = async function (req, res) {
     return res.status(422).send({ message: help.getMsLoc() });
   }
 };
-/**
- * Handle get list event
- *
- * @param {*} req
- * @param {*} res
- */
+
 exports.list = async function (req, res) {
   try {
-    var condition = req.query || {};
+    const condition = req.query || {};
     var page = condition.page || 1;
-    var limit = help.getLimit(condition);
-    // var query = getQuery(condition);
-    // var sort = help.getSort(condition);
-
-    var options = { page: page, limit: limit };
+    const limit = help.getLimit(condition);
+    const options = { page: page, limit: limit };
 
     const aggregates = getQueryAggregate(condition);
     let result = await Municipality.aggregatePaginate(Municipality.aggregate(aggregates).allowDiskUse(true).collation({ locale: 'ja' }), options);
     result = help.parseAggregateQueryResult(result, page);
 
     return res.json(result);
-
-
-    // Municipality.paginate(query, {
-    //   sort: sort,
-    //   page: page,
-    //   limit: limit,
-    //   collation: { locale: 'ja' }
-    // }).then(function (result) {
-    //   return res.json(result);
-    // });
-
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });
@@ -163,7 +124,6 @@ exports.getAll = async function (req, res) {
 exports.detail = async function (req, res) {
   try {
     return res.json(req.model);
-
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });
@@ -182,54 +142,51 @@ exports.update = async function (req, res) {
     // Prepare data update
     const dataUpdate = {
       name: data.name,
-      prefecture: data.prefecture,
-      // fax: data.fax,
-      methods: data.methods,
-      bank_code: data.bank_code,
-      bank_name: data.bank_name,
-      branch_code: data.branch_code,
-      branch_name: data.branch_name,
-      bank_type: data.bank_type,
-      bank_number: data.bank_number,
-      bank_owner: data.bank_owner,
-      bank_owner_kana: data.bank_owner_kana,
-      fee: data.fee
+      prefecture: data.prefecture
     };
 
     const dataAccountUpdate = {
       first_name: data.admin.first_name,
       last_name: data.admin.last_name,
       name: data.admin.last_name + ' ' + data.admin.first_name,
-      // email: data.admin.email,
+      email: data.admin.email,
+      number: data.admin.number,
       phone: data.admin.phone,
       department: data.admin.department
     };
 
-    // if (data.password && data.password !== '') {
-    //   dataAccountUpdate.password = data.password;
-    // }
-
-    let account = await User.findOne({ deleted: false, _id: req.model.admin });
-
-    if (!account) {
-      return res.status(422).send({ message: help.getMsLoc() });
+    if (data.password && data.password !== '') {
+      dataAccountUpdate.password = data.password;
     }
 
-    // Check email exists;
-    // const email_lower = trimAndLowercase(dataAccountUpdate.email);
-    // const user = await User.findOne({ email_lower, deleted: false, _id: { $ne: account._id } }).lean();
-    // if (user) {
-    //   return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
-    // }
+    let account = await User.findOne({ deleted: false, _id: req.model.admin });
+    if (!account) {
+      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.server.error.not_found') });
+    }
+
+    // Check email exists
+    if (account.email !== dataAccountUpdate.email) {
+      const email_lower = trimAndLowercase(dataAccountUpdate.email);
+      const isEmailExisting = await User.findOne({ email_lower, deleted: false, _id: { $ne: account._id } }).lean();
+      if (isEmailExisting) {
+        return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
+      }
+    }
+    // Check number exists
+    if (dataAccountUpdate.number && account.number !== dataAccountUpdate.number) {
+      const isNumberExisting = await User.findOne({ number: dataAccountUpdate.number, deleted: false, _id: { $ne: account._id } }).lean();
+      if (isNumberExisting) {
+        return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.number_exists') });
+      }
+    }
 
     session = await mongoose.startSession();
     session.startTransaction();
 
-    await Municipality.updateOne({ _id: req.model._id }, dataUpdate);
+    await Municipality.updateOne({ _id: req.model._id }, dataUpdate, { session });
 
     account = _.extend(account, dataAccountUpdate);
     await account.save({ session });
-
 
     await session.commitTransaction();
     session.endSession();
@@ -249,13 +206,13 @@ exports.delete = async function (req, res) {
     session = await mongoose.startSession();
     session.startTransaction();
 
-    // 1: Remove all munic member and munic admin
+    // Remove all munic member and munic admin
     await User.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
 
     // 3: Remove all product
     await Product.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
 
-    // 7: Delete munic info
+    //  Delete munic
     await Municipality.updateOne({ _id: munic._id, deleted: false }, { deleted: true }).session(session);
 
     await session.commitTransaction();
@@ -348,7 +305,7 @@ exports.municById = function (req, res, next, id) {
   Municipality.findOne({ _id: id })
     .populate({
       path: 'admin',
-      select: 'first_name last_name email department phone'
+      select: 'first_name last_name email department phone number'
     })
     .exec(function (err, event) {
       if (err) {
@@ -500,8 +457,8 @@ function getQueryAggregate(condition) {
     ]
   }];
 
-  if (condition.kind && condition.kind !== '') {
-    and_arr.push({ kind: { $eq: Number(condition.kind) } });
+  if (condition.prefecture) {
+    and_arr.push({ prefecture: { $eq: String(condition.prefecture) } });
   }
 
   if (condition.created_min) {
@@ -509,10 +466,6 @@ function getQueryAggregate(condition) {
   }
   if (condition.created_max) {
     and_arr.push({ created: { $lte: new Date(condition.created_max) } });
-  }
-
-  if (condition.prefecture) {
-    and_arr.push({ prefecture: { $eq: String(condition.prefecture) } });
   }
 
   let aggregates = [];
@@ -553,8 +506,6 @@ function getQueryAggregate(condition) {
   if (condition.keyword && condition.keyword !== '') {
     second_and_arr.push({ name: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
     second_and_arr.push({ user_email: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
-    // second_and_arr.push({ code: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
-    second_and_arr.push({ number: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
   }
 
   if (second_and_arr.length > 0) {
@@ -579,11 +530,4 @@ function getQueryAggregate(condition) {
   }
 
   return aggregates;
-}
-
-function arrayEquals(a, b) {
-  return Array.isArray(a) &&
-    Array.isArray(b) &&
-    a.length === b.length &&
-    a.every((val, index) => val === b[index]);
 }
