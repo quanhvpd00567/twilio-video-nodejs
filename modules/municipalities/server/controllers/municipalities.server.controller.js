@@ -38,14 +38,14 @@ exports.create = async function (req, res) {
       email: data.admin.email,
       phone: data.admin.phone,
       department: data.admin.department,
-      roles: constants.ROLE.MUNIC_ADMIN,
+      roles: constants.ROLE.MUNICIPALITY,
       number: data.admin.number
     };
 
     const email_lower = trimAndLowercase(dataAccount.email);
     const [isEmailExisting, isNumberExisting] = await Promise.all([
       User.findOne({ email_lower, deleted: false }).lean(),
-      User.findOne({ number: dataAccount.number, roles: constants.ROLE.MUNIC_ADMIN, deleted: false }).lean()
+      User.findOne({ number: dataAccount.number, roles: constants.ROLE.MUNICIPALITY, deleted: false }).lean()
     ]);
 
     if (isEmailExisting) {
@@ -248,53 +248,6 @@ exports.info = async function (req, res) {
   }
 };
 
-exports.isUpdatedPaymentMethod = async function (req, res) {
-  try {
-    let municipalityId = '';
-    if (req.user.roles[0] === constants.ROLE.ADMIN || req.user.roles[0] === constants.ROLE.SUB_ADMIN) {
-      municipalityId = req.body.municipalityId;
-    } else {
-      municipalityId = req.user.municipality;
-    }
-    // const municipalityId = req.user.municipality;
-    if (!municipalityId) {
-      return res.json(false);
-    }
-
-    const municipality = await Municipality.findById(municipalityId).select('methods').lean();
-    const isUpdated = municipality && municipality.methods && municipality.methods.length > 0;
-    return res.json(isUpdated);
-  } catch (error) {
-    logger.error(error);
-    return res.status(422).send({ message: help.getMsLoc() });
-  }
-};
-
-exports.updateInfo = async function (req, res) {
-  try {
-    const body = req.body;
-    const auth = req.user;
-    const bankUpdate = {
-      methods: body.methods,
-      bank_code: body.bank_code,
-      bank_name: body.bank_name,
-      branch_code: body.branch_code,
-      branch_name: body.branch_name,
-      bank_type: body.bank_type,
-      bank_number: body.bank_number,
-      bank_owner: body.bank_owner,
-      bank_owner_kana: body.bank_owner_kana
-    };
-
-    const munic = await Municipality.updateOne({ _id: auth.municipality }, bankUpdate);
-    return res.json(munic);
-  } catch (error) {
-
-    logger.error(error);
-    return res.status(422).send({ message: help.getMsLoc() });
-  }
-};
-
 exports.municById = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
@@ -325,7 +278,6 @@ exports.updateMunic = async function (req, res) {
     const auth = req.user;
     const body = req.body;
     const updateData = {};
-
 
     let municipality = auth.municipality;
     if (req.user.roles[0] === constants.ROLE.ADMIN || req.user.roles[0] === constants.ROLE.SUB_ADMIN) {
@@ -385,50 +337,7 @@ exports.updateMunic = async function (req, res) {
   }
 };
 
-exports.getMunicipalityContactInfo = async function (req, res) {
-  try {
-    const municipalityId = req.params.municipalityId;
-    if (!municipalityId) {
-      return res.json(null);
-    }
-
-    const municipality = await Municipality.findById(municipalityId).select('contact_name contact_tel contact_mail').lean();
-    if (!municipality || (!municipality.contact_name && !municipality.contact_tel && !municipality.contact_mail)) {
-      return res.json(null);
-    }
-
-    return res.json(municipality);
-  } catch (error) {
-    logger.error(error);
-    return res.status(422).send({ message: help.getMsLoc() });
-  }
-};
-
 /** ====== PRIVATE ========= */
-function getQuery(condition) {
-  var and_arr = [{ deleted: false }];
-  if (condition.keyword && condition.keyword !== '') {
-    var or_arr = [
-      { name: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } },
-      { code: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } }
-    ];
-    and_arr.push({ $or: or_arr });
-  }
-
-  if (condition.prefecture && condition.prefecture !== '') {
-    and_arr.push({ prefecture: condition.prefecture });
-  }
-
-  if (condition.created_min) {
-    and_arr.push({ created: { $gte: new Date(condition.created_min) } });
-  }
-  if (condition.created_max) {
-    and_arr.push({ created: { $lte: new Date(condition.created_max) } });
-  }
-
-  return { $and: and_arr };
-}
-
 function trimAndLowercase(data) {
   if (!data) {
     return '';

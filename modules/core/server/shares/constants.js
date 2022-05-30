@@ -38,11 +38,8 @@ const CONSTANTS = {
   },
   ROLE: {
     ADMIN: 'admin',
-    SUB_ADMIN: 'sub_admin',
-    COMPANY: 'company',
-    EMPLOYEE: 'employee',
-    MUNIC_ADMIN: 'munic_admin',
-    MUNIC_MEMBER: 'munic_member'
+    MUNICIPALITY: 'municipality',
+    LOCATION: 'location'
   },
   NOTICE_TARGET: {
     ALL: 1,

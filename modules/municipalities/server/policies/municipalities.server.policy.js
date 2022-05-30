@@ -14,7 +14,7 @@ acl = new acl(new acl.memoryBackend());
 exports.invokeRolesPolicies = function () {
   acl.allow([{
     // list api only role admin
-    roles: ['admin', 'sub_admin', 'company'],
+    roles: ['admin'],
     allows: [{
       resources: '/api/municipalities',
       permissions: '*'
@@ -24,39 +24,15 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/municipalities/:municId',
       permissions: '*'
-    }, {
-      resources: '/api/municipalities/:companyId/account/create',
-      permissions: '*'
-    }, {
-      resources: '/api/municipalities/accounts/:companyAdminId',
-      permissions: '*'
     }]
   }, {
-    roles: ['munic_admin', 'munic_member', 'admin', 'sub_admin'],
+    roles: ['municipality'],
     allows: [{
       resources: '/api/municipalities/info',
       permissions: '*'
     }, {
-      resources: '/api/municipalities/update-info',
-      permissions: ['*']
-    }, {
-      resources: '/api/municipalities/check-update-payment-method',
-      permissions: ['*']
-    }, {
       resources: '/api/municipalities/update-munic',
       permissions: ['*']
-    }]
-  }, {
-    roles: ['admin', 'sub_admin', 'company'],
-    allows: [{
-      resources: '/api/municipalities/list-has-project-in-period',
-      permissions: '*'
-    }]
-  }, {
-    roles: ['company', 'employee'],
-    allows: [{
-      resources: '/api/municipalities/:municipalityId/contact-info',
-      permissions: '*'
     }]
   }]);
 };

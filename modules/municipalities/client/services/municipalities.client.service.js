@@ -59,24 +59,8 @@
       return $http.get('/api/municipalities/info', { params: { municipalityId: municipalityId } });
     };
 
-    this.updateInfo = function (munic) {
-      return $http.post('/api/municipalities/update-info', munic);
-    };
-
-    this.isUpdatedPaymentMethod = function (municipalityId) {
-      return $http.post('/api/municipalities/check-update-payment-method', { municipalityId: municipalityId });
-    };
-
-    this.getListMunicipalitiesHasProjectsInPeriod = function (condition) {
-      return $http.get('/api/municipalities/list-has-project-in-period', { params: condition });
-    };
-
     this.updateMunic = function (data) {
       return $http.post('/api/municipalities/update-munic', data);
-    };
-
-    this.getMunicipalityContactInfo = function (municipalityId) {
-      return $http.get('/api/municipalities/' + municipalityId + '/contact-info');
     };
 
     return this;

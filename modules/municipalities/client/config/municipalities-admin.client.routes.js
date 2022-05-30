@@ -19,7 +19,7 @@
         controller: 'MunicipalityAdminListController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: '自治体一覧'
         }
       })
@@ -32,7 +32,7 @@
           municipality: getDetail
         },
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: '自治体詳細'
         }
       })
@@ -45,7 +45,7 @@
           municipality: getDetail
         },
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: '自治体編集'
         }
       })
@@ -58,7 +58,7 @@
           municipality: newMunic
         },
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: '自治体登録'
         }
       });

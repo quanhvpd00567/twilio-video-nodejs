@@ -42,7 +42,7 @@ module.exports = function () {
 
   function checkRole(roles) {
     const ROLE = constants.ROLE;
-    if (roles && roles[0] && [ROLE.ADMIN, ROLE.SUB_ADMIN, ROLE.COMPANY, ROLE.EMPLOYEE, ROLE.MUNIC_ADMIN, ROLE.MUNIC_MEMBER].indexOf(roles[0]) >= 0) {
+    if (roles && roles[0] && [ROLE.ADMIN, ROLE.MUNICIPALITY, ROLE.LOCATION].indexOf(roles[0]) >= 0) {
       return true;
     }
     return false;
