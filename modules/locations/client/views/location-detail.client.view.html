@@ -1,0 +1,78 @@
+<section class="content container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row mg10b">
+        <div class="col-xs-6">
+          <h4>
+            <span class="page_title_clickable" ui-sref="admin.locations.list">
+              {{'locations.list.page.title' | translate}}
+            </span>&nbsp;>
+            <form-title-only></form-title-only>
+          </h4>
+        </div>
+        <div class="col-xs-6 text-right">
+          <button-edit back="admin.locations.list" noback="admin.locations.create" state="admin.locations.edit"
+            params="{locationId: vm.locationId}">
+          </button-edit>
+        </div>
+      </div>
+      <div class="table-responsive notice-form">
+        <table class="table table-bordered table-detail">
+          <tbody>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.municipality.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.municipality.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.name.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.admin_name.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.admin.name"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.admin_email.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.admin.email"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.admin_number.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.admin.number"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.admin_phone.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.admin.phone"></td>
+            </tr>
+            <tr>
+              <th class="col-xs-2">
+                {{'locations.detail.created.label' | translate}}
+              </th>
+              <td class="col-xs-10" ng-bind="vm.location.created | dateTimeNormal" colspan="3"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row mg10b">
+        <div class="col-xs-4">
+        </div>
+        <div class="col-xs-4 text-center">
+          <button-edit back="admin.locations.list" noback="admin.locations.create" state="admin.locations.edit"
+            params="{locationId: vm.locationId}">
+          </button-edit>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

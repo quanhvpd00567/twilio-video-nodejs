@@ -37,7 +37,6 @@ exports.create = async function (req, res) {
       password: data.password,
       email: data.admin.email,
       phone: data.admin.phone,
-      department: data.admin.department,
       roles: constants.ROLE.MUNICIPALITY,
       number: data.admin.number
     };

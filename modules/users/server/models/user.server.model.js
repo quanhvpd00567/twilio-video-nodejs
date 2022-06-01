@@ -41,8 +41,8 @@ var UserSchema = new Schema({
     required: true
   },
 
-  location: { type: Schema.ObjectId, ref: 'Location' }, // require if role is employee
-  municipality: { type: Schema.ObjectId, ref: 'Municipality' },
+  municipality: { type: Schema.ObjectId, ref: 'Municipality' }, // require if role is location
+  location: { type: Schema.ObjectId, ref: 'Location' }, // require if role is location
 
   // デバイス一覧
   devices: [{ type: Schema.ObjectId, ref: 'Device' }],
