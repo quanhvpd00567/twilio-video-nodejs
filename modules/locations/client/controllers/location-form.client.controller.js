@@ -5,9 +5,9 @@
     .module('locations.admin')
     .controller('LocationFormController', LocationFormController);
 
-  LocationFormController.$inject = ['$scope', '$state', 'locationResolve', '$filter', 'MunicipalitiesApi', 'CompanyApi'];
+  LocationFormController.$inject = ['$scope', '$state', 'locationResolve', '$filter', 'MunicipalitiesApi'];
 
-  function LocationFormController($scope, $state, location, $filter, MunicipalitiesApi, CompanyApi) {
+  function LocationFormController($scope, $state, location, $filter, MunicipalitiesApi) {
     var vm = this;
     vm.location = location;
     vm.municipalities = [];
