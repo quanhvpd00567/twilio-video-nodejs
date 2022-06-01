@@ -2,12 +2,12 @@
   'use strict';
 
   angular
-    .module('products.municipality')
+    .module('products.admin')
     .controller('ProductListController', ProductListController);
 
-  ProductListController.$inject = ['$scope', '$state', '$filter', '$location', 'ProductApi', 'ProductService', 'RequestRegistrationApi'];
+  ProductListController.$inject = ['$scope', '$state', '$filter', '$location', 'ProductApi', 'ProductService'];
 
-  function ProductListController($scope, $state, $filter, $location, ProductApi, ProductService, RequestRegistrationApi) {
+  function ProductListController($scope, $state, $filter, $location, ProductApi, ProductService) {
     var vm = this;
     vm.master = $scope.masterdata;
     vm.listIds = [];
@@ -19,7 +19,9 @@
     vm.isDelete = false;
     vm.auth = $scope.Authentication.user;
 
-    vm.isAdminMunic = $scope.Authentication.user.roles[0] === 'munic_admin';
+    // vm.isAdminMunic = $scope.Authentication.user.roles[0] === 'munic_admin';
+
+    console.log();
     var FEATURE_MUNICIPALITY = $scope.masterdata.FEATURE_MUNICIPALITY;
 
     onCreate();
@@ -27,32 +29,25 @@
     function onCreate() {
       init();
       prepareCondition(false);
+      vm.condition.municipality = 'all';
+      vm.condition.location = 'all';
       handleSearch();
+
+      if (!$scope.isMunicipality) {
+        getMunicipality();
+      } else {
+        getLocationByMunic();
+      }
     }
 
     function init() {
       vm.municipalityId = $state.params.municipalityId;
       vm.key = $state.params.key;
       vm.isNeedAuthorize = $state.params.isNeedAuthorize;
-      // Check permistion when admin or subadmin handle
-      if ($scope.isAdminOrSubAdmin && !vm.municipalityId && !vm.key) {
-        $scope.handleErrorFeatureAuthorization();
-        return;
-      }
-
-      if (vm.municipalityId && vm.key) {
-        vm.isCreate = vm.key === FEATURE_MUNICIPALITY.CREATE_PRODUCT;
-        vm.isEdit = vm.key === FEATURE_MUNICIPALITY.UPDATE_PRODUCT;
-        vm.isDelete = vm.key === FEATURE_MUNICIPALITY.DELETE_PRODUCT;
-      } else {
-        vm.isCreate = true;
-        vm.isEdit = true;
-        vm.isDelete = true;
-      }
     }
 
     function prepareCondition(clear) {
-      vm.condition = $scope.prepareCondition('members', clear);
+      vm.condition = $scope.prepareCondition('products', clear);
       // vm.condition.sort_column = '';
       // vm.condition.sort_direction = '';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
@@ -78,7 +73,7 @@
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.totalDocs;
-          $scope.conditionFactoryUpdate('members', vm.condition);
+          $scope.conditionFactoryUpdate('products', vm.condition);
           $scope.handleCloseWaiting();
         })
         .error(function (error) {
@@ -105,6 +100,8 @@
     };
     vm.handleClearCondition = function () {
       prepareCondition(true);
+      vm.condition.municipality = 'all';
+      vm.condition.location = 'all';
       handleSearch();
     };
     vm.handleSortChanged = function (sort_column) {
@@ -144,7 +141,33 @@
     };
 
     vm.goToCreate = function () {
-      $state.go('municipality.products.create');
+      $state.go('admin.products.create');
+    };
+
+    function getMunicipality() {
+      ProductApi.getMunicipalityAll()
+        .success(function (res) {
+          vm.municipalities = res;
+          console.log(vm.municipalities);
+        });
+    }
+
+    function getLocationByMunic() {
+      vm.locations = [];
+      if ($scope.isMunicipality) {
+        vm.condition.municipality = $scope.Authentication.user.municipalityId;
+      }
+      ProductApi.getLocationByMunic(vm.condition.municipality)
+        .success(function (res) {
+          vm.locations = res;
+          if (vm.locations.length === 0) {
+            vm.condition.location = 'all';
+          }
+        });
+    }
+
+    vm.onChangeMunic = function () {
+      getLocationByMunic();
     };
   }
 }());

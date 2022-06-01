@@ -14,6 +14,8 @@ var mongoose = require('mongoose'),
 var productSchema = new Schema({
   // 自治体
   municipality: { type: Schema.ObjectId, ref: 'Municipality', required: true },
+  // 出品対象導入施設
+  location: { type: Schema.ObjectId, ref: 'Location' },
   // 販売状態
   sell_status: { type: Number, default: 1, required: true },
   // 表示状態
@@ -50,22 +52,6 @@ var productSchema = new Schema({
   avatar: { type: String, required: true },
   // 追加写真
   pictures: { type: [{ type: String }] },
-  // 配送方法
-  ship_method: { type: Number, default: 1, required: true },
-  // 発送期日
-  ship_date: { type: String, required: true },
-  // 配送会社
-  ship_company: { type: String },
-  // 配送希望設定
-  is_accept_schedule: { type: Number, default: 1, required: true },
-  // 配送希望時間
-  accepted_schedule: { type: [{ type: String }] },
-  // 配送不可地域
-  except_place: { type: String },
-
-  except_place_options: { type: [{ type: Number }] },
-  // 配送除外日
-  except_date: { type: String },
   // のし対応
   is_accept_noshi: { type: Number, default: 1, required: true },
 
