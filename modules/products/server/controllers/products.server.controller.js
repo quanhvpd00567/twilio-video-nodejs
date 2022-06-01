@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
   Product = mongoose.model('Product'),
   User = mongoose.model('User'),
   Municipality = mongoose.model('Municipality'),
+  Location = mongoose.model('Location'),
   path = require('path'),
   config = require(path.resolve('./config/config')),
   _ = require('lodash'),
@@ -23,25 +24,19 @@ const lang = 'ja';
 
 exports.create = async function (req, res) {
   try {
-    let data = req.body;
+    var data = req.body;
     let auth = req.user;
+    if (auth.roles[0] !== 'admin') {
+      data.municipality = auth.municipality;
+    }
 
     // check exists code
-    let conditionCheckProductCode = { product_code: data.code, municipality: auth.municipality || data.municipalityId, deleted: false };
-    if (req.body.requestItemId) {
-      conditionCheckProductCode._id = { $ne: req.body.requestItemId };
-    }
-    const [isExistsCodeInProduct, isExistsCodeInRequestItem] = await Promise.all([
-      Product.findOne({ code: data.code, municipality: auth.municipality || data.municipalityId }).lean(),
-      RequestItem.findOne(conditionCheckProductCode).lean()
-    ]);
+    let isExistsCodeInProduct = await Product.findOne({ code: data.code, municipality: auth.municipality, deleted: false }).lean();
 
-    if (isExistsCodeInProduct || isExistsCodeInRequestItem) {
+    if (isExistsCodeInProduct) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'products.form.code.error.exists') });
     }
     let product = new Product(data);
-    product.municipality = auth.municipality;
-    product.except_place_options = product.except_place_options.sort((a, b) => a - b);
 
     await product.save();
     return res.json(product);
@@ -74,17 +69,37 @@ exports.list = async function (req, res) {
     const auth = req.user;
     var condition = req.query || {};
     var page = condition.page || 1;
+
+    if (auth.roles[0] !== 'admin') {
+      condition.municipality = auth.municipality;
+    }
+
     var limit = help.getLimit(condition);
-    var query = getQuery(condition, auth);
-    var sort = help.getSort(condition);
-    Product.paginate(query, {
-      sort: sort,
-      page: page,
-      limit: limit,
-      collation: { locale: 'ja' }
-    }).then(function (result) {
-      return res.json(result);
-    });
+    var options = { page: page, limit: limit };
+
+    const aggregates = getQueryAggregate(condition);
+    let result = await Product.aggregatePaginate(Product.aggregate(aggregates).allowDiskUse(true).collation({ locale: 'ja' }), options);
+    result = help.parseAggregateQueryResult(result, page);
+
+    return res.json(result);
+    // Product.paginate(query, {
+    //   sort: sort,
+    //   page: page,
+    //   limit: limit,
+    //   populate: [
+    //     {
+    //       path: 'municipality',
+    //       select: 'name'
+    //     },
+    //     {
+    //       path: 'location',
+    //       select: 'name'
+    //     }
+    //   ],
+    //   collation: { locale: 'ja' }
+    // }).then(function (result) {
+    //   return res.json(result);
+    // });
 
   } catch (error) {
     logger.error(error);
@@ -108,24 +123,15 @@ exports.update = async function (req, res) {
     let product = req.model;
     let data = req.body;
 
-    // check exists code
-    let conditionCheckProductCode = {
-      product_code: data.code,
-      municipality: auth.municipality || data.municipalityId,
-      deleted: false,
-      status: { $in: [REQUEST_ITEM_STATUSES.PENDING, REQUEST_ITEM_STATUSES.SUBMITTED] }
-    };
-    if (req.body.requestItemId) {
-      conditionCheckProductCode._id = { $ne: req.body.requestItemId };
+    if (auth.roles[0] !== 'admin') {
+      data.municipality = auth.municipality;
     }
-    console.log(conditionCheckProductCode);
-    const [isExistsCodeInProduct, isExistsCodeInRequestItem] = await Promise.all([
-      Product.findOne({ code: data.code, municipality: auth.municipality || data.municipalityId, _id: { $ne: product._id } }).lean(),
-      RequestItem.findOne(conditionCheckProductCode).lean()
-    ]);
+
+    // check exists code
+    let isExistsCodeInProduct = await Product.findOne({ code: data.code, municipality: data.municipality, _id: { $ne: product._id } }).lean();
+
     console.log(isExistsCodeInProduct);
-    console.log(isExistsCodeInRequestItem);
-    if (isExistsCodeInProduct || isExistsCodeInRequestItem) {
+    if (isExistsCodeInProduct) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'products.form.code.error.exists') });
     }
 
@@ -168,8 +174,6 @@ function prepareDataUpdate(product, data) {
   if (product.show_status && product.show_status !== 1) {
     product.show_status = 2;
   }
-
-  product.except_place_options = product.except_place_options.sort((a, b) => a - b);
 
   return product;
 }
@@ -231,6 +235,26 @@ exports.getMunicipality = async function (req, res) {
   }
 };
 
+exports.getMunicipalitiesAll = async function (req, res) {
+  try {
+    Municipality.find({ deleted: false }).exec()
+      .then(data => res.json(data));
+  } catch (error) {
+    logger.error(error);
+    return res.status(422).send({ message: help.getMsLoc() });
+  }
+};
+
+exports.getLocationByMunic = async function (req, res) {
+  try {
+    Location.find({ deleted: false, municipality: new mongoose.Types.ObjectId(req.query.municId) }).exec()
+      .then(data => res.json(data));
+  } catch (error) {
+    logger.error(error);
+    return res.status(422).send({ message: help.getMsLoc() });
+  }
+};
+
 exports.productById = function (req, res, next, id) {
   const auth = req.user;
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -246,6 +270,8 @@ exports.productById = function (req, res, next, id) {
   }
 
   Product.findOne(query)
+    .populate('location', 'name')
+    .populate('municipality', 'name')
     .exec(function (err, event) {
       if (err) {
         logger.error(err);
@@ -262,11 +288,11 @@ exports.productById = function (req, res, next, id) {
 
 /** ====== PRIVATE ========= */
 function getQuery(condition, auth) {
-  let municipalityId = auth.municipality;
-  if (auth.roles[0] === constants.ROLE.ADMIN || auth.roles[0] === constants.ROLE.SUB_ADMIN) {
-    municipalityId = condition.municipalityId;
-  }
-  var and_arr = [{ municipality: municipalityId }];
+  // let municipalityId = auth.municipality;
+  // if (auth.roles[0] === constants.ROLE.ADMIN || auth.roles[0] === constants.ROLE.SUB_ADMIN) {
+  //   municipalityId = condition.municipalityId;
+  // }
+  var and_arr = [{ deleted: false }];
   if (condition.keyword && condition.keyword !== '') {
     var or_arr = [
       { code: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } },
@@ -295,6 +321,146 @@ function getQuery(condition, auth) {
   }
 
   return { $and: and_arr };
+}
+
+function getQueryAggregate(condition) {
+  let and_arr = [{
+    deleted: false
+  }];
+
+  if (condition.keyword && condition.keyword !== '') {
+    var or_arr = [
+      { code: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } },
+      { name: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } }
+    ];
+    and_arr.push({ $or: or_arr });
+  }
+
+  if (condition.municipality && condition.municipality !== 'all') {
+    and_arr.push({ municipality: new mongoose.Types.ObjectId(condition.municipality) });
+  }
+
+  if (condition.location && condition.location !== 'all') {
+    and_arr.push({ location: new mongoose.Types.ObjectId(condition.location) });
+  }
+
+  if (condition.operator && condition.operator !== '') {
+    and_arr.push({ operator: { $regex: '.*' + condition.operator + '.*', $options: 'i' } });
+  }
+
+  if (condition.price_min) {
+    and_arr.push({ price: { $gte: Number(condition.price_min) } });
+  }
+  if (condition.price_max) {
+    and_arr.push({ price: { $lte: Number(condition.price_max) } });
+  }
+
+  if (condition.show_status === 'true') {
+    and_arr.push({ show_status: 1 });
+  }
+
+  if (condition.status === 'true') {
+    and_arr.push({ sell_status: 1 });
+  }
+
+
+  let aggregates = [];
+  aggregates.push({
+    $match: {
+      $and: and_arr
+    }
+  });
+
+  // Match munic
+  let matchUser = {
+    $and: [
+      { 'munic.deleted': { $eq: false } }
+    ]
+  };
+
+  // Match Municipality
+  aggregates.push({
+    $lookup: {
+      from: 'municipalities',
+      localField: 'municipality',
+      foreignField: '_id',
+      as: 'munic'
+    }
+  }, {
+    $unwind: '$munic'
+  }, {
+    $match: matchUser
+  },
+  {
+    $addFields: {
+      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+      munic_name: { $convert: { input: '$munic.name', to: 'string' } }
+    }
+  }
+  );
+
+  // Match location
+  let matchLocation = {
+    $and: [
+      { 'location.deleted': { $eq: false } }
+    ]
+  };
+
+  aggregates.push({
+    $lookup: {
+      from: 'locations',
+      localField: 'location',
+      foreignField: '_id',
+      as: 'location'
+    }
+  }, {
+    $unwind: '$location'
+  }, {
+    $match: matchLocation
+  },
+  {
+    $addFields: {
+      location_id: { $convert: { input: '$location._id', to: 'string' } },
+      location_name: { $convert: { input: '$location.name', to: 'string' } }
+    }
+  }
+  );
+
+  aggregates.push({
+    $project: {
+      code: 1,
+      'sell_status': 1,
+      'show_status': 1,
+      'name': 1,
+      'price': 1,
+      'capacity': 1,
+      'expire': 1,
+      'expire_detail': 1,
+      'operator': 1,
+      'is_set_stock_quantity': 1,
+      'stock_quantity': 1,
+      'is_set_max_quantity': 1,
+      'max_quantity': 1,
+      'is_deadline': 1,
+      'deadline': 1,
+      'description': 1,
+      'avatar': 1,
+      created: 1,
+      munic_name: 1,
+      munic_id: 1,
+      location_name: 1,
+      location_id: 1
+    }
+  });
+
+  const sort = help.getSortAggregate(condition);
+  if (sort) {
+    aggregates.push({
+      $sort: sort
+    });
+  }
+
+  return aggregates;
 }
 
 function trimAndLowercase(data) {

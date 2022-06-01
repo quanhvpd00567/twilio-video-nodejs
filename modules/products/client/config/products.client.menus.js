@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('products.municipality')
+    .module('products.admin')
     .run(menuConfig);
 
   menuConfig.$inject = ['menuService'];
@@ -11,11 +11,11 @@
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
       position: 3,
-      roles: ['munic_admin', 'munic_member'],
+      roles: ['municipality', 'admin'],
       class: 'fa fa-product-hunt',
       title: '返礼品',
-      state: 'municipality.products.list',
-      parrent_state: 'municipality.products'
+      state: 'admin.products.list',
+      parrent_state: 'admin.products'
     });
   }
 }());

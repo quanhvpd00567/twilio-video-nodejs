@@ -12,6 +12,8 @@ module.exports = function (app) {
   app.route('/api/products/image').post(policy.isAllowed, productController.uploadImage);
   app.route('/api/products/upload-pictures').post(policy.isAllowed, productController.uploadPictures);
   app.route('/api/municipality').get(policy.isAllowed, productController.getMunicipality);
+  app.route('/api/municipalities-all').get(policy.isAllowed, productController.getMunicipalitiesAll);
+  app.route('/api/location-by-munic').get(policy.isAllowed, productController.getLocationByMunic);
 
   // Single notice routes
   app.route('/api/products/:productId')

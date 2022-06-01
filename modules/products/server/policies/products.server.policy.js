@@ -14,7 +14,7 @@ acl = new acl(new acl.memoryBackend());
 exports.invokeRolesPolicies = function () {
   acl.allow([{
     // list api only role munic
-    roles: ['munic_admin', 'munic_member', 'admin', 'sub_admin'],
+    roles: ['municipality', 'admin'],
     allows: [{
       resources: '/api/products',
       permissions: '*'
@@ -33,10 +33,13 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/municipality',
       permissions: '*'
-    }]
-  }, {
-    roles: ['admin', 'sub_admin'],
-    allows: [{
+    }, {
+      resources: '/api/municipalities-all',
+      permissions: '*'
+    }, {
+      resources: '/api/location-by-munic',
+      permissions: '*'
+    }, {
       resources: '/api/products/:productId',
       permissions: '*'
     }]
