@@ -31,7 +31,7 @@ function initFolder() {
 async function initMasterAddresses() {
   try {
     const MasterAddress = mongoose.model('MasterAddress');
-    const isExisted = await MasterAddress.findOne({});
+    const isExisted = await MasterAddress.findOne({}).lean();
     if (isExisted) {
       console.log('Checked, master addresses already existed!');
       return true;

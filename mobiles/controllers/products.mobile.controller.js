@@ -4,16 +4,11 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  moment = require('moment-timezone'),
   path = require('path'),
   logger = require(path.resolve('./mobiles/controllers/logger.mobile.controller')),
   Product = mongoose.model('Product'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   translate = require(path.resolve('./config/locales/mobile/ja.json'));
-
-mongoose.Promise = require('bluebird');
-moment.tz.setDefault('Asia/Tokyo');
-moment.locale('ja');
 
 exports.list = async function (req, res) {
   try {
