@@ -15,9 +15,7 @@ var mongoose = require('mongoose'),
   imageController = require(path.resolve('./modules/core/server/controllers/image.server.controller')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
-  FEATURE_MUNICIPALITY = require(path.resolve('./config/lib/master-data')).masterdata.FEATURE_MUNICIPALITY,
-  help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
-  REQUEST_ITEM_STATUSES = Object.keys(constants.REQUEST_ITEM_STATUS).map(key => constants.REQUEST_ITEM_STATUS[key]);
+  help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 
 const lang = 'ja';
@@ -391,12 +389,12 @@ function getQueryAggregate(condition) {
   }, {
     $match: matchUser
   },
-  {
-    $addFields: {
-      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
-      munic_name: { $convert: { input: '$munic.name', to: 'string' } }
+    {
+      $addFields: {
+        munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+        munic_name: { $convert: { input: '$munic.name', to: 'string' } }
+      }
     }
-  }
   );
 
   // Match location
@@ -418,12 +416,12 @@ function getQueryAggregate(condition) {
   }, {
     $match: matchLocation
   },
-  {
-    $addFields: {
-      location_id: { $convert: { input: '$location._id', to: 'string' } },
-      location_name: { $convert: { input: '$location.name', to: 'string' } }
+    {
+      $addFields: {
+        location_id: { $convert: { input: '$location._id', to: 'string' } },
+        location_name: { $convert: { input: '$location.name', to: 'string' } }
+      }
     }
-  }
   );
 
   aggregates.push({
