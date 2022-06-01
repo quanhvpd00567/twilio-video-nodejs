@@ -15,14 +15,4 @@ module.exports = function (app) {
     .put(settingsPolicy.isAllowed, settings.update);
 
   app.route('/api/info').get(settings.getTermPolicty);
-
-  app.route('/api/settings/pps/paging')
-    .post(settingsPolicy.isAllowed, settings.pagingPPSSetting);
-  app.route('/api/settings/aps/paging')
-    .post(settingsPolicy.isAllowed, settings.pagingAPSSetting);
-
-  app.route('/api/settings/config-set/add-or-update')
-    .post(settingsPolicy.isAllowed, settings.addOrUpdateConfigSet);
-  app.route('/api/settings/config-set/delete')
-    .post(settingsPolicy.isAllowed, settings.deleteConfigSet);
 };
