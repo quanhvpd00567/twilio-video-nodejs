@@ -66,7 +66,6 @@ exports.tokenAllowed = function (req, res, next) {
         return res.status(401).send({ message: translate['system.app.policy.user.null'] });
 
       User.findById(device.user)
-        .populate('team')
         .exec(function (err, user) {
           if (err) {
             logger.error(err);
@@ -90,7 +89,7 @@ exports.tokenAllowed = function (req, res, next) {
 };
 
 function isValidUser(roles) {
-  if (roles && roles[0] && roles.indexOf(constants.ROLE.EMPLOYEE) >= 0) {
+  if (roles && roles[0] && roles.indexOf(constants.ROLE.LOCATION) >= 0) {
     return true;
   }
   return false;

@@ -47,25 +47,6 @@ exports.masterdata = {
     BANK_TRANSFER: 3
   },
 
-  bank_types: [
-    { id: 1, value: '普通' },
-    { id: 2, value: '当座' }
-  ],
-
-  magazine_types: [
-    { id: 1, value: '企業名と金額' },
-    { id: 2, value: '企業名のみ' },
-    { id: 3, value: '希望しない' }
-  ],
-
-  pay_statuses: [
-    { id: 1, value: '未' },
-    { id: 2, value: '済' }
-  ],
-  PAY_STATUS: {
-    NOT_YET: 1,
-    FINISHED: 2
-  },
   sent_statuses: [
     { id: 1, value: '未送付' },
     { id: 2, value: '送付済' }
@@ -74,23 +55,7 @@ exports.masterdata = {
     NOT_YET: 1,
     SENT: 2
   },
-  point_log_types: [
-    { id: 1, value: '獲得' },
-    { id: 2, value: '利用' },
-    { id: 3, value: '失効' }
-  ],
-  company_roles: [
-    { id: 'company', value: '担当者' },
-    { id: 'employee', value: '参加者' }
-  ],
-  munic_roles: [
-    { id: 'munic_admin', value: '管理者' },
-    { id: 'munic_member', value: 'メンバー' }
-  ],
-  sel_status: [
-    { id: 1, value: '販売中' },
-    { id: 2, value: '受付終了' }
-  ],
+
   show_status: [
     { id: 1, value: '表示' },
     { id: 2, value: '非表示' }
