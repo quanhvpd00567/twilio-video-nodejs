@@ -8,13 +8,9 @@ var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   path = require('path'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
-  config = require(path.resolve('./config/config')),
-  moment = require('moment-timezone'),
-  Excel = require('exceljs'),
   _ = require('lodash'),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
-  help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
-  filesServerController = require(path.resolve('./modules/core/server/controllers/files.server.controller'));
+  help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 const lang = 'ja';
 exports.create = async function (req, res) {
@@ -119,7 +115,7 @@ exports.update = async function (req, res) {
 
     // Check email exists
     if (account.email !== adminUpdate.email) {
-      const email_lower = trimAndLowercase(adminUpdate.email);
+      const email_lower = help.trimAndLowercase(adminUpdate.email);
       const isEmailExisting = await User.findOne({ email_lower, deleted: false, _id: { $ne: account._id } }).lean();
       if (isEmailExisting) {
         return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
@@ -280,7 +276,7 @@ function getQueryAggregate(condition) {
   aggregates.push({
     $project: {
       account: 0,
-      municipality: 0,
+      municipality: 0
     }
   });
 
