@@ -41,6 +41,7 @@ var UserSchema = new Schema({
     required: true
   },
 
+  department: { type: String }, // munic admin
   municipality: { type: Schema.ObjectId, ref: 'Municipality' }, // require if role is location
   location: { type: Schema.ObjectId, ref: 'Location' }, // require if role is location
 

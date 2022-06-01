@@ -69,27 +69,23 @@
                                   <p class="text"
                                     style="color:#666666; font-family:'Open Sans', Helvetica, Arial, sans-serif; font-size:14px; font-weight:400; font-style:normal; letter-spacing:normal; line-height:22px; text-transform:none; text-align:left; padding:0; margin:0">
                                   <p>
-                                    <%= companyOrMunicName + ' ' + last_name + ' ' + first_name %>様
+                                    <%= accountName %>様
                                   </p>
-                                  <p>※このメールは、自動で送信されています。</p>
-                                  <p>歩くふるさと納税運営事務局です。</p>
+                                  <p>下記のURLにアクセスし、「メールアドレス」、「パスワード」をご入力ください。</p>
+                                  <p>ログイン後、パスワードの変更画面にて、任意のパスワードを設定してください。</p>
+
+                                  <p>次回以降ログインの際は、ご自身で設定したパスワードを利用ください。</p>
 
                                   <p>
                                     「歩くふるさと納税」への申し込みを頂きありがとうございます。<br>
                                     アカウントを発行いたしましたので、以下のIDとパスワードでログインいただけますと幸いです。
                                   </p>
 
-                                  <span>ログインURL : <%= domain %></span> <br>
-                                  <span>ID : <%= email %></span><br>
-                                  <span>PASSWORD : <%= password %></span> <br>
-                                  <span>※パスワードの変更をお願いいたします。</span>
+                                  <span>ふるさとNowのURL : <%= domain %></span> <br>
+                                  <span>パスワード : <%= password %></span> <br>
 
-                                  <p>
-                                    <span>■本件へのお問い合わせ</span> <br>
-                                    <span>
-                                      <%=emailOfAdmin%> (歩くふるさと納税運営事務局)
-                                    </span>
-                                  </p>
+                                  <p>ご不明な点がありましたら企業担当者にご連絡ください。</p>
+                                  <p>※このメールは自動送信されているため、返信できません。</p>
                                 </td>
                               </tr>
                             </tbody>

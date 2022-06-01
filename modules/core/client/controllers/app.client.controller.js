@@ -78,7 +78,7 @@ function AppController(
     switch (role) {
       case 'admin':
       case 'sub_admin':
-        $scope.handleBackScreen('admin.companies.list');
+        $scope.handleBackScreen('admin.products.list');
         break;
       case 'company':
         $scope.handleBackScreen('company.home');
@@ -549,23 +549,6 @@ function AppController(
     return Math.ceil((new Date(end).getTime() - new Date(start).getTime()) / Masterdata.masterdata.DAY_IN_MILLISECONDS);
   };
 
-  $scope.getFullCompanyName = function (kind, name) {
-    var text = '';
-    switch (kind) {
-      case 1:
-        text = '株式会社' + name;
-        break;
-      case 2:
-        text = name + '株式会社';
-        break;
-      default:
-        text = name;
-        break;
-    }
-
-    return text;
-  };
-
   $scope.getEconomicYearsOfJapan = function () {
     // economic year from: 4/1 - 31/3 next year
     var minYear = 2021;
@@ -621,63 +604,5 @@ function AppController(
       || (error && error.data && error.data.message)
       || errorMessage || $filter('translate')('common.data.failed');
     return message;
-  };
-
-  $scope.handleErrorFeatureAuthorization = function () {
-    $scope.handleCloseWaiting();
-    $scope.handleShowToast($filter('translate')('common.server.error.permission'), true);
-    $state.go('admin.companies.list');
-  };
-
-  $scope.buildRequestSubtitle = function (request) {
-    if ([
-      $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_13,
-      $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_14,
-      $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_MUNIC_INFO_15].indexOf(request.type) !== -1) {
-      return '';
-    }
-    var featureItem = _.find($scope.masterdata.features_municipality, function (item) {
-      return item.id === request.type;
-    });
-
-    return request.request_items.length + (featureItem && featureItem.requestSubtitle || '');
-  };
-
-  $scope.buildRequestItemName = function (requestItem) {
-    var featureItem = _.find($scope.masterdata.features_municipality, function (item) {
-      return item.id === requestItem.type;
-    });
-
-    switch (requestItem.type) {
-      case $scope.masterdata.FEATURE_MUNICIPALITY.CREATE_PROJECT:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.CREATE_PRODUCT:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.CREATE_MUNIC_MEMBER:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.CREATE_USING:
-        return requestItem.data && requestItem.data.name || '';
-
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_PROJECT:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.DELETE_PROJECT:
-        return requestItem.project && requestItem.project.name || '';
-
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_PRODUCT:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.DELETE_PRODUCT:
-        return requestItem.product && requestItem.product.name || '';
-
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_MUNIC_MEMBER:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.DELETE_MUNIC_MEMBER:
-        return requestItem.user && requestItem.user.name || '';
-
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_USING:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.DELETE_USING:
-        return requestItem.using && requestItem.using.name || '';
-
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_13:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_TAX_PAYMENT_14:
-      case $scope.masterdata.FEATURE_MUNICIPALITY.UPDATE_MUNIC_INFO_15:
-        return featureItem.requestItemName;
-
-      default:
-        return '';
-    }
   };
 }
