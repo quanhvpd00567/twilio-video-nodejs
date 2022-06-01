@@ -20,10 +20,8 @@ var _ = require('lodash'),
   simulationServerController = require(path.resolve('./modules/core/server/controllers/simulation.server.controller')),
   helperServer = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
-mongoose.Promise = require('bluebird');
 moment.tz.setDefault('Asia/Tokyo');
 moment.locale('ja');
-const ONE_DAY_IN_MILLISECOND = 24 * 60 * 60 * 1000;
 
 const isCheckMaxDonationAmount = true;
 /**
@@ -114,7 +112,7 @@ async function doLogin(email, password, uuid, registrationId, os, version, info)
     device = JSON.parse(JSON.stringify(device));
     delete device.info;
     const returnUser = pickUser(user);
-    return { success: true, data: { user: returnUser, device: device, version: config && config.version || '' } };
+    return { success: true, data: { user: returnUser, location: user.location, device: device, version: config && config.version || '' } };
   } catch (error) {
     logger.error(error);
     throw error;
@@ -122,7 +120,7 @@ async function doLogin(email, password, uuid, registrationId, os, version, info)
 
   async function verifyEmailAndPassword(email, password) {
     const email_lower = trimAndLowercase(email);
-    const user = await User.findOne({ email_lower, roles: constants.ROLE.EMPLOYEE, deleted: false });
+    const user = await User.findOne({ email_lower, roles: constants.ROLE.LOCATION, deleted: false }).populate('location');
 
     if (!user) {
       return { success: false, message: translate['user.signin.user.null'] };
@@ -130,13 +128,6 @@ async function doLogin(email, password, uuid, registrationId, os, version, info)
 
     if (!user.authenticate(password))
       return { success: false, message: translate['user.signin.user.wrong'] };
-
-    if (!isEmployee(user.roles)) {
-      return { success: false, message: translate['user.signin.role.invalid'] };
-    }
-    // if (user.status === constants.USER_STATUS.PENDING) {
-    //   return { success: false, message: translate['user.signin.status.pending'] };
-    // }
 
     return { success: true, user };
   }
@@ -148,12 +139,6 @@ async function doLogin(email, password, uuid, registrationId, os, version, info)
   }
 }
 
-/**
-* @function ログアウト
- * @param userId
- * @param uuid
- * @returns status 200
- */
 exports.signout = function (req, res) {
   req.checkBody('uuid', translate['user.signout.uuid.required']).notEmpty();
   var errors = req.validationErrors();
@@ -179,18 +164,12 @@ exports.resetPassword = async function (req, res) {
     const email = req.body.email;
     const email_lower = trimAndLowercase(email);
 
-    let user = await User.findOne({ email_lower, deleted: false, roles: constants.ROLE.EMPLOYEE });
+    let user = await User.findOne({ email_lower, deleted: false, roles: constants.ROLE.LOCATION });
     if (!user) {
       return res.status(422).send({
         message: translate['user.resetpassword.user.null']
       });
     }
-
-    // if (user.status === constants.USER_STATUS.PENDING) {
-    //   return res.status(422).send({
-    //     message: translate['user.resetpassword.unconfirmed_account.error']
-    //   });
-    // }
 
     const newPassword = await User.generateRandomPassphrase();
     user.password = newPassword;
@@ -255,11 +234,6 @@ exports.changePassword = function (req, res) {
   });
 };
 
-/**
- * Check Token
-* @function アカウント認証
- * @returns { results: object user }
- */
 exports.verify_token = function (req, res) {
   var user = req.user;
   var device = req.device;
@@ -369,46 +343,13 @@ exports.config = function (req, res) {
       logger.error(err);
       return res.status(422).send({ message: translate['system.server.error'] });
     }
-    delete _setting.point_setting;
-    delete _setting.rank_setting;
 
     setting = _setting;
     setting = JSON.parse(JSON.stringify(setting));
 
-    if (setting.term) {
-      setting.term = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
-        <body style="overflow-x: hidden;"> 
-          ${setting.term}
-        </body>
-      </html>
-      `;
-    }
-    if (setting.policy) {
-      setting.policy = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
-        <body style="overflow-x: hidden;"> 
-          ${setting.policy}
-        </body>
-      </html>
-      `;
-    }
     res.jsonp({
       config: setting, version: setting.version,
-      genders: master_data.masterdata.genders,
-      prefectures: master_data.masterdata.prefectures,
-      allow_fix_step: setting && setting.allow_fix_step,
-      fix_user: setting && setting.fix_user,
-      fix_all_user: setting && setting.fix_all_user,
-      fix_key: setting && setting.fix_key
+      prefectures: master_data.masterdata.prefectures
     });
   });
 };
@@ -462,42 +403,6 @@ exports.notif_decrease = function (req, res) {
   Device.findByIdAndUpdate(device._id, { $inc: { notification_count: -1 } }).exec();
 
   return res.end();
-};
-
-exports.update_email = async function (req, res) {
-  try {
-    const { email } = req.body;
-    let user = await User.findOne({ _id: req.user._id, deleted: false });
-    if (!user) {
-      return res.status(403).send({ message: translate['user.account_not_found'] });
-    }
-    if (!email) {
-      return res.status(403).send({ message: translate['system.server.error'] });
-    }
-
-    const email_lower = trimAndLowercase(email);
-    const isEmailExisting = await User.findOne({ email_lower, _id: { $ne: user._id }, deleted: false }).select('_id').lean();
-    if (isEmailExisting) {
-      return res.status(403).send({ message: translate['user.update_email.email.error.exist'] });
-    }
-
-    user.tmp_email = email;
-
-    const token_email = User.createToken();
-    user.token_update_email = token_email;
-    user.token_update_email_expire_at = new Date(new Date().getTime() + ONE_DAY_IN_MILLISECOND);
-
-    await user.save();
-
-    await mailerServerUtils.sendMailUpdatedEmail(email_lower, user.name, token_email);
-
-    let message = translate['user.update_email.message.sent_mail_success'];
-    message = message.replace('{0}', email_lower);
-    return res.status(200).send({ message });
-  } catch (error) {
-    logger.error(error);
-    return res.status(500).send({ message: translate['system.server.error'] });
-  }
 };
 
 exports.home_info = async function (req, res) {
@@ -1259,13 +1164,6 @@ async function updateEventData(event, stepHistory) {
 }
 
 // PRIVATE
-function isEmployee(roles) {
-  if (roles && roles[0] && roles.indexOf(constants.ROLE.EMPLOYEE) >= 0) {
-    return true;
-  }
-  return false;
-}
-
 function changePass(user, device, new_password, status) {
   return new Promise((resolve, reject) => {
     user.password = new_password;
@@ -1304,6 +1202,7 @@ function pickUser(user) {
   delete user.token_update_email;
   delete user.token_update_email_expire_at;
   delete user.devices;
+  delete user.location;
 
   return user;
 }

@@ -4,28 +4,9 @@ module.exports = function (app) {
   var controller = require('../controllers/users.mobile.controller'),
     policy = require('../policies/core.mobile.policy.js');
 
-  /**
- * @function ログイン
- * @param username(ログインID)
- * @param password(パスワード)
- * @param uuid
- * @returns { user: object }
- */
+  app.route('/api/mobile/users/config').post(controller.config);
   app.route('/api/mobile/users/signin').post(policy.versionAllowed, controller.signin);
-  /**
-   * @function ログアウト
-   * @returns Boolean
-   */
   app.route('/api/mobile/users/signout').post(policy.tokenAllowed, controller.signout);
-  /**
-   * @function ChangePasword
-   * @returns Boolean
-   */
-
-  /**
-   * @function ログアウト
-   * @returns Boolean
-   */
 
   app.route('/api/mobile/users/change-password').post(policy.tokenAllowed, controller.changePassword);
 
@@ -51,12 +32,6 @@ module.exports = function (app) {
   app.route('/api/mobile/users/update_profile').post(policy.tokenAllowed, controller.update_profile);
 
   /**
-  * @function システムデータ
-  * @returns { config }
-  */
-  app.route('/api/mobile/users/config').post(controller.config);
-
-  /**
 * @function プッシュ通知ID変更
 * @param registrationId
 * @param uuid
@@ -77,8 +52,6 @@ module.exports = function (app) {
  * @function profile
  * @returns { Object }
  */
-
-  app.route('/api/mobile/users/update_email').post(policy.tokenAllowed, controller.update_email);
 
   /** Home
 * @function home_info
