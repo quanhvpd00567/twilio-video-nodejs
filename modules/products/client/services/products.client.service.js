@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('products.municipality.services')
+    .module('products.admin.services')
     .factory('ProductService', ProductService)
     .factory('ProductApi', ProductApi);
 
@@ -68,6 +68,12 @@
 
     this.getMunicipality = function (municipalityId) {
       return $http.get('/api/municipality', { params: { municipalityId: municipalityId } });
+    };
+    this.getMunicipalityAll = function () {
+      return $http.get('/api/municipalities-all');
+    };
+    this.getLocationByMunic = function (municId) {
+      return $http.get('/api/location-by-munic', { params: { municId: municId } });
     };
 
     return this;

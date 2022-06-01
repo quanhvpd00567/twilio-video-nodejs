@@ -51,7 +51,7 @@ function AppController(
   }
   $scope.isAdmin = $scope.role === 'admin';
   $scope.isAdminOrSubAdmin = $scope.role === 'admin' || $scope.role === 'sub_admin';
-  $scope.isMunicipality = $scope.role === 'munic_admin' || $scope.role === 'munic_member';
+  $scope.isMunicipality = $scope.role === 'municipality';
 
   /** roles */
   $scope.roles = [

@@ -2,12 +2,12 @@
   'use strict';
 
   angular
-    .module('products.municipality')
+    .module('products.admin')
     .controller('ProductFormController', ProductFormController);
 
-  ProductFormController.$inject = ['$scope', '$state', 'product', '$stateParams', 'ProductService', 'ProductApi', '$filter', 'ngDialog', 'uploadService', 'FileUploader', 'RequestsApplicationApi'];
+  ProductFormController.$inject = ['$scope', '$state', 'product', '$stateParams', 'ProductService', 'ProductApi', '$filter', 'ngDialog', 'uploadService', 'FileUploader'];
 
-  function ProductFormController($scope, $state, product, $stateParams, ProductService, ProductApi, $filter, ngDialog, uploadService, FileUploader, RequestsApplicationApi) {
+  function ProductFormController($scope, $state, product, $stateParams, ProductService, ProductApi, $filter, ngDialog, uploadService, FileUploader) {
     var vm = this;
     vm.product = product;
     vm.master = $scope.masterdata;
@@ -16,6 +16,7 @@
     vm.numberOfUploadedImages = 0;
     vm.numberOfSelectedImages = 0;
     vm.showBtnChooseFile = true;
+    vm.locations = [];
     vm.constants = {
       OK: 1, // あり
       IS_ACCEPT_SCHEDULE: 1, // 指定不可
@@ -37,49 +38,19 @@
     onCreate();
 
     function onCreate() {
-      if (vm.requestItemId) {
-        $scope.handleShowWaiting();
-        RequestsApplicationApi.get(vm.requestItemId)
-          .success(function (res) {
-            $scope.handleCloseWaiting();
-            Object.assign(vm.product, res.data);
-            init();
-          })
-          .error(function (error) {
-            $scope.handleCloseWaiting();
-            $scope.handleShowToast($scope.parseErrorMessage(error), true);
-          });
-      } else {
-        init();
-      }
+      init();
     }
 
     function init() {
-      vm.municipalityId = $state.params.municipalityId;
-      vm.key = $state.params.key;
-      vm.isNeedAuthorize = $state.params.isNeedAuthorize;
       vm.imageUrl = $scope.getImageDefault(vm.product.avatar);
-      // Check permistion when admin or subadmin handle
-      if ($scope.isAdminOrSubAdmin && !vm.municipalityId) {
-        $scope.handleErrorFeatureAuthorization();
-        return;
+
+      if ($scope.isMunicipality) {
+        vm.product.municipality = $scope.Authentication.user.municipalityId;
+        getLocationByMunic();
+      } else {
+        getMunicipality();
       }
 
-      if (vm.municipalityId && vm.key) {
-        $scope.handleShowWaiting();
-        ProductApi.hasUsing(vm.municipalityId)
-          .success(function (status) {
-            $scope.handleCloseWaiting();
-            if (!status) {
-              $scope.handleCloseWaiting();
-              var message = '寄付金の使い道を登録してください';
-              $scope.handleShowToast(message, true);
-              $state.go('admin.requests_registration.list');
-            }
-          });
-      }
-
-      getMunicipality();
       if (!vm.product._id) {
         vm.product.expire = 1;
         vm.product.ship_method = 1;
@@ -89,15 +60,10 @@
         vm.product.is_set_stock_quantity = vm.constants.ALWAYS_STOCK;
         vm.product.is_set_max_quantity = vm.constants.LIMIT_BUY_NONE;
         vm.product.is_deadline = vm.constants.YEAR_ROUND;
-        // vm.product.except_place_options = [];
       } else {
 
         if (vm.product.expire !== vm.constants.OK) {
           vm.product.expire_detail = '';
-        }
-
-        if (vm.product.except_place_options.includes(2)) {
-          vm.isExcepPlace = true;
         }
 
         if (vm.product.is_set_stock_quantity === vm.constants.ALWAYS_STOCK) {
@@ -121,6 +87,11 @@
         if (vm.product.pictures.length === vm.maxPicture) {
           vm.showBtnChooseFile = false;
         }
+
+        vm.product.municipality = vm.product.municipality._id;
+        vm.product.location = vm.product.location._id;
+
+        getLocationByMunic();
       }
       prepareUploaderImages();
     }
@@ -173,45 +144,13 @@
         message: messageConfirm
       }, function () {
         $scope.handleShowWaiting();
-        // check munic has using
-        ProductApi.hasUsing(vm.municipalityId)
-          .success(function (status) {
-            if (status) {
-              if (vm.municipalityId) {
-                vm.product.municipalityId = vm.municipalityId;
-              }
-              if (vm.requestItemId) {
-                vm.product.requestItemId = vm.requestItemId;
-                if (!vm.isCreateRequest) {
-                  ProductApi.update(vm.product._id, vm.product)
-                    .success(successCallback)
-                    .error(errorCallback);
-                } else {
-                  ProductApi.create(vm.product)
-                    .success(successCallback)
-                    .error(errorCallback);
-                }
-              } else {
-                vm.product.createOrUpdate()
-                  .then(successCallback)
-                  .catch(errorCallback);
-              }
-            } else {
-              $scope.handleCloseWaiting();
-              var message = '寄付金の使い道を登録してください';
-              $scope.handleShowToast(message, true);
-            }
-          });
+        vm.product.createOrUpdate()
+          .then(successCallback)
+          .catch(errorCallback);
 
         function successCallback(res) {
           $scope.handleCloseWaiting();
-          if (vm.requestItemId) {
-            $state.go('municipality.requests_application.list');
-          } else if (vm.municipalityId) {
-            $state.go('admin.requests_registration.list');
-          } else {
-            $state.go('municipality.products.list');
-          }
+          $state.go('admin.products.list');
 
           var message = $filter('translate')('products.form.controller.message.save_success');
           if (vm.municipalityId && vm.isNeedAuthorize === 'true') {
@@ -468,13 +407,22 @@
     }
 
     function getMunicipality() {
-      ProductApi.getMunicipality()
+      ProductApi.getMunicipalityAll()
         .success(function (res) {
-          vm.municInfo = res;
-          if (vm.municInfo && vm.municInfo.is_setting_gift_bows === undefined) {
-            vm.municInfo.is_setting_gift_bows = true;
-          }
+          vm.municipalities = res;
+          console.log(vm.municipalities);
         });
     }
+
+    function getLocationByMunic() {
+      ProductApi.getLocationByMunic(vm.product.municipality)
+        .success(function (res) {
+          vm.locations = res;
+        });
+    }
+
+    vm.onChangeMunic = function () {
+      getLocationByMunic();
+    };
   }
 }());

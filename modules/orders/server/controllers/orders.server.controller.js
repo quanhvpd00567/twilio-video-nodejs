@@ -823,6 +823,7 @@ exports.adminExport = async function (req, res) {
 
     const aggregates = getQueryAggregate(condition);
     Order.aggregate(aggregates).allowDiskUse(true).collation({ locale: 'ja' }).then(result => {
+
       const timePrefix = Date.now().toString();
       const pathFile = config.uploads.order.csv.exports;
       const outFileCsv = pathFile + timePrefix + '_order_export.csv';
@@ -1212,13 +1213,13 @@ function getQueryAggregate(condition) {
   }, {
     $match: matchUser
   },
-    {
-      $addFields: {
-        munic_id: { $convert: { input: '$munic._id', to: 'string' } },
-        munic_name: { $convert: { input: '$munic.name', to: 'string' } },
-        munic_fee: '$munic.fee'
-      }
+  {
+    $addFields: {
+      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+      munic_name: { $convert: { input: '$munic.name', to: 'string' } },
+      munic_fee: '$munic.fee'
     }
+  }
   );
 
   let second_and_arr = [];
