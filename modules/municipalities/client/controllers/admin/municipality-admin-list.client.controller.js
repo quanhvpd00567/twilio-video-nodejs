@@ -74,23 +74,19 @@
     /** end handle search, sort & paging */
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: $filter('translate')('municipalities.list.controller.message.confirm_delete1')
+        message: $filter('translate')('municipalities.list.controller.message.confirm_delete')
       }, function () {
-        $scope.handleShowConfirm({
-          message: $filter('translate')('municipalities.list.controller.message.confirm_delete2')
-        }, function () {
-          var munic = new MunicipalitiesService({ _id: _id });
-          munic.$remove(function () {
-            handleSearch();
-            var message = $filter('translate')('municipalities.list.controller.message.delete_success');
-            $scope.handleShowToast(message);
-          })
-            .catch(function (error) {
-              $scope.handleCloseWaiting();
-              var message = error && error.data && error.data.message || $filter('translate')('common.data.failed');
-              $scope.handleShowToast(message, true);
-            });
-        });
+        var munic = new MunicipalitiesService({ _id: _id });
+        munic.$remove(function () {
+          handleSearch();
+          var message = $filter('translate')('municipalities.list.controller.message.delete_success');
+          $scope.handleShowToast(message);
+        })
+          .catch(function (error) {
+            $scope.handleCloseWaiting();
+            var message = error && error.data && error.data.message || $filter('translate')('common.data.failed');
+            $scope.handleShowToast(message, true);
+          });
       });
     };
 
