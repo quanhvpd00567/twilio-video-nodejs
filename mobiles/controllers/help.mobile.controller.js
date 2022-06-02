@@ -2,10 +2,8 @@
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Device = mongoose.model('Device'),
-  Config = mongoose.model('Config'),
   path = require('path'),
   moment = require('moment-timezone'),
-  master_data = require(path.resolve('./config/lib/master-data')).masterdata,
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   locale = require(path.resolve('./config/lib/locale'));
 
@@ -94,21 +92,6 @@ module.exports = {
     const dateMoment = moment(date);
     const padding = (target) => ('00' + target).slice(-2);
     return `${dateMoment.year()}/${padding(dateMoment.month() + 1)}/${padding(dateMoment.date())}`;
-  },
-
-  parseCompanyName: function (kind, name) {
-    if (!kind || !name) {
-      return '';
-    }
-
-    switch (kind) {
-      case master_data.COMPANY_KIND.PREVIOUS_STOCK:
-        return master_data.company_name_affix + name;
-      case master_data.COMPANY_KIND.BACK_STOCK:
-        return name + master_data.company_name_affix;
-      default:
-        return name;
-    }
   },
 
   getDaysBetweenTwoDate(date1, date2) {

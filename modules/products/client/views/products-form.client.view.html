@@ -85,13 +85,18 @@
                 </th>
 
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  {{vm.product.locations}}
-                  <multiselect show-search="true" ng-model="vm.product.locations" name="locations"
-                    ng-disabled="!vm.product.municipality"
-                    placeholder="{{'products.form.accepted_schedule.placeholder' | translate}}"
-                    id-prop="_id" display-prop="name"
-                    options="vm.locations">
-                  </multiselect>
+                  <tags-input ng-model="vm.product.locations"
+                    display-property="name"
+                    required
+                    placeholder="Add a location"
+                    replace-spaces-with-dashes="false">
+                    <auto-complete source="vm.locations"
+                                   min-length="0"
+                                   load-on-focus="true"
+                                   load-on-empty="true"
+                                   max-results-to-show="32">
+                    </auto-complete>
+                  </tags-input>
                 </td>
               </tr>
 

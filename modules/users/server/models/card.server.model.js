@@ -6,10 +6,7 @@
 var mongoose = require('mongoose'),
   paginate = require('mongoose-paginate-v2'),
   mongooseAggregatePaginate = require('mongoose-aggregate-paginate'),
-  Schema = mongoose.Schema,
-  path = require('path'),
-  constants = require(path.resolve('./modules/core/server/shares/constants')),
-  BANK_TYPES = Object.keys(constants.BANK_TYPE).map(key => constants.BANK_TYPE[key]);
+  Schema = mongoose.Schema;
 
 /**
  * Card Schema

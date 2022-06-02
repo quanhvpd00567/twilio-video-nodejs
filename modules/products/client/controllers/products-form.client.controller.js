@@ -16,7 +16,7 @@
     vm.numberOfUploadedImages = 0;
     vm.numberOfSelectedImages = 0;
     vm.showBtnChooseFile = true;
-    vm.locations = [];
+    // vm.locations = [];
     vm.constants = {
       OK: 1, // あり
       IS_ACCEPT_SCHEDULE: 1, // 指定不可
@@ -24,6 +24,7 @@
       ALWAYS_STOCK: 1, // 常に在庫あり
       LIMIT_BUY_NONE: 1 // なし
     };
+    vm.isFirstLoadEdit = true;
 
     vm.maxPicture = 7;
 
@@ -43,7 +44,6 @@
 
     function init() {
       vm.imageUrl = $scope.getImageDefault(vm.product.avatar);
-
       if ($scope.isMunicipality) {
         vm.product.municipality = $scope.Authentication.user.municipalityId;
         getLocationByMunic();
@@ -94,23 +94,6 @@
         }
 
         vm.product.municipality = vm.product.municipality._id;
-
-        // var locations = vm.product.locations.map(function (item) {
-        //   console.log(item.location);
-        //   return item.location;
-        // });
-
-        // console.log(vm.product.locations);
-
-        // vm.productLocations = locations;
-        // // vm.product.locations = xxxx;
-
-        // console.log(vm.product.locations);
-
-
-        // console.log(xxxx);
-
-        getLocationByMunic();
       }
       prepareUploaderImages();
     }
@@ -440,6 +423,7 @@
     }
 
     vm.onChangeMunic = function () {
+      vm.product.locations = [];
       getLocationByMunic();
     };
   }

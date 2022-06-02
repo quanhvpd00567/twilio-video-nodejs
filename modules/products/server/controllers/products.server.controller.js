@@ -15,9 +15,7 @@ var mongoose = require('mongoose'),
   imageController = require(path.resolve('./modules/core/server/controllers/image.server.controller')),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
-  FEATURE_MUNICIPALITY = require(path.resolve('./config/lib/master-data')).masterdata.FEATURE_MUNICIPALITY,
-  help = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
-  REQUEST_ITEM_STATUSES = Object.keys(constants.REQUEST_ITEM_STATUS).map(key => constants.REQUEST_ITEM_STATUS[key]);
+  help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 
 const lang = 'ja';
@@ -39,7 +37,7 @@ exports.create = async function (req, res) {
     let product = new Product(data);
 
     data.locations = data.locations.map(location => {
-      return { location: location._id };
+      return location._id;
     });
 
     product.except_place_options = product.except_place_options.sort((a, b) => a - b);
@@ -184,6 +182,12 @@ function prepareDataUpdate(product, data) {
 
   product.except_place_options = product.except_place_options.sort((a, b) => a - b);
 
+  if (data.locations.length > 0) {
+    data.locations = data.locations.map(location => {
+      return location._id;
+    });
+  }
+
   return product;
 }
 
@@ -279,16 +283,13 @@ exports.productById = function (req, res, next, id) {
   }
 
   Product.findOne(query)
-    .populate('locations.location', 'name')
+    .populate('locations')
     .populate('municipality', 'name')
     .exec(function (err, event) {
       if (err) {
         logger.error(err);
         return next(err);
       }
-      // else if (!event) {
-      //   return next(new Error('お知らせが見つかりません。'));
-      // }
 
       req.model = event;
       next();
@@ -415,30 +416,15 @@ function getQueryAggregate(condition) {
     ]
   };
 
-
   aggregates.push({
     $lookup: {
       from: 'locations',
-      localField: 'locations.location',
+      localField: 'locations',
       foreignField: '_id',
-      as: 'location'
+      as: 'locations'
     }
-  }, { $unwind: '$location' },
-  { '$group': {
-    '_id': '$_id',
-    'location': { '$push': '$location' }
-  } }
-  , {
-    $match: matchLocation
-  },
+  }
   );
-
-  aggregates.push({
-    $group: {
-      // '_id': '$_id',
-      '_id': { _id: '$_id', locations: { '$push': { name: '$location.name', _id: '$location._id' } } }
-    }
-  });
 
   aggregates.push({
     $project: {
@@ -461,10 +447,8 @@ function getQueryAggregate(condition) {
       'avatar': 1,
       created: 1,
       munic_name: 1,
-      munic_id: 1
-      // locations: '$locations'
-      // location_name: 1,
-      // location_id: 1
+      munic_id: 1,
+      locations: 1
     }
   });
 

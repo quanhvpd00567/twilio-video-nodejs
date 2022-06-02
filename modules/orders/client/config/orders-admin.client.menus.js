@@ -9,13 +9,13 @@
 
   // Configuring the events module
   function menuConfig(menuService) {
-    menuService.addMenuItem('topbar', {
-      position: 3,
-      roles: ['admin', 'sub_admin'],
-      class: 'fa fa-cart-plus',
-      title: '注文',
-      state: 'admin.orders.list',
-      parrent_state: 'admin.orders'
-    });
+    // menuService.addMenuItem('topbar', {
+    //   position: 3,
+    //   roles: ['admin', 'sub_admin'],
+    //   class: 'fa fa-cart-plus',
+    //   title: '注文',
+    //   state: 'admin.orders.list',
+    //   parrent_state: 'admin.orders'
+    // });
   }
 }());

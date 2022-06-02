@@ -24,6 +24,7 @@ module.exports = {
         'public/admin/css/AdminLTE.min.css',
         'public/admin/css/skins/skin-blue.min.css',
         'public/lib/bootstrap-select/dist/css/bootstrap-select.css',
+        'public/admin/css/inputtag.min.css',
       ],
       js: [
         // bower:js
@@ -53,6 +54,7 @@ module.exports = {
         'public/lib/angular-chart.js/dist/angular-chart.min.js',
         // end
         'public/admin/js/adminlte.min.js',
+        'public/admin/js/input-tag.min.js',
         'public/local_libs/japanese/jaconv.min.js',
 
         'public/lib/ngmap/build/scripts/ng-map.min.js',

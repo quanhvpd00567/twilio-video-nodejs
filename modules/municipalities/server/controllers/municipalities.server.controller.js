@@ -37,9 +37,9 @@ exports.create = async function (req, res) {
       password: data.password,
       email: data.admin.email,
       phone: data.admin.phone,
-      department: data.admin.department,
       roles: constants.ROLE.MUNICIPALITY,
-      number: data.admin.number
+      number: data.admin.number,
+      department: data.admin.department,
     };
 
     const email_lower = trimAndLowercase(dataAccount.email);
@@ -55,30 +55,30 @@ exports.create = async function (req, res) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.number_exists') });
     }
 
-    let munic = new Municipality(dataMunic);
-    let account = new User(dataAccount);
+    let municipalityCreated = new Municipality(dataMunic);
+    let accountCreated = new User(dataAccount);
 
     session = await mongoose.startSession();
     session.startTransaction();
 
-    munic.admin = account._id;
-    munic = await munic.save({ session });
+    municipalityCreated.admin = accountCreated._id;
+    municipalityCreated = await municipalityCreated.save({ session });
 
     // set municipality
-    account.municipality = munic._id;
-    account = await account.save({ session });
+    accountCreated.municipality = municipalityCreated._id;
+    accountCreated = await accountCreated.save({ session });
 
     await session.commitTransaction();
     session.endSession();
 
     // Send mail
     try {
-      // mailerServerUtil.sendMailCreateCompanyOrMunic(dataAccount.email, dataAccount.password, dataAccount.first_name, dataAccount.last_name);
+      mailerServerUtil.sendMailAdminCreateMunicipality(req.user.email, accountCreated.email, dataAccount.password, accountCreated.name);
     } catch (error) {
       logger.error(error);
     }
 
-    return res.json(munic);
+    return res.json(municipalityCreated);
   } catch (error) {
     logger.error(error);
     abortTransaction(session);

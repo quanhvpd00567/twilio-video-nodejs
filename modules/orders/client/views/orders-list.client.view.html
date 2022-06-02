@@ -121,8 +121,7 @@
               <td class="text-center w150" style="vertical-align: middle;" ng-bind="order.number"></td>
 
               <td class="text-left">
-                <span>{{order.last_name + ' ' + order.first_name + '/' + order.last_name_kana + ' '+
-                  order.first_name_kana}}<br></span>
+                <span>{{order.name + '/' + order.furigana}}<br></span>
                 <span ng-if="order.zip_code">{{order.zip_code | format_zipcode}}<br></span>
                 <span>{{order.prefecture + order.city + order.address + order.building}}<br></span>
                 <span ng-if="order.tel"> <i class="fa fa-phone text-red"></i> {{order.tel}}<br></span>

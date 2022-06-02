@@ -15,7 +15,7 @@ var productSchema = new Schema({
   // 自治体
   municipality: { type: Schema.ObjectId, ref: 'Municipality', required: true },
   // 出品対象導入施設
-  locations: [{ location: { type: Schema.ObjectId, ref: 'Location' } }],
+  locations: [{ type: Schema.ObjectId, ref: 'Location' }],
   // 販売状態
   sell_status: { type: Number, default: 1, required: true },
   // 表示状態

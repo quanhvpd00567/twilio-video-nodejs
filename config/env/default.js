@@ -49,79 +49,10 @@ module.exports = {
   uploads: {
     // Storage can be 'local' or 's3'
     storage: process.env.UPLOADS_STORAGE || 'local',
-    employees: {
-      excel: {
-        dest: './modules/employees/client/excel/',
-        template: './modules/employees/client/excel/templates/export.xlsx',
-        export: './modules/employees/client/excel/exports/'
-      },
-      img: {
-        qrcode: './modules/employees/client/img/qrcode/'
-      }
-    },
-    events: {
-      excel: {
-        export: './modules/events/client/excel/exports/',
-        template: './modules/events/client/excel/templates/export.xlsx',
-        template_export_detail: './modules/events/client/excel/templates/stamp_info_sample.xlsx'
-      },
-      image: {
-        dest: './modules/events/client/img/',
-        limits: { fileSize: 5 * 1024 * 1024 }
-      }
-    },
-    projects: {
-      image: {
-        dest: './modules/projects/client/img/',
-        limits: { fileSize: 5 * 1024 * 1024 }
-      }
-    },
-    notices: {
-      image: {
-        dest: './modules/notices/client/img/',
-        limits: { fileSize: 5 * 1024 * 1024 }
-      },
-      excel: {
-        dest: './modules/notices/client/excel/',
-        export: './modules/notices/client/excel/exports/',
-        template: './modules/notices/client/excel/templates/notice_list_export.xlsx'
-      }
-    },
-    ranks: {
-      excel: {
-        export: './modules/ranks/client/excels/exports/',
-        template: './modules/ranks/client/excels/templates/'
-      }
-    },
-    surveys: {
-      excel: {
-        export: './modules/surveys/client/excels/exports/',
-        template: './modules/surveys/client/excels/templates/export.xlsx'
-      }
-    },
-    teams: {
-      excel: {
-        export: './modules/teams/client/excels/exports/',
-        template: './modules/teams/client/excels/templates/export.xlsx'
-      }
-    },
-    turns: {
-      excel: {
-        export: './modules/turns/client/excels/exports/',
-        template: './modules/turns/client/excels/templates/export.xlsx'
-      }
-    },
     users: {
       image: {
         dest: './modules/users/client/images/',
         limits: { fileSize: 5 * 1024 * 1024 }
-      }
-    },
-    com_projects: {
-      excel: {
-        dest: './modules/com_projects/client/excel/',
-        template: './modules/com_projects/client/excel/templates/export.xlsx',
-        export: './modules/com_projects/client/excel/exports/'
       }
     },
     products: {
@@ -130,14 +61,15 @@ module.exports = {
         limits: { fileSize: 5 * 1024 * 1024 }
       }
     },
-    ecommerces: {
+    core: {
       csv: {
-        template: './modules/ecommerces/client/csv/japan_zipcode.csv'
+        template: './modules/core/client/csv/japan_zipcode.csv'
       }
     },
     order: {
-      csv: {
-        exports: './modules/orders/client/exports/'
+      excel: {
+        exports: './modules/orders/client/exports/',
+        template_munic_order: './modules/orders/client/exports/templates/order-tmp.xlsx'
       }
     }
   },

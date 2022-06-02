@@ -31,9 +31,6 @@ var UserSchema = new Schema({
   last_name: { type: String },
   phone: { type: String },
   number: { type: String },
-  note: { type: String },
-  department: { type: String },
-  e_department: { type: Schema.ObjectId, ref: 'Department' },
   // 氏名,
   name: { type: String },
   // ニックネーム
@@ -43,19 +40,10 @@ var UserSchema = new Schema({
     type: [{ type: String, enum: ROLES }],
     required: true
   },
-  height: { type: Number }, // cm
-  stride: { type: Number }, // cm
-  weight: { type: Number }, // kg
-  target_steps_per_day: { type: Number },
 
-  location: { type: Schema.ObjectId, ref: 'Location' }, // require if role is employee
-  municipality: { type: Schema.ObjectId, ref: 'Municipality' },
-
-  // last update os steps to calculate new steps
-  last_get_data_date: { type: Date, default: Date.now },
-
-  // current joining comproject of employee
-  comproject_joining: { type: Schema.ObjectId, ref: 'Comproject' },
+  department: { type: String }, // munic admin
+  municipality: { type: Schema.ObjectId, ref: 'Municipality' }, // require if role is location
+  location: { type: Schema.ObjectId, ref: 'Location' }, // require if role is location
 
   // デバイス一覧
   devices: [{ type: Schema.ObjectId, ref: 'Device' }],
@@ -73,9 +61,6 @@ var UserSchema = new Schema({
   // System info
   last_login: { type: Date },
   login_times: { type: Number },
-
-  // Token for opening ec site in App
-  token_ec_site: { type: String },
 
   deleted: { type: Boolean, default: false },
   updated: { type: Date },

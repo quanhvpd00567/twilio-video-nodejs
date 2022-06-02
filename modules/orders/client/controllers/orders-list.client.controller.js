@@ -87,7 +87,7 @@
 
     /** end handle search, sort & paging */
     vm.onDownloadCsv = function (id) {
-      if (vm.condition.export_status === '1') {
+      if (vm.condition.export_status === 1) {
         $scope.handleShowConfirm({
           message: '注文データをダウンロードします。よろしいですか？'
         }, function () {
@@ -116,6 +116,7 @@
             $scope.handleShowToast(message, true);
           });
       }
+
     };
 
     function handleExportCsv(id) {
@@ -125,6 +126,7 @@
       OrderApi.export(vm.condition)
         .success(function (res) {
           delete vm.condition.id;
+          console.log(res);
           handleSearch();
           window.open('/' + res.url, '_newtab');
         })

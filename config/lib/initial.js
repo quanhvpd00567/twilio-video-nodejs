@@ -2,7 +2,6 @@
 
 var _ = require('lodash'),
   path = require('path'),
-  EVENT_STATUS = require(path.resolve('./modules/core/server/shares/constants')).EVENT_STATUS,
   config = require('../config'),
   mongoose = require('mongoose'),
   csv = require('csv-parser'),
@@ -29,7 +28,36 @@ function initFolder() {
   });
 }
 
+async function initMasterAddresses() {
+  try {
+    const MasterAddress = mongoose.model('MasterAddress');
+    const isExisted = await MasterAddress.findOne({}).lean();
+    if (isExisted) {
+      console.log('Checked, master addresses already existed!');
+      return true;
+    }
+
+    const fileCsv = config.uploads.core.csv.template;
+    let addresses = [];
+    fs.createReadStream(fileCsv)
+      .pipe(csv(['code', 'code2', 'zipcode', 'prefecture_kana', 'city_kana', 'town_kana', 'prefecture', 'city', 'town']))
+      .on('data', (row) => {
+        addresses.push(row);
+      })
+      .on('end', () => {
+        MasterAddress.insertMany(addresses).then(function () {
+          console.log('Master addresses imported successfully!');
+        }).catch(function (error) {
+          console.log(error);
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function start() {
+  initMasterAddresses();
   initConfig();
   initFolder();
 }

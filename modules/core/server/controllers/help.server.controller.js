@@ -4,7 +4,6 @@ var path = require('path'),
   moment = require('moment-timezone'),
   locale = require(path.resolve('./config/lib/locale')),
   User = mongoose.model('User'),
-  Company = mongoose.model('Company'),
   Municipality = mongoose.model('Municipality'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   master_data = require(path.resolve('./config/lib/master-data'));
@@ -81,18 +80,17 @@ module.exports = {
       for (var i = 0; i < length; i++) {
         string += characters.charAt(Math.floor(Math.random() * characters.length));
       }
+
+
       if (key === 'user') {
         const user = await User.findOne({ id: string, deleted: false }).select('_id').lean();
         isExisting = !!user;
-      } else if (key === 'company') {
-        const company = await Company.findOne({ code: string, deleted: false }).select('_id').lean();
-        isExisting = !!company;
-      }
-
-      if (key === 'munic') {
+      } else if (key === 'munic') {
         const munic = await Municipality.findOne({ code: string, deleted: false }).select('_id').lean();
         isExisting = !!munic;
       }
+
+
     } while (isExisting);
 
     return string;
