@@ -36,6 +36,12 @@ exports.create = async function (req, res) {
     }
     let product = new Product(data);
 
+    data.locations = data.locations.map(location => {
+      return location._id;
+    });
+
+    product.except_place_options = product.except_place_options.sort((a, b) => a - b);
+
     await product.save();
     return res.json(product);
   } catch (error) {
@@ -80,6 +86,7 @@ exports.list = async function (req, res) {
     result = help.parseAggregateQueryResult(result, page);
 
     return res.json(result);
+
     // Product.paginate(query, {
     //   sort: sort,
     //   page: page,
@@ -171,6 +178,14 @@ function prepareDataUpdate(product, data) {
   // 画面に表示しない
   if (product.show_status && product.show_status !== 1) {
     product.show_status = 2;
+  }
+
+  product.except_place_options = product.except_place_options.sort((a, b) => a - b);
+
+  if (data.locations.length > 0) {
+    data.locations = data.locations.map(location => {
+      return location._id;
+    });
   }
 
   return product;
@@ -268,16 +283,13 @@ exports.productById = function (req, res, next, id) {
   }
 
   Product.findOne(query)
-    .populate('location', 'name')
+    .populate('locations')
     .populate('municipality', 'name')
     .exec(function (err, event) {
       if (err) {
         logger.error(err);
         return next(err);
       }
-      // else if (!event) {
-      //   return next(new Error('お知らせが見つかりません。'));
-      // }
 
       req.model = event;
       next();
@@ -389,12 +401,12 @@ function getQueryAggregate(condition) {
   }, {
     $match: matchUser
   },
-    {
-      $addFields: {
-        munic_id: { $convert: { input: '$munic._id', to: 'string' } },
-        munic_name: { $convert: { input: '$munic.name', to: 'string' } }
-      }
+  {
+    $addFields: {
+      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+      munic_name: { $convert: { input: '$munic.name', to: 'string' } }
     }
+  }
   );
 
   // Match location
@@ -407,27 +419,17 @@ function getQueryAggregate(condition) {
   aggregates.push({
     $lookup: {
       from: 'locations',
-      localField: 'location',
+      localField: 'locations',
       foreignField: '_id',
-      as: 'location'
+      as: 'locations'
     }
-  }, {
-    $unwind: '$location'
-  }, {
-    $match: matchLocation
-  },
-    {
-      $addFields: {
-        location_id: { $convert: { input: '$location._id', to: 'string' } },
-        location_name: { $convert: { input: '$location.name', to: 'string' } }
-      }
-    }
+  }
   );
 
   aggregates.push({
     $project: {
       code: 1,
-      'sell_status': 1,
+      sell_status: 1,
       'show_status': 1,
       'name': 1,
       'price': 1,
@@ -446,8 +448,7 @@ function getQueryAggregate(condition) {
       created: 1,
       munic_name: 1,
       munic_id: 1,
-      location_name: 1,
-      location_id: 1
+      locations: 1
     }
   });
 

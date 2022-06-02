@@ -67,8 +67,9 @@ module.exports = {
       }
     },
     order: {
-      csv: {
-        exports: './modules/orders/client/exports/'
+      excel: {
+        exports: './modules/orders/client/exports/',
+        template_munic_order: './modules/orders/client/exports/templates/order-tmp.xlsx'
       }
     }
   },

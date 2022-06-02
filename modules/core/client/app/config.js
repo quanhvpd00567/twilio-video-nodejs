@@ -17,7 +17,8 @@
     'ngMap',
     'chart.js',
     'angularFileUpload',
-    'angularMoment'
+    'angularMoment',
+    'ngTagsInput'
   ];
 
   var service = {

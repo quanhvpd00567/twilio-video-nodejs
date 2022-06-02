@@ -6,8 +6,7 @@
   </div>
   <table-search>
     <table-search-button>
-      <button class="btn btn-primary btn-sm pull-right mg5r" type="button" ng-if="vm.isAdminMunic"
-        ng-click="vm.onDownloadCsvAll()">
+      <button class="btn btn-primary btn-sm pull-right mg5r" type="button" ng-click="vm.onDownloadCsvAll()">
         <i class="fa fa-download"></i> 表示されているデータをCSVで一括出力
       </button>
     </table-search-button>
@@ -20,54 +19,6 @@
             event-enter="vm.handleConditionChanged(true)" />
         </div>
       </div> -->
-
-
-
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="vm.isAdminMunic">
-        <div class="form-group">
-          <label>{{'orders.list.search.tel.label' | translate}}</label>
-          <input type="text" name="tel" class="form-control" ng-model="vm.condition.tel"
-            placeholder="{{'orders.list.search.tel.placeholder' | translate}}" />
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="form-group">
-          <label>{{'orders.list.search.number.label' | translate}}</label>
-          <input type="text" name="number" class="form-control" ng-model="vm.condition.number"
-            placeholder="{{'orders.list.search.number.placeholder' | translate}}" />
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="form-group">
-          <label>{{'orders.list.search.munic_name.label' | translate}}</label>
-          <input type="text" name="munic_name" class="form-control" ng-model="vm.condition.munic_name"
-            placeholder="{{'orders.list.search.munic_name.placeholder' | translate}}" />
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="vm.isAdminMunic">
-        <div class="form-group">
-          <label>{{'orders.list.search.export_status.label' | translate}}</label>
-          <div>
-            <label class="radio-inline" ng-repeat="item in vm.master.export_status">
-              <input type="radio" name="export_status" ng-model="vm.condition.export_status"
-                ng-checked="vm.condition.export_status === item.id" value="{{item.id}}"
-                id="export_status{{item.id}}">{{item.value}}
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="form-group">
-          <label>利用システム{{'municipalities.list.search.system_type.label' | translate}}</label>
-          <select name="type" class="form-control" ng-model="vm.condition.is_usage_system">
-            <option value="all">すべて </option>
-            <option ng-repeat="item in vm.master.usage_system" value="{{item.id}}"> {{item.value}}</option>
-          </select>
-        </div>
-      </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
@@ -87,6 +38,30 @@
             ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
               vm.condition.created_max || 'null'
             }}); vm.onChangeCreatedMax()" />
+        </div>
+      </div>
+
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'orders.list.search.export_status.label' | translate}}</label>
+          <div>
+            <label class="radio-inline" ng-repeat="item in vm.master.export_status">
+              <input type="radio" name="export_status" ng-model="vm.condition.export_status"
+                ng-checked="vm.condition.export_status === item.id" value="{{item.id}}"
+                id="export_status{{item.id}}">{{item.value}}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="false">
+        <div class="form-group">
+          <label>利用システム</label>
+          <select name="type" class="form-control" ng-model="vm.condition.is_usage_system">
+            <option value="all">すべて </option>
+            <option ng-repeat="item in vm.master.usage_system" value="{{item.id}}"> {{item.value}}</option>
+          </select>
         </div>
       </div>
 
@@ -120,39 +95,19 @@
               <th class="text-center w150" ng-click="vm.handleSortChanged('number')" tbmodel="number"
                 tbtitle="{{'orders.list.table.header.number.label' | translate}}" table-order
                 tbcondition="vm.condition"></th>
-              <th ng-if="vm.isAdminMunic" class="">{{'orders.list.table.header.shingoren.label' | translate}}</th>
-              <th ng-if="vm.isAdminMunic" class="text-center w100">{{'orders.list.table.header.total_amount.label' |
+              <th class="">{{'orders.list.table.header.shingoren.label' | translate}}</th>
+              <th class="text-center w100">{{'orders.list.table.header.total_amount.label' |
                 translate}}</th>
-              <th ng-if="vm.isAdminMunic" class="text-center w150">{{'orders.list.table.header.payment_method.label' |
+              <th class="text-center w150">{{'orders.list.table.header.payment_method.label' |
                 translate}}</th>
-              <th ng-if="vm.isAdminMunic" class="">{{'orders.list.table.header.product.label' | translate}}</th>
-              <th ng-if="vm.isAdminMunic" class="text-center w100">{{'orders.list.table.header.export_status.label' |
+              <th class="">{{'orders.list.table.header.product.label' | translate}}</th>
+              <th class="text-center w100">{{'orders.list.table.header.export_status.label' |
                 translate}}</th>
-              <th ng-if="vm.isAdminMunic" class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+              <!-- <th ng-click="vm.handleSortChanged('created')" tbmodel="created" table-order tbcondition="vm.condition"
+                class="text-center w200" tbtitle="{{'orders.list.table.header.created.label' | translate}}"></th> -->
 
-              <!-- <<<<<<< Updated upstream
-              <th ng-if="vm.isAdminAndSubAdmin" ng-click="vm.handleSortChanged('municipality')" class="text-center"
-                tbmodel="municipality" table-order tbcondition="vm.condition"
-                tbtitle="{{'orders.list.table.header.munic_name.label' | translate}}"></th>
-              <th ng-if="vm.isAdminAndSubAdmin" class="text-center w200">
-                {{'orders.list.table.header.total_amount_2.label' | translate}}</th>
-              <th ng-if="vm.isAdminAndSubAdmin" class="text-center w200">{{'orders.list.table.header.fee.label' |
-                translate}}</th>
-              <th ng-if="vm.isAdminAndSubAdmin" ng-click="vm.handleSortChanged('created')" tbmodel="created" table-order
-                tbcondition="vm.condition" class="text-center w200"
-                tbtitle="{{'orders.list.table.header.created.label' | translate}}"></th>
-======= -->
-              <th ng-if="vm.isAdminAndSubAdmin" ng-click="vm.handleSortChanged('municipality')" class="text-center"
-                tbmodel="municipality" table-order tbcondition="vm.condition"
-                tbtitle="{{'orders.list.table.header.munic_name.label' | translate}}"></th>
-              <th ng-if="vm.isAdminAndSubAdmin" ng-click="vm.handleSortChanged('total')" class="text-center w200"
-                tbmodel="total" table-order tbcondition="vm.condition"
-                tbtitle="{{'orders.list.table.header.total_amount_2.label' | translate}}"></th>
-              <th ng-if="vm.isAdminAndSubAdmin" class="text-center w200">{{'orders.list.table.header.fee.label' |
-                translate}}</th>
-              <th ng-if="vm.isAdminAndSubAdmin" ng-click="vm.handleSortChanged('created')" tbmodel="created" table-order
-                tbcondition="vm.condition" class="text-center w200"
-                tbtitle="{{'orders.list.table.header.created.label' | translate}}"></th>
+              <th class="w100 text-center">{{'common.table.header.action' | translate}}</th>
+
             </tr>
           </thead>
           <tbody>
@@ -165,36 +120,28 @@
               ui-sref="municipality.orders.detail({ memberId: member._id })">
               <td class="text-center w150" style="vertical-align: middle;" ng-bind="order.number"></td>
 
-              <td ng-if="vm.isAdminMunic" class="text-left">
-                <span>{{order.last_name + ' ' + order.first_name + '/' + order.last_name_kana + ' '+
-                  order.first_name_kana}}<br></span>
+              <td class="text-left">
+                <span>{{order.name + '/' + order.furigana}}<br></span>
                 <span ng-if="order.zip_code">{{order.zip_code | format_zipcode}}<br></span>
                 <span>{{order.prefecture + order.city + order.address + order.building}}<br></span>
                 <span ng-if="order.tel"> <i class="fa fa-phone text-red"></i> {{order.tel}}<br></span>
               </td>
-              <td ng-if="vm.isAdminMunic" class="text-center w100" style="vertical-align: middle;"
-                ng-bind="order.total | format_money2"></td>
-              <td ng-if="vm.isAdminMunic" class="text-center w150" style="vertical-align: middle;"
+              <td class="text-center w100" style="vertical-align: middle;" ng-bind="order.total | format_money2"></td>
+              <td class="text-center w150" style="vertical-align: middle;"
                 ng-bind="showMasterValue(masterdata.order_payments, order.payment)"></td>
-              <td ng-if="vm.isAdminMunic" class="text-left">
+              <td class="text-left">
                 <span ng-repeat="item in order.products">{{item.product.name}} × {{item.quantity}} <br> </span>
               </td>
-              <td ng-if="vm.isAdminMunic" class="text-center w100" style="vertical-align: middle;"
+              <td class="text-center w100" style="vertical-align: middle;"
                 ng-bind="showMasterValue(masterdata.export_status, order.export_status)"></td>
-              <td ng-if="vm.isAdminMunic" class="text-center w100" style="vertical-align: middle;" ui-sref-ignore>
+
+              <!-- <td class="text-center w200" style="vertical-align: middle;" ng-bind="order.created | dateTimeNormal">
+              </td> -->
+              <td class="text-center w100" style="vertical-align: middle;" ui-sref-ignore>
                 <button class="btn btn-xs btn-success" type="button" ng-click="vm.onDownloadCsv(order._id)">
                   <i class="fa fa-download" aria-hidden="true"></i>
                 </button>
               </td>
-
-              <td ng-if="vm.isAdminAndSubAdmin" class="text-center" style="vertical-align: middle;"
-                ng-bind="order.municipality.name"></td>
-              <td ng-if="vm.isAdminAndSubAdmin" class="text-center w200" style="vertical-align: middle;"
-                ng-bind="order.total | format_money2"></td>
-              <td ng-if="vm.isAdminAndSubAdmin" class="text-center w200" style="vertical-align: middle;"
-                ng-bind="order.municipality.fee | format_fee"></td>
-              <td ng-if="vm.isAdminAndSubAdmin" class="text-center w200" style="vertical-align: middle;"
-                ng-bind="order.created | dateTimeNormal"></td>
 
             </tr>
           </tbody>

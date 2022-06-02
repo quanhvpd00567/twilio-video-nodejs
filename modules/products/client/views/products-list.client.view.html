@@ -145,12 +145,10 @@
               <th class="w150" ng-click="vm.handleSortChanged('operator')" tbmodel="operator"
                 tbtitle="{{'products.list.table.header.operator.label' | translate}}" table-order
                 tbcondition="vm.condition"></th>
-              <th class="w150" ng-click="vm.handleSortChanged('operator')" ng-if="!isMunicipality" tbmodel="munic_name"
+              <th class="w150" ng-click="vm.handleSortChanged('munic_name')" ng-if="!isMunicipality" tbmodel="munic_name"
                 tbtitle="{{'products.list.table.header.munic.label' | translate}}" table-order
                 tbcondition="vm.condition"></th>
-              <th class="w150" ng-click="vm.handleSortChanged('operator')" tbmodel="location_name"
-                tbtitle="{{'products.list.table.header.location.label' | translate}}" table-order
-                tbcondition="vm.condition"></th>
+              <th class="w150">{{'products.list.table.header.location.label' | translate}}</th>
               <th class="w150" ng-click="vm.handleSortChanged('sell_status')" tbmodel="sell_status"
                 tbtitle="{{'products.list.table.header.status.label' | translate}}" table-order
                 tbcondition="vm.condition"></th>
@@ -176,7 +174,9 @@
               <td class="w100" ng-bind="product.price | format_money2"></td>
               <td class="w200" ng-bind="product.operator"></td>
               <td class="w200" ng-bind="product.munic_name" ng-if="!isMunicipality"></td>
-              <td class="w200" ng-bind="product.location_name"></td>
+              <td class="w200">
+                <span ng-repeat="location in product.locations">{{location.name}} <br></span>
+              </td>
               <td class="w100"
                 ng-bind="product.sell_status === 2 ? showMasterValue(masterdata.sel_status, product.sell_status) : ''">
               </td>
