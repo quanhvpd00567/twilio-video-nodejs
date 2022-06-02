@@ -888,7 +888,7 @@ exports.adminList = async function (req, res) {
 
 /** ====== PRIVATE ========= */
 function getQuery(condition, auth) {
-  var and_arr = null;
+  var and_arr = [];
   if (help.isAdminOrSubAdmin(auth.roles)) {
     and_arr = [{ deleted: false }];
   } else {
@@ -928,20 +928,18 @@ function getQuery(condition, auth) {
     and_arr.push({ created: { $lte: new Date(condition.created_max) } });
   }
 
-  if (condition.is_usage_system) {
-    let arg = { $eq: 1 };
-    if (condition.is_usage_system === '2') {
-      arg = { $in: [null, 2] };
-    }
+  // if (condition.is_usage_system) {
+  //   let arg = { $eq: 1 };
+  //   if (condition.is_usage_system === '2') {
+  //     arg = { $in: [null, 2] };
+  //   }
 
-    if (condition.is_usage_system === 'all') {
-      arg = { $in: [null, 2, 1] };
-    }
+  //   if (condition.is_usage_system === 'all') {
+  //     arg = { $in: [null, 2, 1] };
+  //   }
 
-    and_arr.push({ is_usage_system: arg });
-  }
-
-  console.log({ $and: and_arr });
+  //   and_arr.push({ is_usage_system: arg });
+  // }
 
   return { $and: and_arr };
 }

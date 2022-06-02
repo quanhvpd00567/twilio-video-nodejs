@@ -28,7 +28,7 @@
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('orders', clear);
       vm.condition.export_status = 1;
-      vm.condition.is_usage_system = 'all';
+      // vm.condition.is_usage_system = 'all';
       // vm.condition.sort_column = 'number';
       vm.condition.sort_direction = '+';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };

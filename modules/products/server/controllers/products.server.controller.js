@@ -38,6 +38,12 @@ exports.create = async function (req, res) {
     }
     let product = new Product(data);
 
+    data.locations = data.locations.map(location => {
+      return { location: location._id };
+    });
+
+    product.except_place_options = product.except_place_options.sort((a, b) => a - b);
+
     await product.save();
     return res.json(product);
   } catch (error) {
@@ -82,6 +88,7 @@ exports.list = async function (req, res) {
     result = help.parseAggregateQueryResult(result, page);
 
     return res.json(result);
+
     // Product.paginate(query, {
     //   sort: sort,
     //   page: page,
@@ -174,6 +181,8 @@ function prepareDataUpdate(product, data) {
   if (product.show_status && product.show_status !== 1) {
     product.show_status = 2;
   }
+
+  product.except_place_options = product.except_place_options.sort((a, b) => a - b);
 
   return product;
 }
@@ -270,7 +279,7 @@ exports.productById = function (req, res, next, id) {
   }
 
   Product.findOne(query)
-    .populate('location', 'name')
+    .populate('locations.location', 'name')
     .populate('municipality', 'name')
     .exec(function (err, event) {
       if (err) {
@@ -406,30 +415,35 @@ function getQueryAggregate(condition) {
     ]
   };
 
+
   aggregates.push({
     $lookup: {
       from: 'locations',
-      localField: 'location',
+      localField: 'locations.location',
       foreignField: '_id',
       as: 'location'
     }
-  }, {
-    $unwind: '$location'
-  }, {
+  }, { $unwind: '$location' },
+  { '$group': {
+    '_id': '$_id',
+    'location': { '$push': '$location' }
+  } }
+  , {
     $match: matchLocation
   },
-  {
-    $addFields: {
-      location_id: { $convert: { input: '$location._id', to: 'string' } },
-      location_name: { $convert: { input: '$location.name', to: 'string' } }
-    }
-  }
   );
+
+  aggregates.push({
+    $group: {
+      // '_id': '$_id',
+      '_id': { _id: '$_id', locations: { '$push': { name: '$location.name', _id: '$location._id' } } }
+    }
+  });
 
   aggregates.push({
     $project: {
       code: 1,
-      'sell_status': 1,
+      sell_status: 1,
       'show_status': 1,
       'name': 1,
       'price': 1,
@@ -447,9 +461,10 @@ function getQueryAggregate(condition) {
       'avatar': 1,
       created: 1,
       munic_name: 1,
-      munic_id: 1,
-      location_name: 1,
-      location_id: 1
+      munic_id: 1
+      // locations: '$locations'
+      // location_name: 1,
+      // location_id: 1
     }
   });
 

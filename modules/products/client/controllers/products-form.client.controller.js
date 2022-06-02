@@ -62,8 +62,13 @@
         vm.product.is_deadline = vm.constants.YEAR_ROUND;
       } else {
 
+
         if (vm.product.expire !== vm.constants.OK) {
           vm.product.expire_detail = '';
+        }
+
+        if (vm.product.except_place_options.includes(2)) {
+          vm.isExcepPlace = true;
         }
 
         if (vm.product.is_set_stock_quantity === vm.constants.ALWAYS_STOCK) {
@@ -89,7 +94,21 @@
         }
 
         vm.product.municipality = vm.product.municipality._id;
-        vm.product.location = vm.product.location._id;
+
+        // var locations = vm.product.locations.map(function (item) {
+        //   console.log(item.location);
+        //   return item.location;
+        // });
+
+        // console.log(vm.product.locations);
+
+        // vm.productLocations = locations;
+        // // vm.product.locations = xxxx;
+
+        // console.log(vm.product.locations);
+
+
+        // console.log(xxxx);
 
         getLocationByMunic();
       }
@@ -410,7 +429,6 @@
       ProductApi.getMunicipalityAll()
         .success(function (res) {
           vm.municipalities = res;
-          console.log(vm.municipalities);
         });
     }
 

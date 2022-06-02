@@ -19,22 +19,9 @@
         controller: 'OrderListController',
         controllerAs: 'vm',
         data: {
-          roles: ['munic_admin', 'munic_member'],
+          roles: ['municipality'],
           pageTitle: '注文一覧'
         }
       });
-
-
-    // getDetail.$inject = ['$stateParams', 'MunicMemberService'];
-    // function getDetail($stateParams, MunicMemberService) {
-    //   return MunicMemberService.get({
-    //     memberId: $stateParams.memberId
-    //   }).$promise;
-    // }
-
-    // newMember.$inject = ['MunicMemberService'];
-    // function newMember(MunicMemberService) {
-    //   return new MunicMemberService();
-    // }
   }
 }());
