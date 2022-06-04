@@ -10,7 +10,7 @@
   // Configuring the events module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 3,
+      position: 1,
       roles: ['admin'],
       class: 'fa fa-clock-o',
       title: '寄付履歴',
