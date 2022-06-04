@@ -5,9 +5,9 @@
     .module('orders.admin')
     .controller('OrderHistoryController', OrderHistoryController);
 
-  OrderHistoryController.$inject = ['$scope', '$filter', 'OrderHistoryApi'];
+  OrderHistoryController.$inject = ['$scope', '$filter', 'OrderHistoryApi', 'OrderApi'];
 
-  function OrderHistoryController($scope, $filter, OrderHistoryApi) {
+  function OrderHistoryController($scope, $filter, OrderHistoryApi, OrderApi) {
     var vm = this;
     vm.master = $scope.masterdata;
     vm.docs;
@@ -39,6 +39,8 @@
       var munic = _.find(vm.docs, function (doc) {
         return doc.municId === municId;
       });
+
+      console.log(munic);
 
       if (munic && !munic.isFetchDetail) {
         OrderHistoryApi.historyByMunic(municId)
@@ -93,6 +95,18 @@
             $scope.handleShowToast(message, true);
           });
       }
+    };
+
+    vm.onAdminDownloadExcelAll = function () {
+      $scope.handleShowConfirm({
+        message: '注文データをダウンロードします。よろしいですか？'
+      }, function () {
+        console.log(121212);
+        OrderApi.adminExportExcel()
+          .success(function (res) {
+            window.open('/' + res.url, '_newtab');
+          });
+      });
     };
   }
 }());

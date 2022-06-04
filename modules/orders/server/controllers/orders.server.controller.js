@@ -72,7 +72,7 @@ exports.detail = async function (req, res) {
   }
 };
 
-exports.exportOrder = async function (req, res) {
+exports.exportOrderAdmin = async function (req, res) {
   try {
     let conditions = {};
     if (req.query.id) {
@@ -82,7 +82,7 @@ exports.exportOrder = async function (req, res) {
     const FILE_EXT = '.xlsx';
     const TEMPLATE_PATH = config.uploads.order.excel.template_munic_order;
     const OUT_FILE_PATH = config.uploads.order.excel.exports;
-    const FILE_NAME = '企業参加者一覧';
+    const FILE_NAME = '寄付履歴';
     // const strtime = moment().format('YYYYMMDDHHmmss');
     const outputExcelFileName = OUT_FILE_PATH + FILE_NAME + FILE_EXT;
     const CURRENT_SHEET = '注文一覧';
@@ -104,6 +104,14 @@ exports.exportOrder = async function (req, res) {
       })
       .populate({
         path: 'location',
+        select: 'code name',
+        populate: {
+          path: 'admin',
+          select: 'code'
+        }
+      })
+      .populate({
+        path: 'municipality',
         select: 'code name'
       })
       .lean();
@@ -122,11 +130,11 @@ exports.exportOrder = async function (req, res) {
           // 住所;
           filesServerController.setValue(wsExport, row, 5, item.prefecture + item.address + item.building, 'left');
           // 自治体ID;
-          filesServerController.setValue(wsExport, row, 6, '', 'left');
+          filesServerController.setValue(wsExport, row, 6, item.municipality.code, 'left');
           // 自治体名;
-          filesServerController.setValue(wsExport, row, 7, '', 'left');
+          filesServerController.setValue(wsExport, row, 7, item.municipality.name, 'left');
           // 導入施設ID;
-          filesServerController.setValue(wsExport, row, 8, item.location.code, 'left');
+          filesServerController.setValue(wsExport, row, 8, item.location.admin ? item.location.admin.code : null, 'left');
           // 導入施設名;
           filesServerController.setValue(wsExport, row, 9, item.location.name, 'left');
           // 返礼品コード;
@@ -157,6 +165,182 @@ exports.exportOrder = async function (req, res) {
           url: outputExcelFileName
         });
       });
+  } catch (error) {
+    logger.error(error);
+    return res.status(422).send({ message: help.getMsLoc() });
+  }
+};
+
+exports.exportOrder = async function (req, res) {
+  try {
+    let conditions = {};
+    if (req.query.id) {
+      conditions._id = req.query.id;
+    }
+
+    const OUT_FILE_PATH = config.uploads.order.excel.exports;
+    var row = 2;
+
+    const auth = req.user;
+    var condition = req.query || {};
+    var query = getQuery(condition, auth);
+    condition.sort_column = 'number';
+    var sort = help.getSort(condition);
+
+    const timePrefix = Date.now().toString();
+    const pathFile = config.uploads.order.excel.exports;
+    const outFileCsv = pathFile + timePrefix + '_order_export.csv';
+    let writeStream = fs.createWriteStream(outFileCsv);
+
+    let orders = await Order.find(query)
+      .sort(sort)
+      .populate({
+        path: 'products.product'
+      })
+      .populate({
+        path: 'location',
+        select: 'code name'
+      })
+      .lean();
+
+    // get max number
+    let totalProductOfOrders = [];
+    let maxGroupColumn = 0;
+    orders.forEach((item, index) => {
+      if (item.products.length > 0) {
+        let quantity = 0;
+        item.products.forEach((data) => { quantity = quantity + data.quantity; });
+        totalProductOfOrders.push(quantity);
+      }
+    });
+
+    maxGroupColumn = Math.max(...totalProductOfOrders);
+
+    // let munic = await Municipality.findOne({ _id: new mongoose.Types.ObjectId(auth.municipality) }).lean();
+
+    // let maxGroupColumn = munic.max_quantity;
+    let headerText = getHeaderCsvRedHouse(maxGroupColumn, null, null);
+    writeStream.write(headerText.join(',') + '\n', () => { });
+
+    orders.forEach((someObject, index) => {
+      let newLine = [];
+
+      // 外部管理番号
+      newLine.push('"' + someObject.number + '"');
+      // 寄附申込日
+      newLine.push(moment(someObject.created).format('YYYY-MM-DD'));
+      // 払込票発送日
+      newLine.push('""');
+      // 入金処理日
+      newLine.push(moment(someObject.created).format('YYYY-MM-DD'));
+      // 名前
+      newLine.push(someObject.name);
+      // ふりがな
+      newLine.push(someObject.furigana);
+      // 郵便番号
+      newLine.push(formatZipcode(someObject.zip_code));
+      // 都道府県
+      newLine.push(someObject.prefecture);
+      // 市区町村
+      newLine.push(someObject.city);
+      // 番地・マンション名
+      let address = someObject.address || '';
+      if (someObject.building) {
+        address = address + someObject.building;
+      }
+      newLine.push(address);
+      // 電話番号
+      newLine.push(someObject.tel);
+      // FAX番号
+      newLine.push('""');
+      // // メールアドレス
+      // newLine.push(someObject.email || '""');
+      // 寄附金額
+      newLine.push(someObject.total);
+      // 寄附金の払込方法
+      newLine.push('"クレジットカード"');
+      // クレジット与信結果
+      newLine.push('""');
+      // 同意確認
+      newLine.push('""');
+      // 寄附情報の公表
+      newLine.push('""');
+      // 地域広報誌等の送付
+      newLine.push('""');
+      // メールマガジン送付
+      newLine.push('""');
+      // 備考
+      newLine.push('""');
+      // お礼の品の辞退
+      newLine.push('""');
+
+      let allProducts = [];
+      someObject.products.map(item => {
+        for (let j = 0; j < item.quantity; j++) {
+          allProducts.push(item);
+        }
+        return true;
+      });
+
+      let productFirst = null;
+      // progress set product to csv
+      // お礼の品_1 => お礼の品_maxGroupColumn
+      for (let i = 1; i <= maxGroupColumn; i++) {
+        let item = allProducts[i - 1];
+        if (i === 1) {
+          productFirst = item;
+        }
+        let pCodeName = '';
+        if (item) {
+          pCodeName = '[' + item.product.code + '] ' + item.product.name; // product code and name
+        }
+
+        newLine.push(pCodeName);
+      }
+
+      // ご不在期間
+      newLine.push('""');
+      // お届け先_備考
+      newLine.push('""');
+      // アンケート_ご出身地
+      newLine.push('""');
+      // アンケート_性別
+      newLine.push('""');
+      // アンケート_年代
+      newLine.push('""');
+      // アンケート_生年
+      newLine.push('""');
+      // アンケート_動機
+      newLine.push('""');
+      // アンケート_何回目
+      newLine.push('""');
+      // アンケート_どこで知りましたか
+      newLine.push('""');
+      // アンケート_応援メッセージ
+      newLine.push('""');
+
+      writeStream.write(newLine.join(',') + '\n', () => { });
+    });
+
+    writeStream.end();
+
+    writeStream.on('finish', () => {
+      console.log('finish write stream, moving along');
+      const promiseUpdate = orders.map(async item => {
+        if (item.export_status === 1) {
+          return await Order.findOneAndUpdate({ _id: item._id }, { export_status: 2, export_date: new Date });
+        }
+      });
+
+      Promise.all([promiseUpdate])
+        .then((values) => {
+          return res.json({
+            url: outFileCsv
+          });
+        });
+
+    });
+
   } catch (error) {
     logger.error(error);
     return res.status(422).send({ message: help.getMsLoc() });
@@ -324,6 +508,56 @@ function getQuery(condition, auth) {
   }
 
   return { $and: and_arr };
+}
+
+function getHeaderCsvRedHouse(maxGroupColumn, x, y) {
+  let header = [
+    '外部管理番号',
+    '寄附申込日',
+    '払込票発送日',
+    '入金処理日',
+    '名前',
+    'ふりがな',
+    '郵便番号',
+    '都道府県',
+    '市区町村',
+    '番地・マンション名',
+    '電話番号',
+    'FAX番号',
+    '寄附金額',
+    '寄附金の払込方法',
+    'クレジット与信結果',
+    '同意確認',
+    '寄附情報の公表',
+    '地域広報誌等の送付',
+    'メールマガジン送付',
+    '備考',
+    'お礼の品の辞退'
+  ];
+
+  // お礼の品_x
+  let headerProductNumber = [];
+
+  for (let index = 1; index <= maxGroupColumn; index++) {
+    headerProductNumber.push('お礼の品_' + index);
+  }
+
+  let header2 = [
+    'ご不在期間',
+    'お届け先_備考',
+    'アンケート_ご出身地',
+    'アンケート_性別',
+    'アンケート_年代',
+    'アンケート_生年',
+    'アンケート_動機',
+    'アンケート_何回目',
+    'アンケート_どこで知りましたか',
+    'アンケート_応援メッセージ'
+  ];
+
+  var other = _.concat(header, headerProductNumber, header2);
+
+  return other;
 }
 
 function trimAndLowercase(data) {

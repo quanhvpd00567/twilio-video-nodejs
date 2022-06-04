@@ -12,6 +12,7 @@ module.exports = function (app) {
   app.route('/api/orders/check-export').get(policy.isAllowed, orderController.checkExported);
   app.route('/api/orders/admin-export').get(policy.isAllowed, orderController.adminExport);
   app.route('/api/orders/admin-list').get(policy.isAllowed, orderController.adminList);
+  app.route('/api/orders/excport-excel').get(policy.isAllowed, orderController.exportOrderAdmin);
   // app.route('/api/munic-members').post(policy.isAllowed, employeeController.create);
   // app.route('/api/munic-members/remove-multi').post(policy.isAllowed, employeeController.removeMulti);
 

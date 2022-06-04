@@ -15,7 +15,6 @@ var locationSchema = new Schema({
   municipality: { type: Schema.ObjectId, ref: 'Municipality', required: true },
   admin: { type: Schema.ObjectId, ref: 'User', required: true },
   name: { type: String, required: true },
-  code: { type: String },
 
   created: { type: Date, default: Date.now },
   deleted: { type: Boolean, default: false },
