@@ -3,12 +3,20 @@
     <div class="col-xs-6">
       <form-title></form-title>
     </div>
+
+    <div class="col-xs-6">
+      <button class="btn btn-primary btn-sm pull-right mg5r" type="button"
+      ng-click="vm.onAdminDownloadExcelAll()">
+      <i class="fa fa-download"></i> Excel出力
+    </button>
+    </div>
   </div>
+
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default" ng-repeat="munic in vm.docs track by $index">
       <div class="panel-heading" role="tab" ng-id="munic.municCode">
         <h4 class="panel-title">
-          <a role="button" data-toggle="collapse" data-parent="#accordion" href="{{'#' + munic.municCode}}"
+          <a role="button" data-toggle="collapse" data-parent="#accordion" href="{{'#' + munic.municId}}"
             aria-expanded="false" ng-click="vm.getMunicDetail(munic.municId)" aria-controls="{{munic.municCode}}">
             <b>{{munic.municName}}</b>
           </a>
@@ -22,7 +30,7 @@
           <span class="price">{{munic.totalPrice | format_money}}</span>
         </div>
       </div>
-      <div id="{{munic.municCode}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div id="{{munic.municId}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
         <div class="panel-body">
           <!-- history-count -->
           <div class="history-count">

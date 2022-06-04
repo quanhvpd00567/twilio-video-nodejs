@@ -27,6 +27,10 @@
       return $http.get('/api/orders/admin-list', { params: conditions });
     };
 
+    this.adminExportExcel = function () {
+      return $http.get('/api/orders/excport-excel');
+    };
+
     return this;
   }
 }());

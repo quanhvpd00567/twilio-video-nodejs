@@ -29,6 +29,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/orders/admin-list',
       permissions: '*'
+    }, {
+      resources: '/api/orders/excport-excel',
+      permissions: '*'
     }]
   }]);
 };
