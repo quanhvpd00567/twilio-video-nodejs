@@ -16,7 +16,7 @@
     vm.numberOfUploadedImages = 0;
     vm.numberOfSelectedImages = 0;
     vm.showBtnChooseFile = true;
-    vm.locations = [];
+    // vm.locations = [];
     vm.constants = {
       OK: 1, // あり
       IS_ACCEPT_SCHEDULE: 1, // 指定不可
@@ -24,6 +24,7 @@
       ALWAYS_STOCK: 1, // 常に在庫あり
       LIMIT_BUY_NONE: 1 // なし
     };
+    vm.isFirstLoadEdit = true;
 
     vm.maxPicture = 7;
 
@@ -43,7 +44,6 @@
 
     function init() {
       vm.imageUrl = $scope.getImageDefault(vm.product.avatar);
-
       if ($scope.isMunicipality) {
         vm.product.municipality = $scope.Authentication.user.municipalityId;
         getLocationByMunic();
@@ -62,8 +62,13 @@
         vm.product.is_deadline = vm.constants.YEAR_ROUND;
       } else {
 
+
         if (vm.product.expire !== vm.constants.OK) {
           vm.product.expire_detail = '';
+        }
+
+        if (vm.product.except_place_options.includes(2)) {
+          vm.isExcepPlace = true;
         }
 
         if (vm.product.is_set_stock_quantity === vm.constants.ALWAYS_STOCK) {
@@ -89,9 +94,6 @@
         }
 
         vm.product.municipality = vm.product.municipality._id;
-        vm.product.location = vm.product.location._id;
-
-        getLocationByMunic();
       }
       prepareUploaderImages();
     }
@@ -410,7 +412,6 @@
       ProductApi.getMunicipalityAll()
         .success(function (res) {
           vm.municipalities = res;
-          console.log(vm.municipalities);
         });
     }
 
@@ -422,6 +423,7 @@
     }
 
     vm.onChangeMunic = function () {
+      vm.product.locations = [];
       getLocationByMunic();
     };
   }

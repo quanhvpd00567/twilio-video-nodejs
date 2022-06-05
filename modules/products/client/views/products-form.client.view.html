@@ -70,9 +70,7 @@
                 </th>
 
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <select class="form-control"
-                    ng-change="vm.onChangeMunic()"
-                    required 
+                  <select class="form-control" ng-change="vm.onChangeMunic()" required
                     ng-model="vm.product.municipality">
                     <option value="" disabled selected>Select your munic</option>
                     <option ng-repeat="item in vm.municipalities" value="{{item._id}}"> {{item.name}}</option>
@@ -87,10 +85,18 @@
                 </th>
 
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <select class="form-control" ng-model="vm.product.location">
-                    <option value="" disabled selected>Select your location</option>
-                    <option ng-repeat="item in vm.locations" value="{{item._id}}"> {{item.name}}</option>
-                  </select>
+                  <tags-input ng-model="vm.product.locations"
+                    display-property="name"
+                    required
+                    placeholder="Add a location"
+                    replace-spaces-with-dashes="false">
+                    <auto-complete source="vm.locations"
+                                   min-length="0"
+                                   load-on-focus="true"
+                                   load-on-empty="true"
+                                   max-results-to-show="32">
+                    </auto-complete>
+                  </tags-input>
                 </td>
               </tr>
 
@@ -136,11 +142,11 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.capacity.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4 form-group" show-errors colspan="{{vm.product._id ? 3 : ''}}">
                   <textarea class="form-control" placeholder="{{'products.form.capacity.placeholder' | translate}}"
-                    name="capacity" id="" rows="5" ng-model="vm.product.capacity" required></textarea>
+                    name="capacity" id="" rows="5" ng-model="vm.product.capacity"></textarea>
                 </td>
               </tr>
 
@@ -179,8 +185,8 @@
                 </td>
               </tr>
 
-               <!-- 取扱い事業者 -->
-               <tr>
+              <!-- 取扱い事業者 -->
+              <tr>
                 <th class="col-xs-2">
                   {{'products.form.operator.label' | translate}}
                   <span class="text-red">*</span>
@@ -355,6 +361,121 @@
                 </td>
               </tr>
 
+              <tr>
+                <th class="col-xs-2" style="border-right: none;">
+                  <h4>配送情報</h4>
+                </th>
+                <th class="col-xs-10" style="border-left: none;" colspan="{{vm.product._id ? 3 : ''}}"></th>
+              </tr>
+
+              <!-- 配送方法 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.ship_method.label' | translate}}
+                </th>
+                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
+                  <label class="radio-inline" ng-repeat="item in vm.master.ship_methods">
+                    <input type="radio" ng-click="vm.product.ship_method = item.id" name="ship_method"
+                      ng-checked="vm.product.ship_method === item.id" value="{{item.id}}" id="ship_method_{{item.id}}">
+                    {{item.value}}
+                  </label>
+                </td>
+              </tr>
+
+              <!-- 発送期日 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.ship_date.label' | translate}}
+                </th>
+                <td class="col-xs-4 form-group" show-errors colspan="{{vm.product._id ? 3 : ''}}">
+                  <textarea class="form-control" placeholder="{{'products.form.ship_date.placeholder' | translate}}"
+                    name="ship_date" rows="5" ng-model="vm.product.ship_date" maxlength="200"
+                    ng-maxlength="200"></textarea>
+                </td>
+              </tr>
+
+              <!-- 配送会社 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.ship_company.label' | translate}}
+                  <!-- <span class="text-red">*</span> -->
+                </th>
+                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
+                  <input type="text" name="ship_company" class="form-control" ng-model="vm.product.ship_company"
+                    placeholder="{{'products.form.ship_company.placeholder' | translate}}">
+                </td>
+              </tr>
+
+              <!-- 配送希望時間 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.accepted_schedule.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
+                  <div style="display: inline-block;">
+                    <label class="radio-inline" ng-repeat="item in vm.master.accept_schedule_status">
+                      <input type="radio" ng-click="vm.product.is_accept_schedule = item.id" name="is_accept_schedule"
+                        ng-checked="vm.product.is_accept_schedule === item.id" value="{{item.id}}"
+                        id="is_accept_schedule_{{item.id}}">{{item.value}}
+                    </label>
+                  </div>
+
+                  <div style="display: inline-block; width: 30%; margin-bottom: 0;" class="form-group {{
+                      vm.isSaveClick &&
+                      vm.product.is_accept_schedule !== vm.constants.IS_ACCEPT_SCHEDULE 
+                      && (vm.product.accepted_schedule.length === 0 || vm.product.accepted_schedule === underfined || vm.product.accepted_schedule === '' ) ? 'has-error' : ''
+                    }}" show-errors>
+                    <multiselect class="input-xlarge" ng-model="vm.product.accepted_schedule" name="accept_schedule"
+                      ng-change="vm.onChangeAcceptedSchedule()"
+                      placeholder="{{'products.form.accepted_schedule.placeholder' | translate}}"
+                      ng-disabled="vm.product.is_accept_schedule === vm.constants.IS_ACCEPT_SCHEDULE"
+                      options="vm.master.accept_schedule">
+                    </multiselect>
+                  </div>
+                  <input type="hidden" name="accepted_schedule" ng-model="vm.product.accepted_schedule"
+                    ng-required="vm.product.is_accept_schedule !== vm.constants.IS_ACCEPT_SCHEDULE">
+                </td>
+              </tr>
+
+              <!-- 配送不可地域 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.except_plane.label' | translate}}
+                  <!-- <span class="text-red">*</span> -->
+                </th>
+                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
+                  <div style="display: inline-block;" class="form-group" show-errors>
+                    <label class="radio-inline" ng-repeat="item in vm.master.except_place_options"
+                      style="padding-left: 0;">
+                      <input type="checkbox" name="is_set_except_place" ng-click="vm.toggleSelection(item.id)"
+                        ng-checked="vm.isCheckedExceptPlace(item.id)" value="{{item.id}}" id="except_place_{{item.id}}">
+                      <span style="padding-left: 5px;">{{item.value}}</span>
+                    </label>
+                    <input type="hidden" name="except_place_options" ng-model="vm.product.except_place_options">
+                  </div>
+                  <div style="display: inline-block; width: 30%; margin-bottom: 0;" class="form-group" show-errors>
+                    <input type="text" name="except_place" class="form-control" ng-model="vm.product.except_place"
+                      placeholder="{{'products.form.except_plane.placeholder' | translate}}"
+                      ng-readonly="!vm.isExcepPlace" ng-required="vm.isExcepPlace">
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 配送除外日 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.except_date.label' | translate}}
+                  <!-- <span class="text-red">*</span> -->
+                </th>
+                <td class="col-xs-4 form-group" show-errors colspan="{{vm.product._id ? 3 : ''}}">
+                  <textarea class="form-control" placeholder="{{'products.form.except_date.placeholder' | translate}}"
+                    name="except_date" rows="5" ng-model="vm.product.except_date" maxlength="100"
+                    ng-maxlength="100"></textarea>
+                </td>
+              </tr>
+
+
             </tbody>
           </table>
         </div>
@@ -379,10 +500,10 @@
             <li class="text-red" ng-message="required">{{'products.form.price.error.required' | translate}}</li>
             <li class="text-red" ng-message="pattern">{{'products.form.price.error.invalid' | translate}}</li>
           </div>
-
+<!-- 
           <div ng-messages="vm.municMemberForm.capacity.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.capacity.error.required' | translate}}</li>
-          </div>
+          </div> -->
 
           <div ng-messages="vm.municMemberForm.expire_detail.$error" role="alert"
             ng-if="vm.product.expire === vm.constants.OK">

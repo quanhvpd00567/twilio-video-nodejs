@@ -10,5 +10,60 @@ exports.masterdata = {
   export_status: [
     { id: 1, value: '未出力' },
     { id: 2, value: '出力済' }
+  ],
+  sel_status: [
+    { id: 1, value: '販売中' },
+    { id: 2, value: '受付終了' }
+  ],
+  show_status: [
+    { id: 1, value: '表示' },
+    { id: 2, value: '非表示' }
+  ],
+  expire_status: [
+    { id: 1, value: 'あり' },
+    { id: 2, value: 'なし' }
+  ],
+  ship_methods: [
+    { id: 1, value: '冷蔵' },
+    { id: 2, value: '冷凍' },
+    { id: 3, value: '常温' }
+  ],
+  accept_schedule_status: [
+    { id: 1, value: '指定不可' },
+    { id: 2, value: '指定可' }
+  ],
+  accept_schedule: [
+    '午前中',
+    '12:00 ～ 14:00',
+    '14:00 ～ 16:00',
+    '16:00 ～ 18:00',
+    '18:00 ～ 20:00',
+    '19:00 ～ 21:00',
+    '20:00 ～ 21:00',
+    '18:00 ～ 21:00'
+  ],
+  accept_noshi_status: [
+    { id: 1, value: '不可' },
+    { id: 2, value: '可能' }
+  ],
+
+  deadline_status: [
+    { id: 1, value: '通年' },
+    { id: 2, value: 'その他' }
+  ],
+
+  stock_quantity_status: [
+    { id: 1, value: '常に在庫あり' },
+    { id: 2, value: '限定品' }
+  ],
+
+  max_quantity_status: [
+    { id: 1, value: 'なし' },
+    { id: 2, value: 'あり' }
+  ],
+
+  except_place_options: [
+    { id: 1, value: '離島' },
+    { id: 2, value: 'その他' }
   ]
 };

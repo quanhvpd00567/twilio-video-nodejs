@@ -28,7 +28,7 @@
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('orders', clear);
       vm.condition.export_status = 1;
-      vm.condition.is_usage_system = 'all';
+      // vm.condition.is_usage_system = 'all';
       // vm.condition.sort_column = 'number';
       vm.condition.sort_direction = '+';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
@@ -87,7 +87,7 @@
 
     /** end handle search, sort & paging */
     vm.onDownloadCsv = function (id) {
-      if (vm.condition.export_status === '1') {
+      if (vm.condition.export_status === 1) {
         $scope.handleShowConfirm({
           message: '注文データをダウンロードします。よろしいですか？'
         }, function () {
@@ -116,6 +116,7 @@
             $scope.handleShowToast(message, true);
           });
       }
+
     };
 
     function handleExportCsv(id) {
@@ -125,6 +126,7 @@
       OrderApi.export(vm.condition)
         .success(function (res) {
           delete vm.condition.id;
+          console.log(res);
           handleSearch();
           window.open('/' + res.url, '_newtab');
         })

@@ -49,6 +49,8 @@ exports.historyByMunic = async function (req, res) {
     const municId = req.params.municId;
     const topProductsCount = await Order.aggregate(getQueryAggregatesTopProduct(municId, 'true', true, LIMIT));
     const topProductsPrice = await Order.aggregate(getQueryAggregatesTopProduct(municId, 'true', false, LIMIT));
+    // console.log(topProductsCount);
+    // console.log(topProductsPrice);
     return res.json({ topProductsCount: topProductsCount, topProductsPrice: topProductsPrice });
   } catch (error) {
     logger.error(error);

@@ -21,6 +21,7 @@
       return $http.get('/api/orders/history/' + municId + '/price/' + byMonth);
     };
 
+
     return this;
   }
 }());

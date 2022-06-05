@@ -11,7 +11,7 @@
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
       position: 3,
-      roles: ['munic_admin', 'munic_member'],
+      roles: ['municipality'],
       class: 'fa fa-cart-plus',
       title: '注文',
       state: 'municipality.orders.list',

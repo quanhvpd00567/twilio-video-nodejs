@@ -27,7 +27,9 @@
             </tr>
             <tr>
               <th class="col-xs-3">{{ 'products.detail.location.label' | translate }}</th>
-              <td class="col-xs-9" ng-bind="vm.product.location.name"></td>
+              <td class="col-xs-9">
+                <span ng-repeat="location in vm.product.locations">{{location.name}} <br></span>
+              </td>
             </tr>
             <tr>
               <th class="col-xs-3">{{ 'products.detail.sell_status.label' | translate }}</th>
@@ -131,6 +133,43 @@
               <th class="col-xs-3">{{ 'products.detail.description.label' | translate }}</th>
               <td class="col-xs-9" ng-bind="vm.product.description"></td>
             </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.ship_date.label' | translate }}</th>
+              <td class="col-xs-10 word-break break-line" ng-bind-html="vm.product.ship_date"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.ship_company.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.ship_company"></td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.accepted_schedule.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-if="vm.product.is_accept_schedule === 1">
+                  {{showMasterValue(masterdata.accept_schedule_status, vm.product.is_accept_schedule)}}
+                  </span>
+                <span ng-if="vm.product.is_accept_schedule === 2" ng-repeat="item in vm.product.accepted_schedule">{{item}}<br></span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.except_place.label' | translate }}</th>
+              <td class="col-xs-9">
+                <span ng-repeat="item in vm.product.except_place_options">
+                  <span ng-if="item === 1">{{showMasterValue(masterdata.except_place_options, item)}}</span>
+                  <span ng-if="item === 2">{{vm.product.except_place}}</span>
+                  <br>
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <th class="col-xs-3">{{ 'products.detail.except_date.label' | translate }}</th>
+              <td class="col-xs-9" ng-bind="vm.product.except_date"></td>
+            </tr>
+
           </tbody>
         </table>
       </div>
