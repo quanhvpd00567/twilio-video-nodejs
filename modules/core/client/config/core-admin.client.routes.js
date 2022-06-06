@@ -22,7 +22,7 @@
         url: '',
         template: '<ui-view/>',
         data: {
-          roles: ['munic_admin']
+          roles: ['municipality']
         }
       })
       .state('ktc', {

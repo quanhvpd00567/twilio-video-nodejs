@@ -55,11 +55,11 @@
     };
 
     // Get info municipality
-    this.info = function (municipalityId) {
-      return $http.get('/api/municipalities/info', { params: { municipalityId: municipalityId } });
+    this.info = function () {
+      return $http.get('/api/municipalities/info');
     };
 
-    this.updateMunic = function (data) {
+    this.updateByMunic = function (data) {
       return $http.post('/api/municipalities/update-munic', data);
     };
 
