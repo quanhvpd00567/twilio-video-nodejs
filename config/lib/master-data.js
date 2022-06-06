@@ -65,5 +65,21 @@ exports.masterdata = {
   except_place_options: [
     { id: 1, value: '離島' },
     { id: 2, value: 'その他' }
+  ],
+  simulation_donation: [
+    {
+      anual_salary: "300万円",
+      single_income: "28,000円",
+      married_only_income: "19,000円",
+      married_with_child_income: "11,000円",
+      couple_with_pension: "19,000円"
+    },
+    {
+      anual_salary: "350万円",
+      single_income: "34,000円",
+      married_only_income: "25,000円",
+      married_with_child_income: "17,000円",
+      couple_with_pension: "28,000円"
+    }
   ]
 };

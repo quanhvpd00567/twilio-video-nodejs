@@ -32,7 +32,8 @@ exports.getConfiguration = function (req, res) {
 
     res.jsonp({
       config: setting, version: setting.version,
-      prefectures: master_data.masterdata.prefectures
+      prefectures: master_data.masterdata.prefectures,
+      simulation_donation: master_data.masterdata.simulation_donation
     });
   });
 };
