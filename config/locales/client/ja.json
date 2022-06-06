@@ -138,8 +138,6 @@
   "sign_in.form.password.error.required": "パスワードを入力してください。",
   "sign_in.form.button.sign_in": "ログイン",
   "sign_in.form.link.reset_password": "パスワードを忘れた方はこちら",
-  "sign_in.form.link.register_company": "企業アカウント発行",
-  "sign_in.form.link.register_municipality": "自治体アカウント発行",
   "sign_in.form.server.error.username_or_password_incorrect": "メールアドレスまたはパスワードが違います。",
   "reset_password.form.title": "パスワードを忘れた場合",
   "reset_password.form.subtitle1": "パスワードをリセットします。",

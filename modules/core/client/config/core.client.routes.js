@@ -33,7 +33,7 @@
         controller: 'HomeController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin', 'sub_admin', 'company', 'employee', 'munic_admin', 'munic_member'],
+          roles: ['admin', 'municipality', 'location'],
           pageTitle: 'お知らせ'
         }
       })

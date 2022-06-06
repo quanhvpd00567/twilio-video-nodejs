@@ -33,55 +33,19 @@ exports.renderIndex = function (req, res) {
       roles: req.user.roles
     };
 
-    if ((req.url.match('/guest/employees/'))) {
-      res.render('modules/core/server/views/company-guest', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    }
-
-    if (req.url.match('/company/register') || req.url.match('/municipality/register') || req.url.match('/term') || req.url.match('/policy')) {
-      res.render('modules/core/server/views/company-guest', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    } else {
-      res.render('modules/core/server/views/index', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    }
+    res.render('modules/core/server/views/index', {
+      user: JSON.stringify(safeUserObject),
+      sharedConfig: JSON.stringify(config.shared),
+      masterdata: JSON.stringify(masterdata.masterdata),
+      translatedata: JSON.stringify(dataTranslateClient)
+    });
   } else {
-    if ((req.url.match('/guest/employees/'))) {
-      res.render('modules/core/server/views/company-guest', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    }
-
-    if (req.url.match('/company/register') || req.url.match('/municipality/register') || req.url.match('/term') || req.url.match('/policy')) {
-      res.render('modules/core/server/views/company-guest', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    } else {
-      res.render('modules/core/server/views/login', {
-        user: JSON.stringify(safeUserObject),
-        sharedConfig: JSON.stringify(config.shared),
-        masterdata: JSON.stringify(masterdata.masterdata),
-        translatedata: JSON.stringify(dataTranslateClient)
-      });
-    }
+    res.render('modules/core/server/views/login', {
+      user: JSON.stringify(safeUserObject),
+      sharedConfig: JSON.stringify(config.shared),
+      masterdata: JSON.stringify(masterdata.masterdata),
+      translatedata: JSON.stringify(dataTranslateClient)
+    });
   }
 };
 

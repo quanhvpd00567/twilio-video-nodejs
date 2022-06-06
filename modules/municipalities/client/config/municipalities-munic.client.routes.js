@@ -10,7 +10,7 @@
     $stateProvider
       .state('municipality.munic', {
         abstract: true,
-        url: '/setting',
+        url: '/setting-info',
         template: '<ui-view/>'
       })
       .state('municipality.munic.munic_setting', {
