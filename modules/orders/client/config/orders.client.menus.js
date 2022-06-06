@@ -10,10 +10,10 @@
   // Configuring the events module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 3,
+      position: 1,
       roles: ['municipality'],
       class: 'fa fa-cart-plus',
-      title: '注文',
+      title: '寄付履歴',
       state: 'municipality.orders.list',
       parrent_state: 'municipality.orders'
     });

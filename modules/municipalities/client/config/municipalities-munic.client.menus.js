@@ -10,7 +10,7 @@
   // Configuring the events module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 12,
+      position: 2,
       roles: ['municipality'],
       class: 'fa fa-wrench',
       title: '自治体情報管理',

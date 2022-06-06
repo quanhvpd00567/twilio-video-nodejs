@@ -10,7 +10,7 @@
   // Configuring the events module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 3,
+      position: 4,
       roles: ['admin', 'sub_admin'],
       class: 'fa fa-area-chart',
       title: '自治体管理',

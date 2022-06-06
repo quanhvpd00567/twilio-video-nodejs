@@ -81,7 +81,7 @@ function AppController(
         $scope.handleBackScreen('admin.products.list');
         break;
       case 'municipality':
-        $scope.handleBackScreen('admin.products.list');
+        $scope.handleBackScreen('municipality.orders.list');
         break;
       default:
         break;

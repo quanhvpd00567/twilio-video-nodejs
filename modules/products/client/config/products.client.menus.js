@@ -10,7 +10,7 @@
   // Configuring the events module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 2,
+      position: 3,
       roles: ['municipality', 'admin'],
       class: 'fa fa-product-hunt',
       title: '返礼品',
