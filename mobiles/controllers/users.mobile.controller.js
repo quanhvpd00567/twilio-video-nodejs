@@ -143,21 +143,34 @@ exports.signin = async function (req, res, next) {
     }
   }
 };
-exports.signout = function (req, res) {
-  req.checkBody('uuid', translate['user.signout.uuid.required']).notEmpty();
-  var errors = req.validationErrors();
-  if (errors)
-    return res.status(403).send(helper.getMessage(errors));
-  var userId = req.user._id;
-  var uuid = req.body.uuid;
+exports.signout = async function (req, res) {
+  try {
+    req.checkBody('uuid', translate['user.signout.uuid.required']).notEmpty();
+    req.checkBody('password', translate['user.signin.password.required']).notEmpty();
+    var errors = req.validationErrors();
+    if (errors)
+      return res.status(403).send(helper.getMessage(errors));
+    const userId = req.user._id;
+    const { uuid, password } = req.body;
 
-  Device.findOneAndUpdate({ uuid: uuid }, { token: null, user: null })
-    .then(device => User.findByIdAndUpdate(userId, { $pull: { devices: device._id } }))
-    .then(res.end())
-    .catch(err => {
-      logger.error(err);
-      return res.status(500).send({ message: translate['system.server.error'] });
-    });
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(422).send({ message: translate['user.account_not_found'] });
+    }
+    if (!user.authenticate(password)) {
+      return res.status(422).send({ message: translate['user.signout.error.password_invalid'] });
+    }
+
+    const device = await Device.findOneAndUpdate({ uuid: uuid }, { token: null, user: null });
+    if (device) {
+      await User.findByIdAndUpdate(userId, { $pull: { devices: device._id } });
+    }
+
+    return res.end();
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).send({ message: translate['system.server.error'] });
+  }
 };
 
 exports.resetPassword = async function (req, res) {
