@@ -107,12 +107,7 @@ exports.signin = async function (req, res, next) {
       }
 
       // Increase login times
-      // Remove token and user in old devices of user if existing
-      await Promise.all([
-        User.findByIdAndUpdate(user._id, { last_login: Date.now(), $inc: { login_times: 1 }, devices: [device._id] }, { new: true }),
-        Device.updateMany({ user: user._id, _id: { $ne: device._id } }, { token: null, user: null })
-      ]);
-
+      await User.findByIdAndUpdate(user._id, { last_login: Date.now(), $inc: { login_times: 1 }, devices: [device._id] }, { new: true });
       device = JSON.parse(JSON.stringify(device));
       delete device.info;
       const returnUser = pickUser(user);
