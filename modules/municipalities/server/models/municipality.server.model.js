@@ -20,6 +20,9 @@ var municipalitiesSchema = new Schema({
   // 自治体名
   name: { type: String, required: true, trim: true },
 
+  fax: { type: String },
+  settlement_fee: { type: Number, default: 0 },
+
   created: { type: Date, default: Date.now },
   deleted: { type: Boolean, default: false },
   updated: { type: Date },

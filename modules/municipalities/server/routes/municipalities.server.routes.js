@@ -12,7 +12,7 @@ module.exports = function (app) {
   app.route('/api/municipalities').post(municController.create);
 
   app.route('/api/municipalities/info').get(policy.isAllowed, municController.info);
-  app.route('/api/municipalities/update-munic').post(policy.isAllowed, municController.updateMunic);
+  app.route('/api/municipalities/update-munic').post(policy.isAllowed, municController.updateByMunic);
 
   // Single notice routes
   app.route('/api/municipalities/:municId')

@@ -80,15 +80,8 @@ function AppController(
       case 'sub_admin':
         $scope.handleBackScreen('admin.products.list');
         break;
-      case 'company':
-        $scope.handleBackScreen('company.home');
-        break;
-      case 'employee':
-        $scope.handleBackScreen('company.ecommerces.home');
-        break;
-      case 'munic_admin':
-      case 'munic_member':
-        $scope.handleBackScreen('municipality.com_projects.list');
+      case 'municipality':
+        $scope.handleBackScreen('municipality.orders.list');
         break;
       default:
         break;

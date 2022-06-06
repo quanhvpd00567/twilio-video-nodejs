@@ -10,7 +10,7 @@
   // Configuring the locations module
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
-      position: 4,
+      position: 5,
       roles: ['admin'],
       class: 'fa fa-map-marker',
       title: '導入施設配信',

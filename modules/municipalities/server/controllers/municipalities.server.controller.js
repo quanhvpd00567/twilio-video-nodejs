@@ -39,7 +39,7 @@ exports.create = async function (req, res) {
       phone: data.admin.phone,
       roles: constants.ROLE.MUNICIPALITY,
       number: data.admin.number,
-      department: data.admin.department,
+      department: data.admin.department
     };
 
     const email_lower = trimAndLowercase(dataAccount.email);
@@ -229,21 +229,55 @@ exports.delete = async function (req, res) {
 exports.info = async function (req, res) {
   try {
     let municId = req.user.municipality;
-
-    if (req.user.roles[0] === constants.ROLE.ADMIN || req.user.roles[0] === constants.ROLE.SUB_ADMIN) {
-      municId = req.query.municipalityId;
-    }
-    if (!mongoose.Types.ObjectId.isValid(municId)) {
-      return res.status(400).send({
-        message: 'お知らせが見つかりません。'
-      });
-    }
-
-    const munic = await Municipality.findOne({ _id: municId }).lean();
-
+    const munic = await Municipality.findOne({ _id: municId, deleted: false }).populate({ path: 'admin', select: '-password' }).lean();
     return res.json(munic);
   } catch (error) {
     logger.error(error);
+    return res.status(422).send({ message: help.getMsLoc() });
+  }
+};
+
+exports.updateByMunic = async function (req, res) {
+  let session = null;
+  try {
+    const body = req.body;
+    const dataAccountUpdate = {
+      first_name: body.admin.first_name,
+      last_name: body.admin.last_name,
+      email: body.admin.email,
+      phone: body.admin.phone,
+      department: body.admin.department
+    };
+
+    let account = await User.findOne({ deleted: false, _id: body.admin._id });
+    if (!account) {
+      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.server.error.not_found') });
+    }
+
+    // Check email exists
+    if (account.email !== dataAccountUpdate.email) {
+      const email_lower = trimAndLowercase(dataAccountUpdate.email);
+      const isEmailExisting = await User.findOne({ email_lower, deleted: false, _id: { $ne: account._id } }).lean();
+      if (isEmailExisting) {
+        return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
+      }
+    }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
+
+    await Municipality.updateOne({ _id: body._id }, body, { session });
+
+    account = _.extend(account, dataAccountUpdate);
+    await account.save({ session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.json(true);
+  } catch (error) {
+    logger.error(error);
+    abortTransaction(session);
     return res.status(422).send({ message: help.getMsLoc() });
   }
 };
@@ -271,70 +305,6 @@ exports.municById = function (req, res, next, id) {
       req.model = event;
       next();
     });
-};
-
-exports.updateMunic = async function (req, res) {
-  try {
-    const auth = req.user;
-    const body = req.body;
-    const updateData = {};
-
-    let municipality = auth.municipality;
-    if (req.user.roles[0] === constants.ROLE.ADMIN || req.user.roles[0] === constants.ROLE.SUB_ADMIN) {
-      municipality = body.municipalityId;
-    }
-
-    if (body.question || body.question === '') {
-      updateData.question = body.question;
-    }
-
-    if (body.max_quantity) {
-      updateData.max_quantity = body.max_quantity;
-    }
-
-    if (body.checklist || body.checklist === '') {
-      updateData.checklist = body.checklist;
-    }
-
-    if (body.contact_name) {
-      updateData.contact_name = body.contact_name;
-    }
-
-    if (body.contact_tel) {
-      updateData.contact_tel = body.contact_tel;
-    }
-
-    if (body.contact_mail) {
-      updateData.contact_mail = body.contact_mail;
-    }
-
-    if (body.fax) {
-      updateData.fax = body.fax;
-    }
-
-    if (body.is_apply_times === true || body.is_apply_times === false) {
-      updateData.is_apply_times = body.is_apply_times;
-    }
-
-    if (body.is_setting_gift_bows === true || body.is_setting_gift_bows === false) {
-      updateData.is_setting_gift_bows = body.is_setting_gift_bows;
-    }
-
-    if (body.is_setting_docs === true || body.is_setting_docs === false) {
-      updateData.is_setting_docs = body.is_setting_docs;
-    }
-
-    if (body.is_apply_need) {
-      updateData.is_apply_need = body.is_apply_need;
-    }
-    updateData.is_usage_system = body.is_usage_system;
-
-    const munic = await Municipality.updateOne({ _id: municipality }, updateData);
-    return res.json(munic);
-  } catch (error) {
-    logger.error(error);
-    return res.status(422).send({ message: help.getMsLoc() });
-  }
 };
 
 /** ====== PRIVATE ========= */
