@@ -2,8 +2,8 @@
 
 module.exports = {
   app: {
-    title: 'ふふるシステム管理システム',
-    description: 'ふふるシステム',
+    title: 'ふるさとNow管理システム',
+    description: 'ふるさとNow',
     keywords: '',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },

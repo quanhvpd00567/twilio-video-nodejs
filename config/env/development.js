@@ -25,7 +25,7 @@ module.exports = {
     deep_link: 'astena-mft-dev://open-app'
   },
   mailer: {
-    prefix_subject: '【ふふるシステム】',
+    prefix_subject: '【ふるさとNow】',
     from: process.env.MAILER_FROM || defaultEnvConfig.app.title + ' - 開発環境',
     options: {
       service: process.env.MAILER_SERVICE_PROVIDER || 'gmail',

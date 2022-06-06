@@ -52,7 +52,7 @@ module.exports = {
     deep_link: 'astena-mft://open-app'
   },
   mailer: {
-    prefix_subject: '【ふふるシステム】',
+    prefix_subject: '【ふるさとNow】',
     from: 'support@fufuru-tax.jp',
     to: '',
     options: {
