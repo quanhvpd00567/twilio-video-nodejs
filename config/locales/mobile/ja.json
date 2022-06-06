@@ -16,6 +16,7 @@
     "user.signin.role.invalid": "このアカウントは使用できません。",
     "user.signin.status.pending": "アカウント認証が完了していません。認証メールをご確認ください。",
     "user.signout.uuid.required": "デバイスの情報を取得できませんでした。アプリを再起動してください。",
+    "user.signout.error.password_invalid": "現在のパスワードが間違っています。",
     "user.changepassword.password.required": "パスワードを入力してください。",
     "user.changepassword.newpassword.required": "新しいパスワードを入力してください。",
     "user.changepassword.newpassword.subject": "新しいパスワード",

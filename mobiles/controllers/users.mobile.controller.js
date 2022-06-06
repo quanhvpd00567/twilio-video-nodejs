@@ -107,12 +107,7 @@ exports.signin = async function (req, res, next) {
       }
 
       // Increase login times
-      // Remove token and user in old devices of user if existing
-      await Promise.all([
-        User.findByIdAndUpdate(user._id, { last_login: Date.now(), $inc: { login_times: 1 }, devices: [device._id] }, { new: true }),
-        Device.updateMany({ user: user._id, _id: { $ne: device._id } }, { token: null, user: null })
-      ]);
-
+      await User.findByIdAndUpdate(user._id, { last_login: Date.now(), $inc: { login_times: 1 }, devices: [device._id] }, { new: true });
       device = JSON.parse(JSON.stringify(device));
       delete device.info;
       const returnUser = pickUser(user);
@@ -143,21 +138,34 @@ exports.signin = async function (req, res, next) {
     }
   }
 };
-exports.signout = function (req, res) {
-  req.checkBody('uuid', translate['user.signout.uuid.required']).notEmpty();
-  var errors = req.validationErrors();
-  if (errors)
-    return res.status(403).send(helper.getMessage(errors));
-  var userId = req.user._id;
-  var uuid = req.body.uuid;
+exports.signout = async function (req, res) {
+  try {
+    req.checkBody('uuid', translate['user.signout.uuid.required']).notEmpty();
+    req.checkBody('password', translate['user.signin.password.required']).notEmpty();
+    var errors = req.validationErrors();
+    if (errors)
+      return res.status(403).send(helper.getMessage(errors));
+    const userId = req.user._id;
+    const { uuid, password } = req.body;
 
-  Device.findOneAndUpdate({ uuid: uuid }, { token: null, user: null })
-    .then(device => User.findByIdAndUpdate(userId, { $pull: { devices: device._id } }))
-    .then(res.end())
-    .catch(err => {
-      logger.error(err);
-      return res.status(500).send({ message: translate['system.server.error'] });
-    });
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(422).send({ message: translate['user.account_not_found'] });
+    }
+    if (!user.authenticate(password)) {
+      return res.status(422).send({ message: translate['user.signout.error.password_invalid'] });
+    }
+
+    const device = await Device.findOneAndUpdate({ uuid: uuid }, { token: null, user: null });
+    if (device) {
+      await User.findByIdAndUpdate(userId, { $pull: { devices: device._id } });
+    }
+
+    return res.end();
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).send({ message: translate['system.server.error'] });
+  }
 };
 
 exports.resetPassword = async function (req, res) {
