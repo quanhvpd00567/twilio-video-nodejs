@@ -32,8 +32,10 @@
     "user.update_profile.nickname.exist": "このニックネームは既に使用されています。",
     "user.update_email.email.error.exist": "このメールアドレスは既に登録済みです。別のメールアドレスをご利用ください。",
     "user.update_email.message.sent_mail_success": "{0} にメールアドレス変更のメールを送信しましたのでご確認ください。",
-    "event.crud.not_found": "イベントの情報が見つかりません。",
-    "event.join.error.existed": "他のイベントに参加しています。",
-    "event.join.error.not_opening": "イベントがまだ開催していません。",
-    "event.join.error.finished": "イベントが終了しています。"
+    "order.product.error.deleted": "返礼品{0}が削除されました。",
+    "order.product.error.sold_out": "【{0}】完売しました。",
+    "order.product.error.end_sale": "【{0}】購入できません。",
+    "order.product.error.order_over_stock_quantity": "【{0}】残り在庫数：{1}",
+    "order.product.error.order_over_max_quantity": "【{0}】{1}個まで購入可能です。",
+    "order.card.error.authorize_card": "カードがご認証できません。"
 }
