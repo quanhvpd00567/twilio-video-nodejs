@@ -102,21 +102,6 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
       return { queueNumber, success: false, message: translate['order.card.error.authorize_card'] };
     }
 
-    // generate order number
-    const orderNumber = await generalNumberOrder();
-    let orderObject = body;
-    orderObject.number = orderNumber;
-    orderObject.user = userId;
-    orderObject.municipality = municipalityId;
-    orderObject.location = locationId;
-    orderObject.total = cart.total;
-
-    const totalQuantity = cart.products.reduce((total, item) => {
-      return total + item.quantity;
-    }, 0);
-    orderObject.total_quantity = totalQuantity;
-    let orderCreated = new Order(orderObject);
-
     logger.info('Start mongoose transaction');
     session = await mongoose.startSession();
     session.startTransaction();
@@ -142,11 +127,25 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
 
     // 5
     logger.info('Create order record');
+    // generate order number
+    const orderNumber = await generalNumberOrder();
+    let orderObject = body;
+    orderObject.number = orderNumber;
+    orderObject.user = userId;
+    orderObject.municipality = municipalityId;
+    orderObject.location = locationId;
+    orderObject.total = cart.total;
+
+    const totalQuantity = cart.products.reduce((total, item) => {
+      return total + item.quantity;
+    }, 0);
+    orderObject.total_quantity = totalQuantity;
     orderObject.products = cart.products.map(item => {
       item.product = item.product._id;
       return item;
     });
 
+    let orderCreated = new Order(orderObject);
     await orderCreated.save({ session });
 
     // 6
