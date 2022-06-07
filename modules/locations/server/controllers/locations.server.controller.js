@@ -49,6 +49,7 @@ exports.create = async function (req, res) {
     locationCreated.admin = userCreated._id;
     locationCreated = await locationCreated.save({ session });
 
+    userCreated.municipality = locationCreated.municipality;
     userCreated.location = locationCreated._id;
     userCreated = await userCreated.save({ session });
 
