@@ -29,6 +29,10 @@ const CONSTANTS = {
     REQUIRED: 2
   },
 
+  SELL_STATUS: {
+    ON_SALE: 1,
+    END_SALE: 2
+  },
   TRANSACTION_STATUS: {
     SUCCESS: 1,
     FAILED: 2

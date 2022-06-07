@@ -20,4 +20,4 @@ jobs:
           script: |
             cd /usr/local/astena-mft-web
             git pull
-            sudo systemctl restart astena-dtest.service 
+            sudo systemctl restart astena-mft-dtest.service

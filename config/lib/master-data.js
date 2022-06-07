@@ -68,139 +68,139 @@ exports.masterdata = {
   ],
   simulation_donation: [
     {
-      anual_salary: "300万円",
-      single_income: "28,000円",
-      married_only_income: "19,000円",
-      married_with_child_income: "11,000円",
-      couple_with_pension: "19,000円"
+      anual_salary: '300万円',
+      single_income: '28,000円',
+      married_only_income: '19,000円',
+      married_with_child_income: '11,000円',
+      couple_with_pension: '19,000円'
     },
     {
-      anual_salary: "350万円",
-      single_income: "34,000円",
-      married_only_income: "25,000円",
-      married_with_child_income: "17,000円",
-      couple_with_pension: "28,000円"
+      anual_salary: '350万円',
+      single_income: '34,000円',
+      married_only_income: '25,000円',
+      married_with_child_income: '17,000円',
+      couple_with_pension: '28,000円'
     },
     {
-      anual_salary: "400万円",
-      single_income: "43,000円",
-      married_only_income: "33,000円",
-      married_with_child_income: "25,000円",
-      couple_with_pension: "36,000円"
+      anual_salary: '400万円',
+      single_income: '43,000円',
+      married_only_income: '33,000円',
+      married_with_child_income: '25,000円',
+      couple_with_pension: '36,000円'
     },
     {
-      anual_salary: "450万円",
-      single_income: "53,000円",
-      married_only_income: "41,000円",
-      married_with_child_income: "32,000円",
-      couple_with_pension: "45,000円"
+      anual_salary: '450万円',
+      single_income: '53,000円',
+      married_only_income: '41,000円',
+      married_with_child_income: '32,000円',
+      couple_with_pension: '45,000円'
     },
     {
-      anual_salary: "500万円",
-      single_income: "61,000円",
-      married_only_income: "49,000円",
-      married_with_child_income: "40,000円",
-      couple_with_pension: "59,000円"
+      anual_salary: '500万円',
+      single_income: '61,000円',
+      married_only_income: '49,000円',
+      married_with_child_income: '40,000円',
+      couple_with_pension: '59,000円'
     },
     {
-      anual_salary: "550万円",
-      single_income: "70,000円",
-      married_only_income: "61,000円",
-      married_with_child_income: "49,000円",
-      couple_with_pension: "68,000円"
+      anual_salary: '550万円',
+      single_income: '70,000円',
+      married_only_income: '61,000円',
+      married_with_child_income: '49,000円',
+      couple_with_pension: '68,000円'
     },
     {
-      anual_salary: "600万円",
-      single_income: "77,000円",
-      married_only_income: "68,000円",
-      married_with_child_income: "60,000円",
-      couple_with_pension: "78,000円"
+      anual_salary: '600万円',
+      single_income: '77,000円',
+      married_only_income: '68,000円',
+      married_with_child_income: '60,000円',
+      couple_with_pension: '78,000円'
     },
     {
-      anual_salary: "650万円",
-      single_income: "98,000円",
-      married_only_income: "76,000円",
-      married_with_child_income: "68,000円",
-      couple_with_pension: "100,000円"
+      anual_salary: '650万円',
+      single_income: '98,000円',
+      married_only_income: '76,000円',
+      married_with_child_income: '68,000円',
+      couple_with_pension: '100,000円'
     },
     {
-      anual_salary: "700万円",
-      single_income: "109,000円",
-      married_only_income: "85,000円",
-      married_with_child_income: "77,000円",
-      couple_with_pension: "111,000円"
+      anual_salary: '700万円',
+      single_income: '109,000円',
+      married_only_income: '85,000円',
+      married_with_child_income: '77,000円',
+      couple_with_pension: '111,000円'
     },
     {
-      anual_salary: "750万円",
-      single_income: "120,000円",
-      married_only_income: "109,000円",
-      married_with_child_income: "87,000円",
-      couple_with_pension: "122,000円"
+      anual_salary: '750万円',
+      single_income: '120,000円',
+      married_only_income: '109,000円',
+      married_with_child_income: '87,000円',
+      couple_with_pension: '122,000円'
     },
     {
-      anual_salary: "800万円",
-      single_income: "131,000円",
-      married_only_income: "120,000円",
-      married_with_child_income: "111,000円",
-      couple_with_pension: "134,000円"
+      anual_salary: '800万円',
+      single_income: '131,000円',
+      married_only_income: '120,000円',
+      married_with_child_income: '111,000円',
+      couple_with_pension: '134,000円'
     },
     {
-      anual_salary: "850万円",
-      single_income: "141,000円",
-      married_only_income: "130,000円",
-      married_with_child_income: "120,000円",
-      couple_with_pension: "146,000円"
+      anual_salary: '850万円',
+      single_income: '141,000円',
+      married_only_income: '130,000円',
+      married_with_child_income: '120,000円',
+      couple_with_pension: '146,000円'
     },
     {
-      anual_salary: "900万円",
-      single_income: "153,000円",
-      married_only_income: "141,000円",
-      married_with_child_income: "132,000円",
-      couple_with_pension: "158,000円"
+      anual_salary: '900万円',
+      single_income: '153,000円',
+      married_only_income: '141,000円',
+      married_with_child_income: '132,000円',
+      couple_with_pension: '158,000円'
     },
     {
-      anual_salary: "950万円",
-      single_income: "165,000円",
-      married_only_income: "153,000円",
-      married_with_child_income: "144,000円",
-      couple_with_pension: "172,000円"
+      anual_salary: '950万円',
+      single_income: '165,000円',
+      married_only_income: '153,000円',
+      married_with_child_income: '144,000円',
+      couple_with_pension: '172,000円'
     },
     {
-      anual_salary: "1000万円",
-      single_income: "177,000円",
-      married_only_income: "165,000円",
-      married_with_child_income: "156,000円",
-      couple_with_pension: "185,000円"
+      anual_salary: '1000万円',
+      single_income: '177,000円',
+      married_only_income: '165,000円',
+      married_with_child_income: '156,000円',
+      couple_with_pension: '185,000円'
     },
     {
-      anual_salary: "1500万円",
-      single_income: "384,000円",
-      married_only_income: "380,000円",
-      married_with_child_income: "368,000円"
+      anual_salary: '1500万円',
+      single_income: '384,000円',
+      married_only_income: '380,000円',
+      married_with_child_income: '368,000円'
     },
     {
-      anual_salary: "2000万円",
-      single_income: "552,000円",
-      married_only_income: "546,000円",
-      married_with_child_income: "534,000円"
+      anual_salary: '2000万円',
+      single_income: '552,000円',
+      married_only_income: '546,000円',
+      married_with_child_income: '534,000円'
     },
     {
-      anual_salary: "3000万円",
-      single_income: "1,034,000円",
-      married_only_income: "1,027,000円",
-      married_with_child_income: "1,013,000円"
+      anual_salary: '3000万円',
+      single_income: '1,034,000円',
+      married_only_income: '1,027,000円',
+      married_with_child_income: '1,013,000円'
     },
     {
-      anual_salary: "5000万円",
-      single_income: "2,056,000円",
-      married_only_income: "2,046,000円",
-      married_with_child_income: "2,031,000円"
+      anual_salary: '5000万円',
+      single_income: '2,056,000円',
+      married_only_income: '2,046,000円',
+      married_with_child_income: '2,031,000円'
     },
     {
-      anual_salary: "1億円",
-      single_income: "4,316,000円",
-      married_only_income: "4,312,000円",
-      married_with_child_income: "4,297,000円"
-    },
+      anual_salary: '1億円',
+      single_income: '4,316,000円',
+      married_only_income: '4,312,000円',
+      married_with_child_income: '4,297,000円'
+    }
   ]
 };

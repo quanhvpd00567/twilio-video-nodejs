@@ -80,7 +80,6 @@ exports.tokenAllowed = function (req, res, next) {
 
           req.user = user;
           req.device = device;
-          req.team = user.team;
 
           return next();
         });

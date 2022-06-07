@@ -8,8 +8,6 @@ var mongoose = require('mongoose'),
 
 var schema = new Schema({
   user: { type: Schema.ObjectId, ref: 'User', required: true },
-  card: { type: Schema.ObjectId, ref: 'Card' },
-  // order: { type: Schema.ObjectId, ref: 'Order', required: true },
 
   amount: { type: Number, default: 0 },
   status: { type: Number, enum: TRANSACTION_STATUSES },
