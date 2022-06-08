@@ -221,5 +221,8 @@ exports.masterdata = {
   ],
   usage_system: [
     { id: 1, value: 'Furusato 360' }
+  ],
+  order_payments: [
+    { id: 1, value: 'クレジットカード' }
   ]
 };
