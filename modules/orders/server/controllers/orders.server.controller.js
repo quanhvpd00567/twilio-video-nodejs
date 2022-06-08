@@ -219,108 +219,111 @@ exports.exportOrder = async function (req, res) {
     // let munic = await Municipality.findOne({ _id: new mongoose.Types.ObjectId(auth.municipality) }).lean();
 
     // let maxGroupColumn = munic.max_quantity;
-    let headerText = getHeaderCsvRedHouse(maxGroupColumn, null, null);
-    writeStream.write(headerText.join(',') + '\n', () => { });
+    if (condition.is_usage_system === '1') {
+      let headerText = getHeaderCsvRedHouse(maxGroupColumn, null, null);
+      writeStream.write(headerText.join(',') + '\n', () => { });
 
-    orders.forEach((someObject, index) => {
-      let newLine = [];
+      orders.forEach((someObject, index) => {
+        let newLine = [];
 
-      // 外部管理番号
-      newLine.push('"' + someObject.number + '"');
-      // 寄附申込日
-      newLine.push(moment(someObject.created).format('YYYY-MM-DD'));
-      // 払込票発送日
-      newLine.push('""');
-      // 入金処理日
-      newLine.push(moment(someObject.created).format('YYYY-MM-DD'));
-      // 名前
-      newLine.push(someObject.name);
-      // ふりがな
-      newLine.push(someObject.furigana);
-      // 郵便番号
-      newLine.push(formatZipcode(someObject.zip_code));
-      // 都道府県
-      newLine.push(someObject.prefecture);
-      // 市区町村
-      newLine.push(someObject.city);
-      // 番地・マンション名
-      let address = someObject.address || '';
-      if (someObject.building) {
-        address = address + someObject.building;
-      }
-      newLine.push(address);
-      // 電話番号
-      newLine.push(someObject.tel);
-      // FAX番号
-      newLine.push('""');
-      // // メールアドレス
-      // newLine.push(someObject.email || '""');
-      // 寄附金額
-      newLine.push(someObject.total);
-      // 寄附金の払込方法
-      newLine.push('"クレジットカード"');
-      // クレジット与信結果
-      newLine.push('""');
-      // 同意確認
-      newLine.push('""');
-      // 寄附情報の公表
-      newLine.push('""');
-      // 地域広報誌等の送付
-      newLine.push('""');
-      // メールマガジン送付
-      newLine.push('""');
-      // 備考
-      newLine.push('""');
-      // お礼の品の辞退
-      newLine.push('""');
-
-      let allProducts = [];
-      someObject.products.map(item => {
-        for (let j = 0; j < item.quantity; j++) {
-          allProducts.push(item);
+        // 外部管理番号
+        newLine.push('"' + someObject.number + '"');
+        // 寄附申込日
+        newLine.push(moment(someObject.created).format('YYYY-MM-DD'));
+        // 払込票発送日
+        newLine.push('""');
+        // 入金処理日
+        newLine.push(moment(someObject.created).format('YYYY-MM-DD'));
+        // 名前
+        newLine.push(someObject.name);
+        // ふりがな
+        newLine.push(someObject.furigana);
+        // 郵便番号
+        newLine.push(formatZipcode(someObject.zip_code));
+        // 都道府県
+        newLine.push(someObject.prefecture);
+        // 市区町村
+        newLine.push(someObject.city);
+        // 番地・マンション名
+        let address = someObject.address || '';
+        if (someObject.building) {
+          address = address + someObject.building;
         }
-        return true;
+        newLine.push(address);
+        // 電話番号
+        newLine.push(someObject.tel);
+        // FAX番号
+        newLine.push('""');
+        // // メールアドレス
+        // newLine.push(someObject.email || '""');
+        // 寄附金額
+        newLine.push(someObject.total);
+        // 寄附金の払込方法
+        newLine.push('"クレジットカード"');
+        // クレジット与信結果
+        newLine.push('""');
+        // 同意確認
+        newLine.push('""');
+        // 寄附情報の公表
+        newLine.push('""');
+        // 地域広報誌等の送付
+        newLine.push('""');
+        // メールマガジン送付
+        newLine.push('""');
+        // 備考
+        newLine.push('""');
+        // お礼の品の辞退
+        newLine.push('""');
+
+        let allProducts = [];
+        someObject.products.map(item => {
+          for (let j = 0; j < item.quantity; j++) {
+            allProducts.push(item);
+          }
+          return true;
+        });
+
+        let productFirst = null;
+        // progress set product to csv
+        // お礼の品_1 => お礼の品_maxGroupColumn
+        for (let i = 1; i <= maxGroupColumn; i++) {
+          let item = allProducts[i - 1];
+          if (i === 1) {
+            productFirst = item;
+          }
+          let pCodeName = '';
+          if (item) {
+            pCodeName = '[' + item.product.code + '] ' + item.product.name; // product code and name
+          }
+
+          newLine.push(pCodeName);
+        }
+
+        // ご不在期間
+        newLine.push('""');
+        // お届け先_備考
+        newLine.push('""');
+        // アンケート_ご出身地
+        newLine.push('""');
+        // アンケート_性別
+        newLine.push('""');
+        // アンケート_年代
+        newLine.push('""');
+        // アンケート_生年
+        newLine.push('""');
+        // アンケート_動機
+        newLine.push('""');
+        // アンケート_何回目
+        newLine.push('""');
+        // アンケート_どこで知りましたか
+        newLine.push('""');
+        // アンケート_応援メッセージ
+        newLine.push('""');
+
+        writeStream.write(newLine.join(',') + '\n', () => { });
       });
 
-      let productFirst = null;
-      // progress set product to csv
-      // お礼の品_1 => お礼の品_maxGroupColumn
-      for (let i = 1; i <= maxGroupColumn; i++) {
-        let item = allProducts[i - 1];
-        if (i === 1) {
-          productFirst = item;
-        }
-        let pCodeName = '';
-        if (item) {
-          pCodeName = '[' + item.product.code + '] ' + item.product.name; // product code and name
-        }
-
-        newLine.push(pCodeName);
-      }
-
-      // ご不在期間
-      newLine.push('""');
-      // お届け先_備考
-      newLine.push('""');
-      // アンケート_ご出身地
-      newLine.push('""');
-      // アンケート_性別
-      newLine.push('""');
-      // アンケート_年代
-      newLine.push('""');
-      // アンケート_生年
-      newLine.push('""');
-      // アンケート_動機
-      newLine.push('""');
-      // アンケート_何回目
-      newLine.push('""');
-      // アンケート_どこで知りましたか
-      newLine.push('""');
-      // アンケート_応援メッセージ
-      newLine.push('""');
-
-      writeStream.write(newLine.join(',') + '\n', () => { });
-    });
+    }
 
     writeStream.end();
 

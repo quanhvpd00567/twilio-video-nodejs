@@ -218,5 +218,8 @@ exports.masterdata = {
       married_only_income: '4,312,000円',
       married_with_child_income: '4,297,000円'
     }
+  ],
+  usage_system: [
+    { id: 1, value: 'Furusato 360' }
   ]
 };

@@ -19,14 +19,15 @@
 
     function onCreate() {
       prepareCondition(false);
+
       handleSearch();
     }
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('orders', clear);
       vm.condition.export_status = 1;
-      // vm.condition.is_usage_system = 'all';
-      // vm.condition.sort_column = 'number';
+      // vm.condition.is_usage_system = vm.master.usage_system[0].id;
+      vm.usage_system = vm.master.usage_system[0];
       vm.condition.sort_direction = '+';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
       vm.dateOptionsCreatedMax = { showWeeks: false, minDate: null };
@@ -40,6 +41,8 @@
       vm.listIds = [];
       vm.ids = [];
       vm.listIdsAll = [];
+
+      vm.condition.is_usage_system = vm.usage_system.id;
 
       OrderApi.list(vm.condition)
         .success(function (res) {
