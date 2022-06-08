@@ -50,7 +50,7 @@ function AppController(
     $scope.role = Authentication.user.roles[0];
   }
   $scope.isAdmin = $scope.role === 'admin';
-  $scope.isAdminOrSubAdmin = $scope.role === 'admin' || $scope.role === 'sub_admin';
+  $scope.isAdminOrSubAdmin = $scope.role === 'admin';
   $scope.isMunicipality = $scope.role === 'municipality';
 
   /** roles */
@@ -77,8 +77,7 @@ function AppController(
     var role = user && user.roles[0];
     switch (role) {
       case 'admin':
-      case 'sub_admin':
-        $scope.handleBackScreen('admin.products.list');
+        $scope.handleBackScreen('admin.orders.history');
         break;
       case 'municipality':
         $scope.handleBackScreen('municipality.orders.list');

@@ -298,10 +298,6 @@ exports.productById = function (req, res, next, id) {
 
 /** ====== PRIVATE ========= */
 function getQuery(condition, auth) {
-  // let municipalityId = auth.municipality;
-  // if (auth.roles[0] === constants.ROLE.ADMIN || auth.roles[0] === constants.ROLE.SUB_ADMIN) {
-  //   municipalityId = condition.municipalityId;
-  // }
   var and_arr = [{ deleted: false }];
   if (condition.keyword && condition.keyword !== '') {
     var or_arr = [
@@ -401,12 +397,12 @@ function getQueryAggregate(condition) {
   }, {
     $match: matchUser
   },
-  {
-    $addFields: {
-      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
-      munic_name: { $convert: { input: '$munic.name', to: 'string' } }
+    {
+      $addFields: {
+        munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+        munic_name: { $convert: { input: '$munic.name', to: 'string' } }
+      }
     }
-  }
   );
 
   // Match location

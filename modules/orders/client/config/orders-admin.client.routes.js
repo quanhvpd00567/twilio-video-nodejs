@@ -19,7 +19,7 @@
         controller: 'AdminOrderListController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: '注文一覧'
         }
       });

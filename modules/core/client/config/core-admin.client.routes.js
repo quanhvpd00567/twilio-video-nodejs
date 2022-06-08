@@ -14,7 +14,7 @@
         url: '/admin',
         template: '<ui-view/>',
         data: {
-          roles: ['admin', 'sub_admin']
+          roles: ['admin']
         }
       })
       .state('municipality', {
@@ -40,7 +40,7 @@
         controller: 'HomeController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: 'ホーム'
         }
       });

@@ -15,9 +15,6 @@
     vm.isDisable = true;
     vm.ids = [];
 
-    vm.isAdminMunic = $scope.Authentication.user.roles[0] === 'munic_admin';
-    vm.isAdminAndSubAdmin = ['admin', 'sub_admin'].includes($scope.Authentication.user.roles[0]);
-
     onCreate();
 
     function onCreate() {

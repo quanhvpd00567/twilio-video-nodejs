@@ -19,7 +19,7 @@
         controller: 'OrderHistoryController',
         controllerAs: 'vm',
         data: {
-          roles: ['admin', 'sub_admin'],
+          roles: ['admin'],
           pageTitle: '寄付履歴'
         }
       });

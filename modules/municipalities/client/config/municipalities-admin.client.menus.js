@@ -11,7 +11,7 @@
   function menuConfig(menuService) {
     menuService.addMenuItem('topbar', {
       position: 4,
-      roles: ['admin', 'sub_admin'],
+      roles: ['admin'],
       class: 'fa fa-area-chart',
       title: '自治体管理',
       state: 'admin.municipalities.list',

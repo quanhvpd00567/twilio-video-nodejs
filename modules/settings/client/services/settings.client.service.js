@@ -19,19 +19,6 @@
     this.getInfo = function (os) {
       return $http.get('/api/info');
     };
-    this.listPPSSetting = function (condition) {
-      return $http.post('/api/settings/pps/paging', { condition: condition }, {});
-    };
-    this.addOrUpdateConfigSet = function (configSet) {
-      return $http.post('/api/settings/config-set/add-or-update', { configSet: configSet });
-    };
-    this.deleteConfigSet = function (_id) {
-      return $http.post('/api/settings/config-set/delete', { _id: _id });
-    };
-
-    this.listAPSSetting = function (condition) {
-      return $http.post('/api/settings/aps/paging', { condition: condition }, {});
-    };
 
     return this;
   }
