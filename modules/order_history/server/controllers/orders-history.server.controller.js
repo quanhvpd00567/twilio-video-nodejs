@@ -22,7 +22,9 @@ const LIMIT = 20;
  */
 exports.history = async function (req, res) {
   try {
-    var query = getQueryAggregates();
+    console.log();
+    let params = req.query;
+    var query = getQueryAggregates(params);
     await Municipality.aggregate(query).then(function (result) {
       if (result) {
         result = result.map(function (item) {
@@ -83,17 +85,25 @@ exports.filterPriceByMunic = async function (req, res) {
 };
 
 /** ====== PRIVATE ========= */
-function getQueryAggregates() {
+function getQueryAggregates(params) {
   let aggregate_arr = [];
+  let and_arr = [{}];
+
+  if (params.municipality && params.municipality !== 'all') {
+    and_arr.push({ _id: new mongoose.Types.ObjectId(params.municipality) });
+  }
+
+  and_arr.push({ $or: [
+    { is_testing: null },
+    { is_testing: false }
+  ] });
+
   aggregate_arr.push({
     $match: {
-      // deleted: false,
-      $or: [
-        { is_testing: null },
-        { is_testing: false }
-      ]
+      $and: and_arr
     }
   });
+
   const thisMonth = moment().month();
 
   aggregate_arr.push({

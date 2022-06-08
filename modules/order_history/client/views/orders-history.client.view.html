@@ -4,15 +4,51 @@
       <form-title></form-title>
     </div>
 
-    <div class="col-xs-6">
+  </div>
+
+  <table-search>
+    <table-search-button>
       <button class="btn btn-primary btn-sm pull-right mg5r" type="button"
       ng-click="vm.onAdminDownloadExcelAll()">
       <i class="fa fa-download"></i> Excel出力
     </button>
-    </div>
-  </div>
+    </table-search-button>
+    <table-search-content>
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'municipalities.list.search.create_from.label' | translate}}  <span class="text-red">*</span></label>
+          <input type="text" name="created_min" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMin"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min" class="form-control"
+            ng-model="vm.condition.created_min" ng-change="vm.onChangeCreatedMin()" />
+        </div>
+      </div>
 
-  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>{{'municipalities.list.search.create_to.label' | translate}}  <span class="text-red">*</span></label>
+          <input type="text" name="created_max" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMax"
+            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')"
+            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max" class="form-control"
+            ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
+              vm.condition.created_max || 'null'
+            }}); vm.onChangeCreatedMax()" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label>自治体  <span class="text-red">*</span></label>
+          <select name="type" class="form-control" ng-model="vm.condition.municipality">
+            <option value="all">すべて </option>
+            <option ng-repeat="item in vm.municipalities" value="{{item._id}}"> {{item.name}}</option>
+          </select>
+        </div>
+      </div>
+    </table-search-content>
+  </table-search>
+
+  <div class="panel-group" style="margin-top: 20px;" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default" ng-repeat="munic in vm.docs track by $index">
       <div class="panel-heading" role="tab" ng-id="munic.municCode">
         <h4 class="panel-title">
