@@ -113,7 +113,7 @@ exports.resetPass = async function (req, res) {
 
     const email_lower = helpServerController.trimAndLowercase(email);
     const [user, newPassword] = await Promise.all([
-      User.findOne({ email_lower, roles: { $in: [constants.ROLE.COMPANY, constants.ROLE.MUNIC_ADMIN, constants.ROLE.MUNIC_MEMBER, constants.ROLE.ADMIN] }, deleted: false }),
+      User.findOne({ email_lower, roles: { $in: [constants.ROLE.MUNICIPALITY, constants.ROLE.ADMIN] }, deleted: false }),
       User.generateRandomPassphrase()
     ]);
 
