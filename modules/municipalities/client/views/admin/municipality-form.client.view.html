@@ -24,7 +24,7 @@
                   <span class="text-red">*</span>
                 </th>
                 <td class="col-xs-10 form-group" show-errors colspan="3">
-                  <select name="prefecture" class="form-control" ng-model="vm.munic.prefecture"
+                  <select name="prefecture" class="form-control" ng-model="vm.munic.prefecture" required
                     ng-options="item as item for item in masterdata.prefectures">
                     <option value="">{{'municipalities.form.prefecture.placeholder' | translate}}</option>
                   </select>
@@ -140,6 +140,10 @@
         </div>
 
         <div class="messages mg30t" ng-if="vm.isSaveClick">
+          <div ng-messages="vm.municForm.prefecture.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.prefecture.error.required' | translate}}
+            </li>
+          </div>
           <div ng-messages="vm.municForm.department.$error" role="alert">
             <li class="text-red" ng-message="required">{{'municipalities.form.department.error.required' | translate}}
             </li>
