@@ -396,14 +396,12 @@ function getQueryAggregate(condition) {
     $unwind: '$munic'
   }, {
     $match: matchUser
-  },
-    {
-      $addFields: {
-        munic_id: { $convert: { input: '$munic._id', to: 'string' } },
-        munic_name: { $convert: { input: '$munic.name', to: 'string' } }
-      }
+  }, {
+    $addFields: {
+      munic_id: { $convert: { input: '$munic._id', to: 'string' } },
+      munic_name: { $convert: { input: '$munic.name', to: 'string' } }
     }
-  );
+  });
 
   // Match location
   let matchLocation = {

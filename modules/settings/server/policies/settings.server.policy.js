@@ -23,7 +23,7 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/settings/pushVersion',
       permissions: '*'
-    },]
+    }]
   }, {
     roles: ['employee'],
     allows: [{
