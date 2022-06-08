@@ -4,6 +4,7 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
+  ObjectId = mongoose.Types.ObjectId,
   Location = mongoose.model('Location'),
   User = mongoose.model('User'),
   path = require('path'),
@@ -71,7 +72,11 @@ exports.paging = async function (req, res) {
     const limit = help.getLimit(condition);
     const options = { page, limit };
 
-    const aggregates = getQueryAggregate(condition);
+    const isMunicipalityQuery = req.user.roles[0] === constants.ROLE.MUNICIPALITY;
+    if (isMunicipalityQuery) {
+      condition.municipalityId = req.user.municipality;
+    }
+    const aggregates = getQueryAggregate(condition, isMunicipalityQuery);
     let result = await Location.aggregatePaginate(Location.aggregate(aggregates).allowDiskUse(true).collation({ locale: 'ja' }), options);
     result = help.parseAggregateQueryResult(result, page);
 
@@ -194,7 +199,7 @@ exports.locationByID = function (req, res, next, id) {
 };
 
 /** ====== PRIVATE ========= */
-function getQueryAggregate(condition) {
+function getQueryAggregate(condition, isMunicipalityQuery) {
   let and_arr = [{
     deleted: false,
     $or: [
@@ -208,6 +213,9 @@ function getQueryAggregate(condition) {
   }
   if (condition.created_max) {
     and_arr.push({ created: { $lte: new Date(condition.created_max) } });
+  }
+  if (isMunicipalityQuery) {
+    and_arr.push({ municipality: new ObjectId(condition.municipalityId) });
   }
 
   let aggregates = [];
@@ -261,7 +269,9 @@ function getQueryAggregate(condition) {
 
   let second_and_arr = [];
   if (condition.keyword && condition.keyword !== '') {
-    second_and_arr.push({ municipality_name: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
+    if (!isMunicipalityQuery) {
+      second_and_arr.push({ municipality_name: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
+    }
     second_and_arr.push({ name: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
     second_and_arr.push({ admin_email: { $regex: '.*' + condition.keyword + '.*', $options: 'i' } });
   }

@@ -18,13 +18,14 @@ moment.locale('ja');
 
 var smtpTransport = nodemailer.createTransport(config.mailer.options);
 
-exports.sendMailAdminCreateMunicipality = function (adminEmail, accountEmail, password, accountName) {
+exports.sendMailAdminCreateMunicipality = function (adminEmail, accountEmail, password, accountName, municName) {
   return new Promise(function (resolve, reject) {
     var template = './modules/core/server/mails/email-admin-create-municipality.server.view.html';
     var subject = helper.getServerMsLoc('ja', 'server.email.subject.create.municipality');
     var data = {
       password: password,
       accountName: accountName,
+      municName,
       domain: config.system.domain
     };
     _sendMailEjs([adminEmail, accountEmail], template, subject, data)

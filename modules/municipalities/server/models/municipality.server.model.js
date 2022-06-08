@@ -23,6 +23,16 @@ var municipalitiesSchema = new Schema({
   fax: { type: String },
   settlement_fee: { type: Number, default: 0 },
 
+  // ワンストップ特例申請書の送付申し込み受付
+  is_apply_need: { type: Number, default: 2 },
+  // 停止期間
+  suspension_period: { type: Number },
+
+  start_month: { type: Number },
+  start_date: { type: Number },
+  end_month: { type: Number },
+  end_date: { type: Number },
+
   created: { type: Date, default: Date.now },
   deleted: { type: Boolean, default: false },
   updated: { type: Date },

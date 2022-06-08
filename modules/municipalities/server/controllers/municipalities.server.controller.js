@@ -73,7 +73,7 @@ exports.create = async function (req, res) {
 
     // Send mail
     try {
-      mailerServerUtil.sendMailAdminCreateMunicipality(req.user.email, accountCreated.email, dataAccount.password, accountCreated.name);
+      mailerServerUtil.sendMailAdminCreateMunicipality(req.user.email, accountCreated.email, dataAccount.password, accountCreated.name, municipalityCreated.name);
     } catch (error) {
       logger.error(error);
     }

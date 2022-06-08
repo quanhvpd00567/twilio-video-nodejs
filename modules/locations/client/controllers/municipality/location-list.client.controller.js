@@ -1,20 +1,14 @@
-﻿(function () {
+(function () {
   'use strict';
 
   angular
-    .module('orders.admin1')
-    .controller('AdminOrderListController', AdminOrderListController);
+    .module('locations.admin')
+    .controller('LocationMunicipalityListController', LocationMunicipalityListController);
 
-  AdminOrderListController.$inject = ['$scope', '$filter', '$location', 'OrderApi'];
+  LocationMunicipalityListController.$inject = ['$scope', 'LocationsApi'];
 
-  function AdminOrderListController($scope, $filter, $location, OrderApi) {
+  function LocationMunicipalityListController($scope, LocationsApi) {
     var vm = this;
-    vm.master = $scope.masterdata;
-    vm.listIds = [];
-    vm.listIdsAll = [];
-    vm.isDisable = true;
-    vm.ids = [];
-
     onCreate();
 
     function onCreate() {
@@ -23,10 +17,8 @@
     }
 
     function prepareCondition(clear) {
-      vm.condition = $scope.prepareCondition('orders', clear);
-      vm.condition.export_status = 1;
-      vm.condition.is_usage_system = 'all';
-      vm.condition.sort_column = 'number';
+      vm.condition = $scope.prepareCondition('locations', clear);
+      vm.condition.sort_column = 'created';
       vm.condition.sort_direction = '-';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
       vm.dateOptionsCreatedMax = { showWeeks: false, minDate: null };
@@ -36,25 +28,18 @@
       if (!isShowingWaiting) {
         $scope.handleShowWaiting();
       }
-
-      vm.listIds = [];
-      vm.ids = [];
-      vm.listIdsAll = [];
-
-      OrderApi.adminList(vm.condition)
+      LocationsApi.list(vm.condition)
         .success(function (res) {
           $scope.handleCloseWaiting();
-          vm.orders = res.docs;
+          vm.docs = res.docs;
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.totalDocs;
-          $scope.conditionFactoryUpdate('orders', vm.condition);
-          $scope.handleCloseWaiting();
+          $scope.conditionFactoryUpdate('locations', vm.condition);
         })
         .error(function (error) {
           $scope.handleCloseWaiting();
-          var message = error && error.data && error.data.message || $filter('translate')('common.data.failed');
-          $scope.handleShowToast(message, true);
+          $scope.handleShowToast($scope.parseErrorMessage(error), true);
         });
     }
 
@@ -62,14 +47,24 @@
     vm.handleConditionChange = function () {
       vm.isChanged = true;
     };
-    vm.handleConditionChanged = function (changed) {
+    vm.handleConditionChanged = function (changed, key, old) {
+      if (!changed && (key === 'created_max')) {
+        if (old) {
+          var valNew = moment(vm.condition[key]);
+          var valOld = moment(old);
+          if (valNew.format('YYYYMMDD') !== valOld.format('YYYYMMDD')) {
+            vm.condition[key] = valNew.hour(23).minute(59).second(59).toDate();
+          }
+        } else {
+          vm.condition[key] = moment(vm.condition[key]).hour(23).minute(59).second(59).toDate();
+        }
+      }
       if (changed || vm.isChanged) {
         vm.isChanged = false;
         vm.condition.page = 1;
         handleSearch();
       }
     };
-
     vm.handlePageChanged = function () {
       handleSearch();
     };
@@ -81,18 +76,7 @@
       vm.condition = $scope.handleSortChanged(vm.condition, sort_column);
       handleSearch();
     };
-
     /** end handle search, sort & paging */
-    vm.onAdminDownloadCsvAll = function () {
-      $scope.handleShowConfirm({
-        message: '注文データをダウンロードします。よろしいですか？'
-      }, function () {
-        OrderApi.adminExport(vm.condition)
-          .success(function (res) {
-            window.open('/' + res.url, '_newtab');
-          });
-      });
-    };
 
     vm.onChangeCreatedMin = function () {
       vm.dateOptionsCreatedMax.minDate = new Date(vm.condition.created_min);
@@ -100,14 +84,6 @@
 
     vm.onChangeCreatedMax = function () {
       vm.dateOptionsCreatedMin.maxDate = new Date(vm.condition.created_max);
-    };
-
-    vm.getOrderFee = function (item) {
-      if (!item.munic_fee || item.munic_fee === 0) {
-        return 0;
-      }
-
-      return (item.munic_fee * item.total) / 100;
     };
   }
 }());

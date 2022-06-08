@@ -189,7 +189,7 @@ module.exports = {
       return false;
     }
 
-    return roles.indexOf(constants.ROLE.ADMIN) !== -1 || roles.indexOf(constants.ROLE.SUB_ADMIN) !== -1;
+    return roles.indexOf(constants.ROLE.ADMIN) !== -1;
   },
 
   isMunicAdminOrMunicMember: function (roles) {

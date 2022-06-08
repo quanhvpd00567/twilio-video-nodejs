@@ -15,6 +15,22 @@ exports.masterdata = {
     { id: 1, value: '販売中' },
     { id: 2, value: '受付終了' }
   ],
+  apply_needs: [
+    { id: 2, value: '受付中' },
+    { id: 1, value: '受付停止' }
+  ],
+  APPLY_NEED: {
+    RECEPTION_STOP: 1,
+    ACCEPTING: 2
+  },
+  suspension_periods: [
+    { id: 1, value: 'すぐ' },
+    { id: 2, value: '予約' }
+  ],
+  SUSPENSION_PERIOD: {
+    SOON: 1,
+    RESERVE: 2
+  },
   show_status: [
     { id: 1, value: '表示' },
     { id: 2, value: '非表示' }

@@ -296,7 +296,7 @@ async function generalNumberOrder() {
     number = count + 1;
   }
 
-  return moment().format('YYMMDD') + number;
+  return '27' + moment().format('YYMMDD') + number;
 }
 
 function handleVResponse(vResultCode) {
