@@ -16,7 +16,7 @@
       })
       .state('admin.locations.list', {
         url: '',
-        templateUrl: '/modules/locations/client/views/location-list.client.view.html',
+        templateUrl: '/modules/locations/client/views/admin/location-list.client.view.html',
         controller: 'LocationListController',
         controllerAs: 'vm',
         data: {
@@ -26,7 +26,7 @@
       })
       .state('admin.locations.create', {
         url: '/create',
-        templateUrl: '/modules/locations/client/views/location-form.client.view.html',
+        templateUrl: '/modules/locations/client/views/admin/location-form.client.view.html',
         controller: 'LocationFormController',
         controllerAs: 'vm',
         resolve: {
@@ -39,7 +39,7 @@
       })
       .state('admin.locations.edit', {
         url: '/:locationId/edit',
-        templateUrl: '/modules/locations/client/views/location-form.client.view.html',
+        templateUrl: '/modules/locations/client/views/admin/location-form.client.view.html',
         controller: 'LocationFormController',
         controllerAs: 'vm',
         resolve: {
@@ -52,7 +52,7 @@
       })
       .state('admin.locations.detail', {
         url: '/:locationId/detail',
-        templateUrl: '/modules/locations/client/views/location-detail.client.view.html',
+        templateUrl: '/modules/locations/client/views/admin/location-detail.client.view.html',
         controller: 'LocationDetailController',
         controllerAs: 'vm',
         resolve: {

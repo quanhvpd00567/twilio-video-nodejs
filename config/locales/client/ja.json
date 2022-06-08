@@ -294,6 +294,7 @@
   "locations.form.server.error.number_exists": "職員No.は既に存在します。",
   "locations.list.page.title": "導入施設一覧",
   "locations.list.search.keyword.label": "検索キー（自治体、施設名、メールアドレス）",
+  "locations.municipality_list.search.keyword.label": "検索キー（施設名、メールアドレス）",
   "locations.list.search.keyword.placeholder": "検索キーを入力",
   "locations.list.search.created_min.label": "登録日時(From)",
   "locations.list.search.created_max.label": "登録日時(To)",
