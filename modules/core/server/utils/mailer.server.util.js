@@ -38,6 +38,25 @@ exports.sendMailAdminCreateMunicipality = function (adminEmail, accountEmail, pa
   });
 };
 
+exports.sendMailResetPassForAdmin = function (email, password, name, isEcommerce) {
+  return new Promise(function (resolve, reject) {
+    var template = './modules/core/server/mails/email-reset-password-admin.server.view.html';
+    var subject = helper.getServerMsLoc('ja', 'server.email.subject.user.reset_password');
+    var data = {
+      email: email,
+      password: password,
+      name: name
+    };
+    _sendMailEjs(email, template, subject, data, isEcommerce)
+      .then(function () {
+        resolve(true);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
 // exports.sendMailSignup = function (email, name, token) {
 //   return new Promise(function (resolve, reject) {
 //     const template = './modules/core/server/mails/email-signup.server.view.html';
@@ -48,25 +67,6 @@ exports.sendMailAdminCreateMunicipality = function (adminEmail, accountEmail, pa
 //       name: name
 //     };
 //     _sendMailEjs(email, template, subject, data)
-//       .then(function () {
-//         resolve(true);
-//       })
-//       .catch(error => {
-//         reject(error);
-//       });
-//   });
-// };
-
-// exports.sendMailResetPassForAdmin = function (email, password, name, isEcommerce) {
-//   return new Promise(function (resolve, reject) {
-//     var template = './modules/core/server/mails/email-reset-password-admin.server.view.html';
-//     var subject = helper.getServerMsLoc('ja', 'server.email.subject.user.reset_password');
-//     var data = {
-//       email: email,
-//       password: password,
-//       name: name
-//     };
-//     _sendMailEjs(email, template, subject, data, isEcommerce)
 //       .then(function () {
 //         resolve(true);
 //       })
