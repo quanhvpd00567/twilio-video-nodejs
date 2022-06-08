@@ -81,20 +81,14 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.location.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
 
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <tags-input ng-model="vm.product.locations"
-                    display-property="name"
-                    required
-                    placeholder="Add a location"
+                  <tags-input ng-model="vm.product.locations" display-property="name" placeholder="Add a location"
                     replace-spaces-with-dashes="false">
-                    <auto-complete source="vm.locations"
-                                   min-length="0"
-                                   load-on-focus="true"
-                                   load-on-empty="true"
-                                   max-results-to-show="32">
+                    <auto-complete source="vm.locations" min-length="0" load-on-focus="true" load-on-empty="true"
+                      max-results-to-show="32">
                     </auto-complete>
                   </tags-input>
                 </td>
@@ -154,7 +148,7 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.expire_status.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
                   <label class="radio-inline" ng-repeat="item in vm.master.expire_status">
@@ -173,18 +167,6 @@
                 </td>
               </tr>
 
-              <!-- 申込条件 -->
-              <tr>
-                <th class="col-xs-2">
-                  {{'products.form.is_apply_condition.label' | translate}}
-                </th>
-                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <input type="checkbox" id="is_apply_condition""
-                    name=" is_apply_condition" ng-model="vm.product.is_apply_condition" ng-disabled="true">
-                  <span for="is_apply_condition" style="cursor:pointer;">オンライン決済限定</span>
-                </td>
-              </tr>
-
               <!-- 取扱い事業者 -->
               <tr>
                 <th class="col-xs-2">
@@ -197,11 +179,23 @@
                 </td>
               </tr>
 
+              <!-- 申込条件 -->
+              <tr>
+                <th class="col-xs-2">
+                  {{'products.form.is_apply_condition.label' | translate}}
+                </th>
+                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
+                  <input type="checkbox" id="is_apply_condition""
+                        name=" is_apply_condition" ng-model="vm.product.is_apply_condition" ng-disabled="true">
+                  <span for="is_apply_condition" style="cursor:pointer;">オンライン決済限定</span>
+                </td>
+              </tr>
+
               <!-- 取扱い数量 -->
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.stock_quantity.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4">
                   <div style="display: inline-block;" class="form-group" show-errors>
@@ -228,7 +222,7 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.max_quantity.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
                   <div style="display: inline-block;" class="form-group" show-errors>
@@ -254,7 +248,7 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.deadline.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4 " colspan="{{vm.product._id ? 3 : ''}}">
                   <div style="display: inline-block;" class="form-group" show-errors>
@@ -278,12 +272,12 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.description.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4 form-group" show-errors colspan="{{vm.product._id ? 3 : ''}}">
                   <textarea class="form-control" placeholder="{{'products.form.description.placeholder' | translate}}"
                     name="description" rows="5" ng-model="vm.product.description" maxlength="1000" ng-maxlength="1000"
-                    required></textarea>
+                    ></textarea>
                 </td>
               </tr>
 
@@ -500,7 +494,7 @@
             <li class="text-red" ng-message="required">{{'products.form.price.error.required' | translate}}</li>
             <li class="text-red" ng-message="pattern">{{'products.form.price.error.invalid' | translate}}</li>
           </div>
-<!-- 
+          <!-- 
           <div ng-messages="vm.municMemberForm.capacity.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.capacity.error.required' | translate}}</li>
           </div> -->

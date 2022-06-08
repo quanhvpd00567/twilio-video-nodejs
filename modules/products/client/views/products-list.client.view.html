@@ -6,11 +6,9 @@
   </div>
   <table-search>
     <table-search-button>
-
       <a class="btn btn-success btn-sm pull-right mg5r" ng-click="vm.goToCreate()">
         <span class="glyphicon glyphicon-plus"></span> 登録
       </a>
-
     </table-search-button>
     <table-search-content>
       <div class="row">
@@ -174,8 +172,9 @@
               <td class="w100" ng-bind="product.price | format_money2"></td>
               <td class="w200" ng-bind="product.operator"></td>
               <td class="w200" ng-bind="product.munic_name" ng-if="!isMunicipality"></td>
-              <td class="w200">
+              <td class="w200 text-center">
                 <span ng-repeat="location in product.locations">{{location.name}} <br></span>
+                <span ng-if="product.locations.length > 4">他</span>
               </td>
               <td class="w100"
                 ng-bind="product.sell_status === 2 ? showMasterValue(masterdata.sel_status, product.sell_status) : ''">
