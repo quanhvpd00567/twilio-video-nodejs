@@ -4,7 +4,7 @@
   position: relative;
 }
 
-.btn-mcd{
+.btn-mcd {
   color: white;
   background-color: #73C55B;
   border-color: #73C55B;
@@ -14,36 +14,39 @@ textarea {
   resize: none !important;
 }
 
-.none-border-bottom{
+.none-border-bottom {
   border-bottom: 1px solid #EEEEEE !important;
 }
-.none-border-top{
+
+.none-border-top {
   border-bottom: 1px solid #EEEEEE !important;
 }
-.logo-mini{
+
+.logo-mini {
   font-size: 6px !important;
 }
 
-.main-header .logo{
+.main-header .logo {
   font-size: 11px !important;
 }
 
-#wrapper-company-guest{
+#wrapper-company-guest {
   width: 80%;
   margin: 0 auto;
 }
 
-.apply_form_input{
+.apply_form_input {
   max-width: 80%;
   display: inline-block;
 }
 
-.apply_form_simulation_input{
+.apply_form_simulation_input {
   max-width: 40%;
   display: inline-block;
 }
 
-.input_readonly:focus, .input_readonly:hover {
+.input_readonly:focus,
+.input_readonly:hover {
   background-color: #eeeeee;
   cursor: default;
 }
@@ -65,34 +68,39 @@ textarea {
   z-index: 5;
 }
 
-.dropdown-toggle{
+.dropdown-toggle {
   white-space: unset !important;
 }
 
-.request .collapse-btn{
+.request .collapse-btn {
   font-weight: bold;
   color: gray;
   margin-left: 30px;
   float: right;
 }
 
-.request .approve-btn{
+.request .approve-btn {
   font-weight: bold;
   color: #155615;
   margin-left: 30px;
   float: right;
 }
 
-.request .delete-btn{
+.request .delete-btn {
   font-weight: bold;
   color: red;
   margin-left: 30px;
   float: right;
 }
 
-.request .reject-btn{
+.request .reject-btn {
   font-weight: bold;
   color: rgb(209 178 4);
   margin-left: 30px;
   float: right;
+}
+
+.select_month_date {
+  display: inline-block;
+  width: 30%;
 }

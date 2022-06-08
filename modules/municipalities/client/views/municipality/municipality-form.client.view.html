@@ -98,6 +98,76 @@
             </tbody>
           </table>
         </div>
+
+        <div class="table-custom">
+          <div class="row mg10b">
+            <div class="col-xs-12">
+              <h4>ワンストップ特例申請書の送付設定</h4>
+            </div>
+          </div>
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'municipalities.form.apply_need.label' | translate}}
+                </th>
+                <td class="col-xs-10 form-group" colspan="3">
+                  <label class="radio-inline" ng-repeat="item in masterdata.apply_needs">
+                    <input type="radio" name="is_apply_need" ng-model="vm.munic.is_apply_need"
+                      ng-checked="vm.munic.is_apply_need === item.id" ng-value="{{item.id}}"
+                      id="is_apply_need_{{item.id}}">{{item.value}}
+                  </label>
+                </td>
+              </tr>
+              <tr ng-if="vm.munic.is_apply_need === masterdata.APPLY_NEED.RECEPTION_STOP">
+                <th class="col-xs-2">
+                  {{'municipalities.form.suspension_period.label' | translate}}
+                </th>
+                <td class="col-xs-10 form-group" colspan="3">
+                  <label class="radio-inline" ng-repeat="item in masterdata.suspension_periods">
+                    <input type="radio" name="suspension_period" ng-model="vm.munic.suspension_period"
+                      ng-checked="vm.munic.suspension_period === item.id" ng-value="{{item.id}}"
+                      id="suspension_period_{{item.id}}">{{item.value}}
+                  </label>
+                </td>
+              </tr>
+
+              <tr ng-if="vm.munic.suspension_period === masterdata.SUSPENSION_PERIOD.RESERVE">
+                <th class="col-xs-2">
+                  {{'municipalities.form.start_date.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <select class="form-control select_month_date" name="start_month" required
+                    ng-model="vm.munic.start_month" ng-options="item for item in masterdata.months"
+                    ng-change="vm.handleGenerateStartDatesOfMonth()">
+                    <option value="" disabled>{{'common.label.month' | translate}}</option>
+                  </select>
+                  <select class="form-control select_month_date" name="start_date" required
+                    ng-disabled="!vm.munic.start_month" ng-model="vm.munic.start_date"
+                    ng-options="item for item in vm.datesOfStartMonth">
+                    <option value="" disabled>{{'common.label.date' | translate}}</option>
+                  </select>
+                </td>
+                <th class="col-xs-2">
+                  {{'municipalities.form.end_date.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-4 form-group" show-errors>
+                  <select class="form-control select_month_date" name="end_month" required ng-model="vm.munic.end_month"
+                    ng-options="item for item in masterdata.months" ng-change="vm.handleGenerateEndDatesOfMonth()">
+                    <option value="" disabled>{{'common.label.month' | translate}}</option>
+                  </select>
+                  <select class="form-control select_month_date" name="end_date" required
+                    ng-disabled="!vm.munic.end_month" ng-model="vm.munic.end_date"
+                    ng-options="item for item in vm.datesOfEndMonth">
+                    <option value="" disabled>{{'common.label.date' | translate}}</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="form-group mgnb mg50b text-center">
           <button-save></button-save>
         </div>
@@ -137,6 +207,15 @@
             <li class="text-red" ng-message="number">{{'municipalities.form.settlement_fee.error.number' | translate}}
             </li>
             <li class="text-red" ng-message="min">{{'municipalities.form.settlement_fee.error.min_0' | translate}}</li>
+          </div>
+
+          <div ng-messages="vm.municForm.start_month.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.start_date.error.required' | translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.municForm.end_month.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.end_date.error.required' | translate}}
+            </li>
           </div>
         </div>
       </div>

@@ -9,6 +9,8 @@
 
   function MunicipalityMunicFormController($scope, $filter, MunicipalitiesApi) {
     var vm = this;
+    vm.datesOfStartMonth = [];
+    vm.datesOfEndMonth = [];
     onCreate();
 
     function onCreate() {
@@ -16,6 +18,10 @@
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.munic = res;
+          if (vm.munic.suspension_period && vm.munic.suspension_period === $scope.masterdata.SUSPENSION_PERIOD.RESERVE) {
+            vm.handleGenerateStartDatesOfMonth();
+            vm.handleGenerateEndDatesOfMonth();
+          }
         })
         .error(function (error) {
           $scope.handleCloseWaiting();
@@ -29,6 +35,24 @@
         vm.isSaveClick = true;
         $scope.$broadcast('show-errors-check-validity', 'vm.municForm');
         return false;
+      }
+      if (vm.munic.is_apply_need === $scope.masterdata.APPLY_NEED.ACCEPTING) {
+        vm.munic.suspension_period = null;
+      }
+      if (!vm.munic.suspension_period || vm.munic.suspension_period === $scope.masterdata.SUSPENSION_PERIOD.SOON) {
+        vm.munic.start_month = null;
+        vm.munic.start_date = null;
+        vm.munic.end_month = null;
+        vm.munic.end_date = null;
+      }
+
+      if (vm.munic.start_month && vm.munic.start_date && vm.munic.end_month && vm.munic.end_date) {
+        var year = new Date().getFullYear();
+        if (new Date(vm.munic.end_date + '/' + vm.munic.end_month + '/' + year) <= new Date(vm.munic.start_date + '/' + vm.munic.start_month + '/' + year)) {
+          var message = $filter('translate')('municipalities.form.end_date.error.less_start_date');
+          $scope.handleShowToast(message, true);
+          return;
+        }
       }
 
       $scope.handleShowConfirm({
@@ -54,5 +78,25 @@
         }
       });
     };
+
+    vm.handleGenerateStartDatesOfMonth = function () {
+      vm.datesOfStartMonth = [];
+      for (var i = 1; i <= daysInMonth(vm.munic.start_month); i++) {
+        vm.datesOfStartMonth.push(i);
+      }
+      vm.munic.start_date = vm.datesOfStartMonth[0];
+    };
+
+    vm.handleGenerateEndDatesOfMonth = function () {
+      vm.datesOfEndMonth = [];
+      for (var i = 1; i <= daysInMonth(vm.munic.end_month); i++) {
+        vm.datesOfEndMonth.push(i);
+      }
+      vm.munic.end_date = vm.datesOfEndMonth[0];
+    };
+
+    function daysInMonth(month) {
+      return new Date(new Date().getFullYear(), month, 0).getDate();
+    }
   }
 }());
