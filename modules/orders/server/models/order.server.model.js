@@ -16,6 +16,7 @@ var orderSchema = new Schema({
   user: { type: Schema.ObjectId, ref: 'User', required: true },
   // 自治体
   municipality: { type: Schema.ObjectId, ref: 'Municipality', required: true },
+
   location: { type: Schema.ObjectId, ref: 'Location', required: true },
   // カート
   // cart: { type: Schema.ObjectId, ref: 'Cart' },

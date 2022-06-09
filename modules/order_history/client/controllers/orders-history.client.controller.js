@@ -5,25 +5,46 @@
     .module('orders.admin')
     .controller('OrderHistoryController', OrderHistoryController);
 
-  OrderHistoryController.$inject = ['$scope', '$filter', 'OrderHistoryApi', 'OrderApi'];
+  OrderHistoryController.$inject = ['$scope', '$filter', 'OrderHistoryApi', 'OrderApi', 'ProductApi'];
 
-  function OrderHistoryController($scope, $filter, OrderHistoryApi, OrderApi) {
+  function OrderHistoryController($scope, $filter, OrderHistoryApi, OrderApi, ProductApi) {
     var vm = this;
     vm.master = $scope.masterdata;
     vm.docs;
+    vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
+    vm.dateOptionsCreatedMax = { showWeeks: false, minDate: null };
 
     onCreate();
 
     function onCreate() {
+      prepareCondition();
+      vm.condition.municipality = 'all';
+      getMunicipality();
       handleSearch();
     }
+
+    function prepareCondition(clear) {
+      vm.condition = $scope.prepareCondition('orders-admin', clear);
+    }
+
+    vm.handleConditionChange = function () {
+      vm.isChanged = true;
+    };
+
+    vm.handleConditionChanged = function (changed) {
+      if (changed || vm.isChanged) {
+        vm.isChanged = false;
+        vm.condition.page = 1;
+        handleSearch();
+      }
+    };
 
     function handleSearch(isShowingWaiting) {
       if (!isShowingWaiting) {
         $scope.handleShowWaiting();
       }
 
-      OrderHistoryApi.history()
+      OrderHistoryApi.history(vm.condition)
         .success(function (res) {
           $scope.handleCloseWaiting();
           vm.docs = res;
@@ -108,5 +129,12 @@
           });
       });
     };
+
+    function getMunicipality() {
+      ProductApi.getMunicipalityAll()
+        .success(function (res) {
+          vm.municipalities = res;
+        });
+    }
   }
 }());

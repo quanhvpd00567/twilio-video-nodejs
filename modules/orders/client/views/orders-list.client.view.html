@@ -55,12 +55,11 @@
         </div>
       </div>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="false">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
           <label>利用システム</label>
-          <select name="type" class="form-control" ng-model="vm.condition.is_usage_system">
-            <option value="all">すべて </option>
-            <option ng-repeat="item in vm.master.usage_system" value="{{item.id}}"> {{item.value}}</option>
+          <select name="type" class="form-control" ng-model="vm.usage_system" 
+            ng-options="option.value for option in vm.master.usage_system track by option.id">
           </select>
         </div>
       </div>
