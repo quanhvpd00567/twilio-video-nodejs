@@ -41,7 +41,6 @@ function AppController(
   $scope.dateOptions = { showWeeks: false };
   $scope.timeOptions = { showMeridian: false };
   $scope.socketClient = initSocketClient();
-  $scope.numberOfPendingRequests = $scope.Authentication && $scope.Authentication.user && $scope.Authentication.user.numberOfPendingRequests || 0;
 
   if (!Authentication.user || !Authentication.user.roles || Authentication.user.roles.length === 0) {
     $scope.role = 'guest';

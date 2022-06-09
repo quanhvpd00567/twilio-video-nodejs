@@ -19,9 +19,6 @@
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
     $scope.$state = $state;
-    if ($scope.isMunicipality) {
-      handleReceiveNumberOfPendingRequests();
-    }
 
     function stateChangeSuccess() {
       vm.isCollapsed = false;
@@ -51,23 +48,5 @@
         $state.reload();
       }
     };
-
-    function handleReceiveNumberOfPendingRequests() {
-      if ($scope.socketClient) {
-        $scope.socketClient.on('number_of_pending_requests', function (response) {
-          var numberOfPendingRequests = response && response.numberOfPendingRequests;
-          var municipalityId = response && response.municipalityId;
-          if (municipalityId) {
-            if ($scope.isMunicipality && $scope.Authentication && $scope.Authentication.user && $scope.Authentication.user.municipalityId &&
-              $scope.Authentication.user.municipalityId === municipalityId) {
-              $scope.numberOfPendingRequests = numberOfPendingRequests || 0;
-              if (!$scope.$$phase) {
-                $scope.$digest();
-              }
-            }
-          }
-        });
-      }
-    }
   }
 }());
