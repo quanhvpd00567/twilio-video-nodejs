@@ -25,7 +25,7 @@
           });
         }, 0);
       } else {
-        $scope.handleLoggedIn(Authentication.user);
+        $scope.handleBackToHome(Authentication.user);
       }
     } else {
       $state.go('member.signin');
