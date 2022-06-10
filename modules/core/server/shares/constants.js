@@ -24,6 +24,11 @@ const CONSTANTS = {
     NEW_VERSION_APP_NOTICE: 'PS14'
   },
 
+  SENDING_APPLICATION_FORM: {
+    YES: 1,
+    NO: 2
+  },
+
   UPDATE_APP_TYPE: {
     OPTIONAL: 1,
     REQUIRED: 2
