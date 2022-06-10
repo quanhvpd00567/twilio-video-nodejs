@@ -113,7 +113,7 @@ exports.signin = async function (req, res, next) {
       device = JSON.parse(JSON.stringify(device));
       delete device.info;
       const returnUser = pickUser(user);
-      return { success: true, data: { user: returnUser, location: user.location, device: device, version: config && config.version || '' } };
+      return { success: true, data: { user: returnUser, location: user.location, municipality: user.municipality, device: device, version: config && config.version || '' } };
     } catch (error) {
       logger.error(error);
       throw error;
@@ -121,7 +121,7 @@ exports.signin = async function (req, res, next) {
 
     async function verifyEmailAndPassword(email, password) {
       const email_lower = trimAndLowercase(email);
-      const user = await User.findOne({ email_lower, roles: constants.ROLE.LOCATION, deleted: false }).populate('location');
+      const user = await User.findOne({ email_lower, roles: constants.ROLE.LOCATION, deleted: false }).populate([{ path: 'location', path: 'municipality' }]);
 
       if (!user) {
         return { success: false, message: translate['user.signin.user.null'] };
