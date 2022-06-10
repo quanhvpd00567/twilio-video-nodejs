@@ -59,10 +59,12 @@ var orderSchema = new Schema({
     quantity: { type: Number, default: 0 }
   }],
 
+  // 申請書の送付
+  sending_application_form: { type: Number, default: 2 },
   // 申請書の送付_性別
-  apply_sex: { type: Number },
+  application_sex: { type: Number },
   // 申請書の送付_生年月日 YYYY/MM/DD
-  apply_birthday: { type: String },
+  application_birthday: { type: String },
 
   // 申し込み日時
   created: { type: Date, default: Date.now },
