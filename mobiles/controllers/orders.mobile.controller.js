@@ -24,6 +24,36 @@ const veritransResultCodes = Object.keys(veritransResultCode).map(code => {
   return { code: code, message: veritransResultCode[code] };
 });
 
+exports.validateProductsToOrder = async function (req, res) {
+  try {
+    let products = req.body.products || [];
+    if (!products || products.length === 0) {
+      return res.json({ success: true });
+    }
+
+    const productIds = products.map(item => item.productId);
+    const productsToOrder = await Product.find({ _id: { $in: productIds } }).lean();
+
+    let _products = productsToOrder;
+    _products = _products.map((item, index) => {
+      item.orderQuantity = products[index].quantity;
+      return item;
+    });
+
+    const errors = checkSellStatusAndQuantity(_products);
+    if (errors && errors.length > 0) {
+      return res.json({ success: false, errors });
+    }
+
+    return res.json({ success: true });
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).send({
+      message: translate['system.server.error']
+    });
+  }
+};
+
 exports.submitOrder = async function (req, res) {
   try {
     const queueNumber = new Date().getTime() + (Math.random() + 1).toString(36).substring(7);

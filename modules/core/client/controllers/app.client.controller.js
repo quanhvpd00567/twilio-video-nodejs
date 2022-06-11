@@ -41,7 +41,6 @@ function AppController(
   $scope.dateOptions = { showWeeks: false };
   $scope.timeOptions = { showMeridian: false };
   $scope.socketClient = initSocketClient();
-  $scope.numberOfPendingRequests = $scope.Authentication && $scope.Authentication.user && $scope.Authentication.user.numberOfPendingRequests || 0;
 
   if (!Authentication.user || !Authentication.user.roles || Authentication.user.roles.length === 0) {
     $scope.role = 'guest';
@@ -88,7 +87,21 @@ function AppController(
   };
 
   $scope.handleBackScreen = function (state) {
-    $state.go($state.previous.state.name || state, ($state.previous.state.name) ? $state.previous.params : {});
+    $state.go($state.previous.state.name || state, $state.previous.state.name ? $state.previous.params : {});
+  };
+
+  $scope.handleBackToHome = function (user) {
+    var role = user && user.roles[0];
+    switch (role) {
+      case 'admin':
+        $state.go('admin.orders.history');
+        break;
+      case 'municipality':
+        $state.go('municipality.orders.list');
+        break;
+      default:
+        break;
+    }
   };
 
   $scope.excelFilter = function (item) {
@@ -105,9 +118,6 @@ function AppController(
     return +number;
   };
 
-  $scope.handleBackScreen = function (state) {
-    $state.go($state.previous.state.name || state, $state.previous.state.name ? $state.previous.params : {});
-  };
   $scope.handleShowToast = function (msg, error) {
     if (error)
       return Notification.error({ message: msg + '', title: '<i class="glyphicon glyphicon-remove"></i> エラー: ' });

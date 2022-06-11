@@ -9,4 +9,6 @@ var controller = require('../controllers/orders.mobile.controller'),
 module.exports = function (app) {
   app.route('/api/mobile/orders/submit')
     .all(policy.tokenAllowed).post(controller.submitOrder);
+  app.route('/api/mobile/orders/validate-products')
+    .all(policy.tokenAllowed).post(controller.validateProductsToOrder);
 };

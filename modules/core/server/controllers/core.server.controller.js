@@ -27,7 +27,6 @@ exports.renderIndex = function (req, res) {
       email: validator.escape(req.user.email),
       created: req.user.created.toString(),
       municipalityId: req.user.municipality,
-      numberOfPendingRequests: req.user.numberOfPendingRequests,
       is_can_config_version: req.user.is_can_config_version,
       is_required_update_password: req.user.is_required_update_password,
       roles: req.user.roles
