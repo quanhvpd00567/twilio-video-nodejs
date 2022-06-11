@@ -1,6 +1,7 @@
 <div class="btn-group" style="width: 100%">
   <button type="button" class="btn dropdown-toggle" ng-class="classesBtn" ng-click="toggleDropdown()" ng-disabled="disabled" style="white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis;">
-      {{getButtonText()}}&nbsp;<span class="caret"></span>
+      {{getButtonText()}}&nbsp;
+      <span class="caret"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-form"
       ng-style="{display: open ? 'block' : 'none'}" style="width: 100%; overflow-x: auto">
@@ -18,7 +19,7 @@
           class="divider">
       </li>
 
-      <li role="presentation" ng-repeat="option in selectedOptions" class="active">
+      <li role="presentation" ng-repeat="option in selectedOptions" ng-if="!isShowList" class="active">
           <a class="item-selected" href="" title="{{showTooltip ? getDisplay(option) : ''}}" ng-click="toggleItem(option); $event.stopPropagation()" style="overflow-x: hidden;text-overflow: ellipsis">
               <span class="glyphicon glyphicon-remove"></span>
               {{getDisplay(option)}}
