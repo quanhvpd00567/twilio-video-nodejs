@@ -18,6 +18,8 @@
       restrict: 'AE',
       scope: {
         options: '=',
+        onChange: '=',
+        isShowList: '=?',
         displayProp: '@',
         idProp: '@',
         searchLimit: '=?',
@@ -86,8 +88,11 @@
               return false;
             });
             $scope.unselectedOptions = $scope.resolvedOptions.filter(function (el) {
-              return $scope.selectedOptions.indexOf(el) < 0;
+              return true;
             });
+            if ($scope.onChange && $scope.resolvedOptions.length > 0) {
+              $scope.onChange($scope.selectedOptions);
+            }
           }
         };
 
@@ -173,6 +178,9 @@
             if ($scope.idProp) {
               return multiselect.getRecursiveProperty(item, $scope.idProp);
             } else {
+              if ($scope.idProp === undefined) {
+                return '';
+              }
               $log.error('Multiselect: when using objects as model, a idProp value is mandatory.');
               return '';
             }
@@ -215,6 +223,7 @@
             $scope.options().then(function (resolvedOptions) {
               $scope.resolvedOptions = resolvedOptions;
               updateSelectionLists();
+
             });
           }
         };
