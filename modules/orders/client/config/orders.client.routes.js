@@ -20,7 +20,7 @@
         controllerAs: 'vm',
         data: {
           roles: ['municipality'],
-          pageTitle: '注文一覧'
+          pageTitle: '寄付履歴一覧'
         }
       });
   }
