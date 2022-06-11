@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Device = mongoose.model('Device'),
   Config = mongoose.model('Config'),
+  Municipality = mongoose.model('Municipality'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   mailerServerUtils = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   master_data = require(path.resolve('./config/lib/master-data')),
@@ -352,7 +353,8 @@ exports.notif_decrease = function (req, res) {
 
 exports.home_info = async function (req, res) {
   try {
-    return res.json({});
+    const municipality = await Municipality.findById(req.user.municipality).lean();
+    return res.json({ municipality });
   } catch (error) {
     logger.error(error);
     return res.status(500).send({ message: translate['system.server.error'] });
