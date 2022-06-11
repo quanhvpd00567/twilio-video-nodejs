@@ -69,10 +69,10 @@
                   <span class="text-red">*</span>
                 </th>
 
-                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <select class="form-control" ng-change="vm.onChangeMunic()" required
+                <td class="col-xs-4 form-group" show-errors colspan="{{vm.product._id ? 3 : ''}}">
+                  <select class="form-control" ng-change="vm.onChangeMunic()" required name="municipality"
                     ng-model="vm.product.municipality">
-                    <option value="" disabled selected>Select your munic</option>
+                    <option value="" selected disabled>自治体を選択</option>
                     <option ng-repeat="item in vm.municipalities" value="{{item._id}}"> {{item.name}}</option>
                   </select>
                 </td>
@@ -85,12 +85,28 @@
                 </th>
 
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <tags-input ng-model="vm.product.locations" display-property="name" placeholder="Add a location"
-                    replace-spaces-with-dashes="false">
-                    <auto-complete source="vm.locations" min-length="0" load-on-focus="true" load-on-empty="true"
-                      max-results-to-show="32">
-                    </auto-complete>
-                  </tags-input>
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <multiselect  ng-model="vm.productLocations" name="locations" 
+                        show-search="true" id-prop="_id" display-prop="name"
+                        on-change="vm.onChangeProductLocations"
+                        ng-disabled="!vm.product.municipality"
+                        placeholder="導入施設を選択"
+                        is-show-list="true"
+                        labels="{search: '検索'}"
+                        options="vm.locations">
+                      </multiselect>
+                    </div>
+                    
+                    <div class="col-xs-9">
+                      <div class="tags-container">
+                        <div class="tag" ng-if="vm.product.locations.length > 0" ng-repeat="item in vm.product.locations track by $index">
+                          <span class="tag__name">{{item.name}}</span>
+                          <button class="tag__remove" type="button" ng-click="vm.onRemoveTagLocation(item)">×</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -204,8 +220,7 @@
                         ng-checked="vm.product.is_set_stock_quantity === item.id" value="{{item.id}}"
                         id="stock_quantity_{{item.id}}">{{item.value}}
                     </label>
-                    <input type="hidden" name="is_set_stock_quantity" ng-model="vm.product.is_set_stock_quantity"
-                      required>
+                    <input type="hidden" name="is_set_stock_quantity" ng-model="vm.product.is_set_stock_quantity">
                   </div>
                   <div style="display: inline-block; margin-bottom: 0;" class="form-group" show-errors>
                     <input type="number" name="stock_quantity" class="form-control" ng-model="vm.product.stock_quantity"
@@ -231,7 +246,7 @@
                         ng-checked="vm.product.is_set_max_quantity === item.id" value="{{item.id}}"
                         id="is_set_max_quantity_{{item.id}}">{{item.value}}
                     </label>
-                    <input type="hidden" name="is_set_max_quantity" ng-model="vm.product.is_set_max_quantity" required>
+                    <input type="hidden" name="is_set_max_quantity" ng-model="vm.product.is_set_max_quantity">
                   </div>
                   <div style="display: inline-block; margin-bottom: 0;" class="form-group" show-errors>
                     <input type="number" name="max_quantity" class="form-control" ng-model="vm.product.max_quantity"
@@ -257,7 +272,7 @@
                         ng-checked="vm.product.is_deadline === item.id" value="{{item.id}}"
                         id="is_deadline_{{item.id}}">{{item.value}}
                     </label>
-                    <input type="hidden" name="is_deadline" ng-model="vm.product.is_deadline" required>
+                    <input type="hidden" name="is_deadline" ng-model="vm.product.is_deadline">
                   </div>
                   <div style="display: inline-block; margin-bottom: 0;" class="form-group" show-errors>
                     <input type="text" name="deadline" class="form-control" ng-model="vm.product.deadline"
@@ -276,8 +291,8 @@
                 </th>
                 <td class="col-xs-4 form-group" show-errors colspan="{{vm.product._id ? 3 : ''}}">
                   <textarea class="form-control" placeholder="{{'products.form.description.placeholder' | translate}}"
-                    name="description" rows="5" ng-model="vm.product.description" maxlength="1000" ng-maxlength="1000"
-                    ></textarea>
+                    name="description" rows="5" ng-model="vm.product.description" maxlength="1000"
+                    ng-maxlength="1000"></textarea>
                 </td>
               </tr>
 
@@ -482,6 +497,11 @@
         </div>
 
         <div class="messages mg30t" ng-if="vm.isSaveClick">
+
+          <div ng-messages="vm.municMemberForm.municipality.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'products.form.munic.error.required' | translate}}</li>
+          </div>
+
           <div ng-messages="vm.municMemberForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.name.error.required' | translate}}</li>
           </div>

@@ -16,7 +16,8 @@
     vm.numberOfUploadedImages = 0;
     vm.numberOfSelectedImages = 0;
     vm.showBtnChooseFile = true;
-    // vm.locations = [];
+    vm.locations = [];
+    vm.productLocations = [];
     vm.constants = {
       OK: 1, // あり
       IS_ACCEPT_SCHEDULE: 1, // 指定不可
@@ -91,12 +92,15 @@
           vm.showBtnChooseFile = false;
         }
 
-        vm.product.municipality = vm.product.municipality._id;
-
-        if (!$scope.isMunicipality) {
-          getLocationByMunic();
+        if (vm.product.municipality) {
+          vm.product.municipality = vm.product.municipality._id;
+        } else {
+          vm.product.municipality = '';
         }
 
+        if (!$scope.isMunicipality && vm.product.municipality) {
+          getLocationByMunic();
+        }
       }
       prepareUploaderImages();
     }
@@ -354,10 +358,6 @@
 
         calculateProgressToEndUploadSession();
       };
-
-      // vm.uploadImages.onCompleteAll = function () {
-      //   endUploadSession();
-      // };
     }
 
     function calculateProgressToEndUploadSession() {
@@ -419,15 +419,29 @@
     }
 
     function getLocationByMunic() {
-      ProductApi.getLocationByMunic(vm.product.municipality)
-        .success(function (res) {
-          vm.locations = res;
-        });
+      if (vm.product.municipality) {
+        ProductApi.getLocationByMunic(vm.product.municipality)
+          .success(function (res) {
+            vm.locations = res;
+            vm.productLocations = vm.product.locations;
+          });
+      }
     }
 
     vm.onChangeMunic = function () {
-      vm.product.locations = [];
       getLocationByMunic();
+    };
+
+    vm.onRemoveTagLocation = function (item) {
+      vm.productLocations = vm.product.locations.filter(function (location) {
+        return location._id !== item._id;
+      });
+    };
+
+    vm.onChangeProductLocations = function (items) {
+      if (items !== undefined) {
+        vm.product.locations = items;
+      }
     };
   }
 }());
