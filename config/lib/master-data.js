@@ -10,11 +10,11 @@ exports.masterdata = {
   // app
   sending_application_forms: [
     { id: 1, value: '希望する' }, // Yes
-    { id: 2, value: '希望しない' }, // No
+    { id: 2, value: '希望しない' } // No
   ],
   application_sexes: [
     { id: 1, value: '男性' }, // male
-    { id: 2, value: '女性' }, // female
+    { id: 2, value: '女性' } // female
   ],
 
   export_status: [
@@ -26,8 +26,8 @@ exports.masterdata = {
     { id: 2, value: '受付終了' }
   ],
   apply_needs: [
-    { id: 2, value: '受付中' },
-    { id: 1, value: '受付停止' }
+    { id: 2, value: '受付中' }, // ACCEPTING
+    { id: 1, value: '受付停止' } // RECEPTION_STOP
   ],
   APPLY_NEED: {
     RECEPTION_STOP: 1,
