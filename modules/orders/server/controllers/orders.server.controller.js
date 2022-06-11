@@ -273,22 +273,22 @@ exports.exportOrder = async function (req, res) {
         // メールマガジン送付
         newLine.push('""');
         // ワンストップ特例_要望
-        if (someObject.apply_is_need === 1) {
+        if (someObject.sending_application_form === 1) {
           newLine.push('"希望しない"');
         } else {
           newLine.push('"希望する"');
         }
         // ワンストップ特例_性別
-        if (someObject.apply_is_need === 1) {
+        if (someObject.sending_application_form === 1) {
           newLine.push('""');
         } else {
-          newLine.push(someObject.apply_sex === 1 ? '"男"' : '"女"');
+          newLine.push(someObject.application_sex === 1 ? '"男"' : '"女"');
         }
         // ワンストップ特例_生年月日
-        if (someObject.apply_is_need === 1) {
+        if (someObject.sending_application_form === 1) {
           newLine.push('""');
         } else {
-          newLine.push('"' + someObject.apply_birthday || '' + '"');
+          newLine.push('"' + someObject.application_birthday + '"');
         }
         // ワンストップ特例_返送確認日
         newLine.push('""');
