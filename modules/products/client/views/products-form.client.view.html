@@ -69,10 +69,12 @@
                   <span class="text-red">*</span>
                 </th>
 
-                <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
-                  <select class="form-control" ng-change="vm.onChangeMunic()" required
+                <td class="col-xs-4 form-group"  show-errors  colspan="{{vm.product._id ? 3 : ''}}">
+                  <select class="form-control" ng-change="vm.onChangeMunic()"
+                    required
+                    name="municipality"
                     ng-model="vm.product.municipality">
-                    <option value="" disabled selected>Select your munic</option>
+                    <option value="" selected disabled>自治体を選択</option>
                     <option ng-repeat="item in vm.municipalities" value="{{item._id}}"> {{item.name}}</option>
                   </select>
                 </td>
@@ -86,9 +88,9 @@
 
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
                   <tags-input ng-model="vm.product.locations" display-property="name" placeholder="Add a location"
+                    ng-disabled="vm.product.municipality === ''"
                     replace-spaces-with-dashes="false">
-                    <auto-complete source="vm.locations" min-length="0" load-on-focus="true" load-on-empty="true"
-                      max-results-to-show="32">
+                    <auto-complete source="vm.locations" min-length="0" load-on-focus="true" load-on-empty="true">
                     </auto-complete>
                   </tags-input>
                 </td>
@@ -204,8 +206,8 @@
                         ng-checked="vm.product.is_set_stock_quantity === item.id" value="{{item.id}}"
                         id="stock_quantity_{{item.id}}">{{item.value}}
                     </label>
-                    <input type="hidden" name="is_set_stock_quantity" ng-model="vm.product.is_set_stock_quantity"
-                      required>
+                    <!-- <input type="hidden" name="is_set_stock_quantity" ng-model="vm.product.is_set_stock_quantity"
+                      required> -->
                   </div>
                   <div style="display: inline-block; margin-bottom: 0;" class="form-group" show-errors>
                     <input type="number" name="stock_quantity" class="form-control" ng-model="vm.product.stock_quantity"
@@ -231,7 +233,7 @@
                         ng-checked="vm.product.is_set_max_quantity === item.id" value="{{item.id}}"
                         id="is_set_max_quantity_{{item.id}}">{{item.value}}
                     </label>
-                    <input type="hidden" name="is_set_max_quantity" ng-model="vm.product.is_set_max_quantity" required>
+                    <!-- <input type="hidden" name="is_set_max_quantity" ng-model="vm.product.is_set_max_quantity" required> -->
                   </div>
                   <div style="display: inline-block; margin-bottom: 0;" class="form-group" show-errors>
                     <input type="number" name="max_quantity" class="form-control" ng-model="vm.product.max_quantity"
@@ -257,7 +259,7 @@
                         ng-checked="vm.product.is_deadline === item.id" value="{{item.id}}"
                         id="is_deadline_{{item.id}}">{{item.value}}
                     </label>
-                    <input type="hidden" name="is_deadline" ng-model="vm.product.is_deadline" required>
+                    <!-- <input type="hidden" name="is_deadline" ng-model="vm.product.is_deadline" required> -->
                   </div>
                   <div style="display: inline-block; margin-bottom: 0;" class="form-group" show-errors>
                     <input type="text" name="deadline" class="form-control" ng-model="vm.product.deadline"
@@ -482,6 +484,11 @@
         </div>
 
         <div class="messages mg30t" ng-if="vm.isSaveClick">
+
+          <div ng-messages="vm.municMemberForm.municipality.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'products.form.munic.error.required' | translate}}</li>
+          </div>
+
           <div ng-messages="vm.municMemberForm.name.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.name.error.required' | translate}}</li>
           </div>

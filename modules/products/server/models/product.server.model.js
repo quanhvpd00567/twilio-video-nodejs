@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
  */
 var productSchema = new Schema({
   // 自治体
-  municipality: { type: Schema.ObjectId, ref: 'Municipality', required: true },
+  municipality: { type: Schema.ObjectId, ref: 'Municipality' },
   // 出品対象導入施設
   locations: [{ type: Schema.ObjectId, ref: 'Location' }],
   // 販売状態
@@ -35,19 +35,19 @@ var productSchema = new Schema({
   // 取扱い事業者
   operator: { type: String, required: true },
 
-  is_set_stock_quantity: { type: Number, default: 1, required: true },
+  is_set_stock_quantity: { type: Number },
   // 取扱い数量
   stock_quantity: { type: Number },
 
-  is_set_max_quantity: { type: Number, default: 1, required: true },
+  is_set_max_quantity: { type: Number },
   // 購入上限
   max_quantity: { type: Number },
 
-  is_deadline: { type: Number, default: 1, required: true },
+  is_deadline: { type: Number },
   // 申込期日
   deadline: { type: String },
   // 商品説明
-  description: { type: String, required: true },
+  description: { type: String },
   // 代表写真
   avatar: { type: String, required: true },
   // 追加写真

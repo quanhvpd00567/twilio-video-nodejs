@@ -74,10 +74,10 @@ exports.detail = async function (req, res) {
 
 exports.exportOrderAdmin = async function (req, res) {
   try {
-    let conditions = {};
-    if (req.query.id) {
-      conditions._id = req.query.id;
-    }
+    var condition = req.query || {};
+    // if (condition.municipality !== 'all') {
+    //   condition._id = condition.municipality;
+    // }
 
     const FILE_EXT = '.xlsx';
     const TEMPLATE_PATH = config.uploads.order.excel.template_munic_order;
@@ -92,7 +92,7 @@ exports.exportOrderAdmin = async function (req, res) {
     var row = 2;
 
     const auth = req.user;
-    var condition = req.query || {};
+
     var query = getQuery(condition, auth);
     condition.sort_column = 'number';
     var sort = help.getSort(condition);
@@ -254,13 +254,15 @@ exports.exportOrder = async function (req, res) {
         newLine.push(someObject.tel);
         // FAX番号
         newLine.push('""');
-        // // メールアドレス
-        // newLine.push(someObject.email || '""');
+        // メールアドレス
+        newLine.push(someObject.email || '""');
         // 寄附金額
         newLine.push(someObject.total);
         // 寄附金の払込方法
         newLine.push('"クレジットカード"');
         // クレジット与信結果
+        newLine.push('""');
+        // 寄附金の使途 using
         newLine.push('""');
         // 同意確認
         newLine.push('""');
@@ -269,6 +271,26 @@ exports.exportOrder = async function (req, res) {
         // 地域広報誌等の送付
         newLine.push('""');
         // メールマガジン送付
+        newLine.push('""');
+        // ワンストップ特例_要望
+        if (someObject.apply_is_need === 1) {
+          newLine.push('"希望しない"');
+        } else {
+          newLine.push('"希望する"');
+        }
+        // ワンストップ特例_性別
+        if (someObject.apply_is_need === 1) {
+          newLine.push('""');
+        } else {
+          newLine.push(someObject.apply_sex === 1 ? '"男"' : '"女"');
+        }
+        // ワンストップ特例_生年月日
+        if (someObject.apply_is_need === 1) {
+          newLine.push('""');
+        } else {
+          newLine.push('"' + someObject.apply_birthday || '' + '"');
+        }
+        // ワンストップ特例_返送確認日
         newLine.push('""');
         // 備考
         newLine.push('""');
@@ -295,10 +317,33 @@ exports.exportOrder = async function (req, res) {
           if (item) {
             pCodeName = '[' + item.product.code + '] ' + item.product.name; // product code and name
           }
-
           newLine.push(pCodeName);
         }
 
+        // お届け先_名前
+        // お届け先_ふりがな -> お届け希望時間帯
+        let pAddressTo = '';
+        let pAddressfurigana = '';
+        let pZipcode = '';
+        let pPrefecture = '';
+        let pCity = '';
+        let pAddress = '';
+        let pTel = '';
+        newLine.push('"' + pAddressTo + '"');
+        newLine.push('"' + pAddressfurigana + '"');
+        newLine.push('"' + formatZipcode(pZipcode) + '"');
+        newLine.push('"' + pPrefecture + '"');
+        newLine.push('"' + pCity + '"');
+        newLine.push('"' + pAddress + '"');
+        newLine.push('"' + pTel + '"');
+        // お届け希望曜日
+        newLine.push('""');
+        // お届け希望時間帯
+        if (productFirst.accepted_schedule === '指定なし') {
+          newLine.push('"希望なし"');
+        } else {
+          newLine.push('"' + productFirst.accepted_schedule + '"');
+        }
         // ご不在期間
         newLine.push('""');
         // お届け先_備考
@@ -320,9 +365,43 @@ exports.exportOrder = async function (req, res) {
         // アンケート_応援メッセージ
         newLine.push('""');
 
+
+        // お届け先_書類_名前
+        var docFullName = '';
+        // 送り先_書類_郵便番号
+        var docZipcode = '';
+        // 送り先_書類_都道府県
+        var docPrefecture = '';
+        // 送り先_書類_市区町村
+        var docCity = '';
+        // お届け先_書類_番地・マンション名
+        var docAddress = '';
+        var docBuilding = '';
+        // お届け先_書類_電話番号
+        var docTel = '';
+        var docAddressfurigana = '';
+
+        if (docBuilding) {
+          docAddress = `${docAddress}${docBuilding}`;
+        }
+
+        // お届け先_書類_名前
+        newLine.push('"' + docFullName + '"');
+        // お届け先_書類_ふりがな
+        newLine.push('"' + docAddressfurigana + '"');
+        // お届け先_書類_郵便番号
+        newLine.push('"' + formatZipcode(docZipcode) + '"');
+        // お届け先_書類_都道府県
+        newLine.push('"' + docPrefecture + '"');
+        // お届け先_書類_市区町村
+        newLine.push('"' + docCity + '"');
+        // お届け先_書類_番地・マンション名
+        newLine.push('"' + docAddress + '"');
+        // お届け先_書類_電話番号
+        newLine.push('"' + docTel + '"');
+
         writeStream.write(newLine.join(',') + '\n', () => { });
       });
-
     }
 
     writeStream.end();
@@ -477,6 +556,10 @@ function getQuery(condition, auth) {
     and_arr = [{ deleted: false, municipality: new mongoose.Types.ObjectId(auth.municipality) }];
   }
 
+  if (condition.municipality) {
+    and_arr.push({ municipality: new mongoose.Types.ObjectId(condition.municipality) });
+  }
+
   if (condition.shingoren && condition.shingoren !== '') {
     var or_arr = [
       { last_name: { $regex: '.*' + condition.shingoren + '.*', $options: 'i' } },
@@ -527,13 +610,19 @@ function getHeaderCsvRedHouse(maxGroupColumn, x, y) {
     '番地・マンション名',
     '電話番号',
     'FAX番号',
+    'メールアドレス',
     '寄附金額',
     '寄附金の払込方法',
     'クレジット与信結果',
+    '寄附金の使途',
     '同意確認',
     '寄附情報の公表',
     '地域広報誌等の送付',
     'メールマガジン送付',
+    'ワンストップ特例_希望',
+    'ワンストップ特例_性別',
+    'ワンストップ特例_生年月日',
+    'ワンストップ特例_返送確認日',
     '備考',
     'お礼の品の辞退'
   ];
@@ -546,6 +635,15 @@ function getHeaderCsvRedHouse(maxGroupColumn, x, y) {
   }
 
   let header2 = [
+    'お届け先_名前',
+    'お届け先_ふりがな',
+    'お届け先_郵便番号',
+    'お届け先_都道府県',
+    'お届け先_市区町村',
+    'お届け先_番地・マンション名',
+    'お届け先_電話番号',
+    'お届け希望曜日',
+    'お届け希望時間帯',
     'ご不在期間',
     'お届け先_備考',
     'アンケート_ご出身地',
@@ -555,7 +653,14 @@ function getHeaderCsvRedHouse(maxGroupColumn, x, y) {
     'アンケート_動機',
     'アンケート_何回目',
     'アンケート_どこで知りましたか',
-    'アンケート_応援メッセージ'
+    'アンケート_応援メッセージ',
+    'お届け先_書類_名前',
+    'お届け先_書類_ふりがな',
+    'お届け先_書類_郵便番号',
+    'お届け先_書類_都道府県',
+    'お届け先_書類_市区町村',
+    'お届け先_書類_番地・マンション名',
+    'お届け先_書類_電話番号'
   ];
 
   var other = _.concat(header, headerProductNumber, header2);

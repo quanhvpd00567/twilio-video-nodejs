@@ -18,13 +18,12 @@
 
     function onCreate() {
       prepareCondition();
-      vm.condition.municipality = 'all';
       getMunicipality();
       handleSearch();
     }
 
     function prepareCondition(clear) {
-      vm.condition = $scope.prepareCondition('orders-admin', clear);
+      vm.condition = $scope.prepareCondition('orders-admin-export', clear);
     }
 
     vm.handleConditionChange = function () {
@@ -118,12 +117,17 @@
       }
     };
 
-    vm.onAdminDownloadExcelAll = function () {
+    vm.onAdminDownloadExcelAll = function (isValid) {
+      if (!isValid) {
+        vm.isSaveClick = true;
+        $scope.$broadcast('show-errors-check-validity', 'vm.adminExport');
+        return false;
+      }
+
       $scope.handleShowConfirm({
         message: '注文データをダウンロードします。よろしいですか？'
       }, function () {
-        console.log(121212);
-        OrderApi.adminExportExcel()
+        OrderApi.adminExportExcel(vm.condition)
           .success(function (res) {
             window.open('/' + res.url, '_newtab');
           });
