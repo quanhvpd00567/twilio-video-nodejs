@@ -27,8 +27,8 @@
       return $http.get('/api/orders/admin-list', { params: conditions });
     };
 
-    this.adminExportExcel = function () {
-      return $http.get('/api/orders/excport-excel');
+    this.adminExportExcel = function (params) {
+      return $http.get('/api/orders/excport-excel', { params: params });
     };
 
     return this;

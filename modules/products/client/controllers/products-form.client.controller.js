@@ -91,9 +91,13 @@
           vm.showBtnChooseFile = false;
         }
 
-        vm.product.municipality = vm.product.municipality._id;
+        if (vm.product.municipality) {
+          vm.product.municipality = vm.product.municipality._id;
+        } else {
+          vm.product.municipality = '';
+        }
 
-        if (!$scope.isMunicipality) {
+        if (!$scope.isMunicipality && vm.product.municipality) {
           getLocationByMunic();
         }
 
@@ -419,10 +423,14 @@
     }
 
     function getLocationByMunic() {
-      ProductApi.getLocationByMunic(vm.product.municipality)
-        .success(function (res) {
-          vm.locations = res;
-        });
+      if (vm.product.municipality) {
+        ProductApi.getLocationByMunic(vm.product.municipality)
+          .success(function (res) {
+            vm.locations = res;
+          });
+      } else {
+        vm.locations = [];
+      }
     }
 
     vm.onChangeMunic = function () {
