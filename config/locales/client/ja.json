@@ -399,6 +399,8 @@
   "products.list.search.status_note.label": "受付終了していない返礼品のみ表示する",
   "products.list.search.delete_status.label": "削除St.",
   "products.list.search.delete_status_note.label": "削除されていない返礼品のみ表示する",
+  "products.list.search.location.label": "出品対象導入施設",
+  "products.list.search.munic.label": "自治体",
   "products.list.table.header.code.label": "返礼品コード",
   "products.list.table.header.name.label": "返礼品",
   "products.list.table.header.price.label": "価格",

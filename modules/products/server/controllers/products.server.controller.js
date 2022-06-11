@@ -28,8 +28,9 @@ exports.create = async function (req, res) {
       data.municipality = auth.municipality;
     }
 
+
     // check exists code
-    let isExistsCodeInProduct = await Product.findOne({ code: data.code, municipality: auth.municipality, deleted: false }).lean();
+    let isExistsCodeInProduct = await Product.findOne({ code: data.code, municipality: data.municipality, deleted: false }).lean();
 
     if (isExistsCodeInProduct) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'products.form.code.error.exists') });
@@ -131,13 +132,20 @@ exports.update = async function (req, res) {
     if (auth.roles[0] !== 'admin') {
       data.municipality = auth.municipality;
     }
+    let conditionCheckCode = { code: data.code, _id: { $ne: product._id } };
+    if (data.municipality) {
+      conditionCheckCode.municipality = data.municipality;
+    }
 
     // check exists code
-    let isExistsCodeInProduct = await Product.findOne({ code: data.code, municipality: data.municipality, _id: { $ne: product._id } }).lean();
+    let isExistsCodeInProduct = await Product.findOne(conditionCheckCode).lean();
 
-    console.log(isExistsCodeInProduct);
     if (isExistsCodeInProduct) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'products.form.code.error.exists') });
+    }
+
+    if (data.municipality === '') {
+      delete data.municipality;
     }
 
     product = prepareDataUpdate(product, data);
@@ -347,7 +355,7 @@ function getQueryAggregate(condition) {
   }
 
   if (condition.location && condition.location !== 'all') {
-    and_arr.push({ location: new mongoose.Types.ObjectId(condition.location) });
+    and_arr.push({ locations: new mongoose.Types.ObjectId(condition.location) });
   }
 
   if (condition.operator && condition.operator !== '') {
@@ -393,7 +401,9 @@ function getQueryAggregate(condition) {
       as: 'munic'
     }
   }, {
-    $unwind: '$munic'
+    $unwind: {
+      'path': '$munic'
+    }
   }, {
     $match: matchUser
   }, {
@@ -401,12 +411,13 @@ function getQueryAggregate(condition) {
       munic_id: { $convert: { input: '$munic._id', to: 'string' } },
       munic_name: { $convert: { input: '$munic.name', to: 'string' } }
     }
-  });
+  }
+  );
 
   // Match location
   let matchLocation = {
     $and: [
-      { 'location.deleted': { $eq: false } }
+      { 'locations.deleted': false }
     ]
   };
 
@@ -417,6 +428,9 @@ function getQueryAggregate(condition) {
       foreignField: '_id',
       as: 'locations'
     }
+  }
+  , {
+    $match: matchLocation
   }
   );
 
