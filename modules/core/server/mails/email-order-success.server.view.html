@@ -75,7 +75,7 @@
                                     style="color:#666666; font-family:'Open Sans', Helvetica, Arial, sans-serif; font-size:14px; font-weight:400; font-style:normal; letter-spacing:normal; line-height:22px; text-transform:none; text-align:left; padding:0; margin:0">
                                   </p>
                                   <span>
-                                    <%= userName %>様
+                                    <%= name %>様
                                   </span> <br><br>
                                   <span>ふふるをご利用いただき、誠にありがとうございます。</span> <br><br>
 
@@ -87,17 +87,14 @@
                                   <span>以下、お客様の入力内容です。</span> <br>
                                   <span>------------------------------------------------</span> <br>
 
-                                  <span>▼ 使い道</span><br>
-                                  <span>使い道: <%= using.name %></span><br><br>
-
                                   <span>▼ 寄付者情報</span><br>
                                   <span>
                                     メールアドレス: <%= email %><br>
-                                      氏名: <%= last_name + ' ' + first_name %> <br>
-                                        ふりがな: <%= last_name_kana + ' ' + first_name_kana %><br>
+                                      氏名: <%= name %> <br>
+                                        ふりがな: <%= furigana %><br>
                                           郵便番号: <%= zip_code %> <br>
                                             都道府県: <%= prefecture %><br>
-                                              住所: <%= city + ' ' + address%>
+                                              住所: <%= address %>
                                                 <% if(building) { %>
                                                   <span>
                                                     <%= ' ' + building %>
@@ -118,97 +115,26 @@
 
                                       <span>-----------------------------------</span> <br>
                                       <span>合計寄付金額: <%= totalFormatted %>円
-                                          <% if(point) { %>
-                                            （内 <%= pointFormatted %> ポイント利用）
-                                              <% } %>
                                       </span> <br><br>
 
                                       <!-- payment date -->
                                       <span>▼ お支払い方法</span><br>
-                                      <span>お支払い方法: <%= paymentValue %></span><br>
-                                      <span>決済金額: <%= payAmountFormatted %>円</span><br>
+                                      <span>決済金額: <%= totalFormatted %>円</span><br>
                                       <span>決済日時: <%= paymentDate %></span><br><br>
 
                                       <!-- applyIsNeed -->
                                       <span>▼ ワンストップ申請 必要情報の入力</span><br>
-                                      <span>自治体からのワンストップ特例申請書の送付: <%= applyIsNeedValue %></span><br>
+                                      <span>自治体からのワンストップ特例申請書の送付: <%= sendingApplicationFormValue %></span><br>
 
-                                      <% if(apply_is_need===2) { %>
+                                      <% if(sending_application_form===1) { %>
                                         <span>性別: <%= applySexValue %></span><br>
                                         <% } %>
 
-                                          <% if(apply_is_need===2) { %>
+                                          <% if(sending_application_form===1) { %>
                                             <span>性別: <%= applyBirthdayValue %></span><br>
                                             <% } %>
-
-                                              <!-- list products delivery address -->
-                                              <% for(var i=0; i < products.length; i++) { %>
-                                                <span>▼ お届け先<%= i + 1 %></span><br>
-                                                <span>
-                                                  お礼の品: <%= products[i].product.name %> <br>
-                                                    配送先: <%= products[i].last_name + ' ' + products[i].first_name + ' '
-                                                      + products[i].last_name_kana + ' ' + products[i].first_name_kana
-                                                      + ' ' + products[i].zipcode + ' ' + products[i].prefecture + ' ' +
-                                                      products[i].city + ' ' + products[i].address %>
-
-                                                      <% if(products[i].building) { %>
-                                                        <span>
-                                                          <%= ' ' + products[i].building %>
-                                                        </span>
-                                                        <% } %>
-
-                                                          <%= ' ' + products[i].tel%>
-                                                            <br>
-
-                                                            発送期日: <%= products[i].product.ship_date %>
-                                                              <br><br>
-                                                              発送準備が整い次第「発送完了について（お知らせ）」メールが配信されますので、ご確認いただきますようお願いいたします。
-                                                              <br>
-
-                                                              <% if(products[i].accepted_schedule) { %>
-                                                                配送希望: <%= products[i].accepted_schedule %> <br>
-                                                                  <% } %>
-                                                </span> <br>
-                                                <% } %>
-
-                                                  <span>ふるさと納税関連書類のお届け先</span><br>
-                                                  <span>配送先氏名: <%= doc_add_last_name + ' ' + doc_add_first_name + ' ' +
-                                                      doc_add_last_name_kana + ' ' + doc_add_first_name_kana + ' ' +
-                                                      doc_add_zipcode + ' ' + doc_add_prefecture + ' ' + doc_add_city
-                                                      + ' ' + doc_add_address %>
-
-                                                      <% if(doc_add_building) { %>
-                                                        <%= ' ' + doc_add_building%>
-                                                          <% } %>
-
-                                                            <%= ' ' + doc_add_tel %>
-                                                  </span><br><br>
-
-                                                  <span>------------------------------------------------</span> <br>
-                                                  <span>送信日時: <%= currentDate %></span> <br><br>
-
-                                                  <span>
-                                                    尚、このメールへの返信は受け付けておりません。<br>
-                                                    ご不明点がある場合は下記をご確認ください。
-                                                  </span><br><br>
-
-                                                  <span>■申込み内容の変更等は、下部記載の自治体(または自治体委託事業者)連絡先まで直接ご連絡ください。</span><br><br>
-
-                                                  <% if(municipality.contact_name) { %>
-                                                    <span>▼連絡先▼</span> <br>
-                                                    <span>■■<%= municipality.contact_name %>■■</span><br><br>
-                                                    <% } %>
-
-                                                      <!-- municipality contact info -->
-                                                      <% if(municipality.contact_mail) { %>
-                                                        <span>Mail: <%= municipality.contact_mail %></span> <br>
-                                                        <% } %>
-                                                          <% if(municipality.contact_tel) { %>
-                                                            <span>TEL: <%= municipality.contact_tel %></span> <br>
-                                                            <% } %>
-                                                              <% if(municipality.fax) { %>
-                                                                <span>FAX: <%= municipality.fax %></span> <br>
-                                                                <% } %>
+                                              <span>------------------------------------------------</span> <br>
+                                              <span>送信日時: <%= currentDate %></span> <br><br>
                                 </td>
                               </tr>
                             </tbody>
