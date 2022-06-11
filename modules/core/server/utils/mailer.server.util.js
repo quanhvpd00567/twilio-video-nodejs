@@ -57,6 +57,36 @@ exports.sendMailResetPassForAdmin = function (email, password, name, isEcommerce
   });
 };
 
+exports.sendMailOrderSuccess = function (email, order) {
+  return new Promise(function (resolve, reject) {
+    const template = './modules/core/server/mails/email-order-success.server.view.html';
+    let subject = helper.getServerMsLoc('ja', 'server.email.subject.order_success');
+    subject = subject.replace('{municipalityPrefecture}', order.municipality.prefecture);
+    subject = subject.replace('{municipalityName}', order.municipality.name);
+    _sendMailEjs(email, template, subject, order, true)
+      .then(function () {
+        resolve(true);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+exports.sendMailOrderSuccessToMunicipality = function (emails, order) {
+  return new Promise(function (resolve, reject) {
+    const template = './modules/core/server/mails/email-order-success-munic.server.view.html';
+    let subject = helper.getServerMsLoc('ja', 'server.email.subject.order_success_munic');
+    _sendMailEjs(emails, template, subject, order, false)
+      .then(function () {
+        resolve(true);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
 // exports.sendMailSignup = function (email, name, token) {
 //   return new Promise(function (resolve, reject) {
 //     const template = './modules/core/server/mails/email-signup.server.view.html';
@@ -106,36 +136,6 @@ exports.sendMailResetPassForAdmin = function (email, password, name, isEcommerce
 //       name: name
 //     };
 //     _sendMailEjs(email, template, subject, data)
-//       .then(function () {
-//         resolve(true);
-//       })
-//       .catch(error => {
-//         reject(error);
-//       });
-//   });
-// };
-
-// exports.sendMailOrderSuccess = function (email, order) {
-//   return new Promise(function (resolve, reject) {
-//     const template = './modules/core/server/mails/email-order-success.server.view.html';
-//     let subject = helper.getServerMsLoc('ja', 'server.email.subject.order_success');
-//     subject = subject.replace('{municipalityPrefecture}', order.municipality.prefecture);
-//     subject = subject.replace('{municipalityName}', order.municipality.name);
-//     _sendMailEjs(email, template, subject, order, true)
-//       .then(function () {
-//         resolve(true);
-//       })
-//       .catch(error => {
-//         reject(error);
-//       });
-//   });
-// };
-
-// exports.sendMailOrderSuccessToMunicAdminAndMunicMember = function (emails, order) {
-//   return new Promise(function (resolve, reject) {
-//     const template = './modules/core/server/mails/email-order-success-munic.server.view.html';
-//     let subject = helper.getServerMsLoc('ja', 'server.email.subject.order_success_munic');
-//     _sendMailEjs(emails, template, subject, order, false)
 //       .then(function () {
 //         resolve(true);
 //       })

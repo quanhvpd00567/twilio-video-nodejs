@@ -14,6 +14,8 @@ var mongoose = require('mongoose'),
   creditServerController = require(path.resolve('./modules/core/server/controllers/credit.server.controller')),
   orderHandlingServerController = require(path.resolve('./modules/core/server/controllers/order-handling.queue.server.controller')),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
+  helpServer = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
+  mailerServerUtils = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   translate = require(path.resolve('./config/locales/mobile/ja.json'));
 
 moment.tz.setDefault('Asia/Tokyo');
@@ -205,6 +207,41 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     await session.commitTransaction();
     session.endSession();
 
+    // order success -> send mail
+    try {
+      Order.findById(orderCreated._id).populate([
+        { path: 'municipality', select: 'name prefecture', populate: { path: 'admin', select: 'email' } },
+        { path: 'products.product' }
+      ]).lean().exec().then(order => {
+        // mapping order data to mail template
+        order.products = order.products.map(item => {
+          item.priceFormatted = helpServer.formatNumber(item.price);
+          return item;
+        });
+
+        order.totalFormatted = helpServer.formatNumber(order.total);
+        order.paymentDate = moment(order.created).format('YYYY年MM月DD日 HH:mm:ss');
+        order.sendingApplicationFormValue = helpServer.getMasterDataValue('sending_application_forms', order.sending_application_form);
+        if (order.sending_application_form === constants.SENDING_APPLICATION_FORM.YES) {
+          order.applicationSexValue = helpServer.getMasterDataValue('application_sexes', order.application_sex);
+          order.applyBirthdayValue = order.application_birthday || '';
+          if (order.applyBirthdayValue) {
+            order.applyBirthdayValue = order.applyBirthdayValue.replace('/', '年');
+            order.applyBirthdayValue = order.applyBirthdayValue.replace('/', '月');
+            order.applyBirthdayValue = order.applyBirthdayValue + '日';
+          }
+        }
+
+        order.currentDate = moment().format('YYYY/MM/DD HH:mm:ss');
+        order.building = order.building || '';
+
+        mailerServerUtils.sendMailOrderSuccess(order.email, order);
+        mailerServerUtils.sendMailOrderSuccessToMunicipality('phuochung180896+01@gmail.com', order);
+      });
+    } catch (error) {
+      logger.error(error);
+    }
+
     logger.info('Respond success');
     return { queueNumber, success: true };
   } catch (error) {
@@ -306,7 +343,7 @@ async function generalNumberOrder() {
     .countDocuments({ created: { $gte: start, $lte: end } });
 
   if (count === 0) {
-    return moment().format('YYMMDD0001');
+    return '27' + moment().format('YYMMDD0001');
   }
 
   let number = '';
