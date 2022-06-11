@@ -10,11 +10,11 @@ exports.masterdata = {
   // app
   sending_application_forms: [
     { id: 1, value: '希望する' }, // Yes
-    { id: 2, value: '希望しない' }, // No
+    { id: 2, value: '希望しない' } // No
   ],
   application_sexes: [
     { id: 1, value: '男性' }, // male
-    { id: 2, value: '女性' }, // female
+    { id: 2, value: '女性' } // female
   ],
 
   export_status: [

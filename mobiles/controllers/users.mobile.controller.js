@@ -121,7 +121,7 @@ exports.signin = async function (req, res, next) {
 
     async function verifyEmailAndPassword(email, password) {
       const email_lower = trimAndLowercase(email);
-      const user = await User.findOne({ email_lower, roles: constants.ROLE.LOCATION, deleted: false }).populate([{ path: 'location', path: 'municipality' }]);
+      const user = await User.findOne({ email_lower, roles: constants.ROLE.LOCATION, deleted: false }).populate([{ path: 'location' }, { path: 'municipality' }]);
 
       if (!user) {
         return { success: false, message: translate['user.signin.user.null'] };
