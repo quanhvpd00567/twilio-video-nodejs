@@ -236,7 +236,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
         order.building = order.building || '';
 
         mailerServerUtils.sendMailOrderSuccess(order.email, order);
-        mailerServerUtils.sendMailOrderSuccessToMunicipality('phuochung180896+01@gmail.com', order);
+        mailerServerUtils.sendMailOrderSuccessToMunicipality(order.municipality.admin.email, order);
       });
     } catch (error) {
       logger.error(error);
