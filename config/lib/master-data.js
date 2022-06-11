@@ -26,8 +26,8 @@ exports.masterdata = {
     { id: 2, value: '受付終了' }
   ],
   apply_needs: [
-    { id: 2, value: '受付中' },
-    { id: 1, value: '受付停止' }
+    { id: 2, value: '受付中' }, // ACCEPTING
+    { id: 1, value: '受付停止' } // RECEPTION_STOP
   ],
   APPLY_NEED: {
     RECEPTION_STOP: 1,
