@@ -6,10 +6,10 @@
         <div class="row mg10b">
           <div class="col-xs-6">
             <h4>
-              <span class="page_title_clickable" ng-if="!isAdminOrSubAdmin" ui-sref="municipality.products.list">
+              <!-- <span class="page_title_clickable" ng-if="!isAdminOrSubAdmin" ui-sref="municipality.products.list">
                 {{'products.list.page.label' | translate}}
-              </span>
-              <span ng-if="!isAdminOrSubAdmin">&nbsp;></span>
+              </span> -->
+              <!-- <span ng-if="!isAdminOrSubAdmin">&nbsp;></span> -->
               <form-title-only></form-title-only>
             </h4>
           </div>
@@ -513,6 +513,7 @@
           <div ng-messages="vm.municMemberForm.price.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.price.error.required' | translate}}</li>
             <li class="text-red" ng-message="pattern">{{'products.form.price.error.invalid' | translate}}</li>
+            <li class="text-red" ng-message="number">{{'products.form.price.error.invalid' | translate}}</li>
           </div>
           <!-- 
           <div ng-messages="vm.municMemberForm.capacity.$error" role="alert">

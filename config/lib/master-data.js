@@ -74,7 +74,7 @@ exports.masterdata = {
   ],
 
   deadline_status: [
-    { id: 1, value: '通年' },
+    { id: 1, value: 'なし' },
     { id: 2, value: 'その他' }
   ],
 
