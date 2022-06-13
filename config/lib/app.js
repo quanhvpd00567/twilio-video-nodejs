@@ -56,6 +56,6 @@ module.exports.start = function start(callback) {
     });
 
     var socketMobile = require('./socket-mobile');
-    socketMobile.initSocketVisa(appSocketIo);
+    socketMobile.initSocketMobile(appSocketIo);
   });
 };
