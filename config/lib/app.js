@@ -36,9 +36,8 @@ module.exports.start = function start(callback) {
   var _this = this;
 
   _this.init(function (app, db, config) {
-
     // Start the app by listening on <port> at <host>
-    app.listen(config.port, config.host, function () {
+    var appSocketIo = app.listen(config.port, config.host, function () {
       // Create server URL
       var server = (process.env.NODE_ENV === 'secure' ? 'https://' : 'http://') + config.host + ':' + config.port;
       // Logging initialization
@@ -56,6 +55,7 @@ module.exports.start = function start(callback) {
       if (callback) callback(app, db, config);
     });
 
+    var socketMobile = require('./socket-mobile');
+    socketMobile.initSocketVisa(appSocketIo);
   });
-
 };

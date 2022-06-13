@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
   Municipality = mongoose.model('Municipality'),
   User = mongoose.model('User'),
   Product = mongoose.model('Product'),
+  Location = mongoose.model('Location'),
   path = require('path'),
   _ = require('lodash'),
   mailerServerUtil = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
@@ -206,13 +207,16 @@ exports.delete = async function (req, res) {
     session = await mongoose.startSession();
     session.startTransaction();
 
-    // Remove all munic member and munic admin
+    // Remove all munic admin
     await User.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
 
-    // 3: Remove all product
+    // Remove all products
     await Product.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
 
-    //  Delete munic
+    // Remove all locations
+    await Location.updateMany({ municipality: munic._id, deleted: false }, { $set: { deleted: true } }).session(session);
+
+    // Delete munic
     await Municipality.updateOne({ _id: munic._id, deleted: false }, { deleted: true }).session(session);
 
     await session.commitTransaction();
