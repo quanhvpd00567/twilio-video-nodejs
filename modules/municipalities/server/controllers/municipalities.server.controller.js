@@ -46,13 +46,13 @@ exports.create = async function (req, res) {
     const email_lower = trimAndLowercase(dataAccount.email);
     const [isEmailExisting, isNumberExisting] = await Promise.all([
       User.findOne({ email_lower, deleted: false }).lean(),
-      User.findOne({ number: dataAccount.number, roles: constants.ROLE.MUNICIPALITY, deleted: false }).lean()
+      dataAccount.number ? User.findOne({ number: dataAccount.number, roles: constants.ROLE.MUNICIPALITY, deleted: false }).lean() : null
     ]);
 
     if (isEmailExisting) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'common.server.email.error.exists') });
     }
-    if (isNumberExisting) {
+    if (dataAccount.number && isNumberExisting) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.number_exists') });
     }
 
