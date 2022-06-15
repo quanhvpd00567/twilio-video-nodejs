@@ -68,6 +68,10 @@ exports.submitOrder = async function (req, res) {
 
     eventEmitter.on('order_response', function (queueResponse) {
       if (queueResponse && queueResponse.jobId === queueNumber) {
+        if (queueResponse.result) {
+          delete queueResponse.result.queueNumber;
+        }
+
         return res.json(queueResponse.result);
       }
     });
