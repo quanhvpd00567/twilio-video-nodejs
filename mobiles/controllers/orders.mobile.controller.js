@@ -13,6 +13,7 @@ var mongoose = require('mongoose'),
   veritransResultCode = require(path.resolve('./mobiles/controllers/veritrans-result-code.json')),
   creditServerController = require(path.resolve('./modules/core/server/controllers/credit.server.controller')),
   orderHandlingServerController = require(path.resolve('./modules/core/server/controllers/order-handling.queue.server.controller')),
+  eventEmitterServerController = require(path.resolve('./modules/core/server/controllers/event-emitter.server.controller')),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   helpServer = require(path.resolve('./modules/core/server/controllers/help.server.controller')),
   mailerServerUtils = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
@@ -22,6 +23,7 @@ moment.tz.setDefault('Asia/Tokyo');
 moment.locale('ja');
 
 const orderHandlingQueue = orderHandlingServerController.getOrderHandlingQueue();
+const eventEmitter = eventEmitterServerController.getEventEmitter();
 const veritransResultCodes = Object.keys(veritransResultCode).map(code => {
   return { code: code, message: veritransResultCode[code] };
 });
@@ -63,7 +65,12 @@ exports.submitOrder = async function (req, res) {
     orderHandlingQueue.push(function () {
       return handleOrder(req.body, userId, queueNumber, req.user.municipality, req.user.location);
     });
-    return res.json(queueNumber);
+
+    eventEmitter.on('order_response', function (queueResponse) {
+      if (queueResponse && queueResponse.jobId === queueNumber) {
+        return res.json(queueResponse.result);
+      }
+    });
   } catch (error) {
     logger.error(error);
     return res.status(500).send({
