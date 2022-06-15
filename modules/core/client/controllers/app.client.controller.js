@@ -40,7 +40,7 @@ function AppController(
   $scope.formatDate = 'yyyy/MM/dd';
   $scope.dateOptions = { showWeeks: false };
   $scope.timeOptions = { showMeridian: false };
-  $scope.socketClient = initSocketClient();
+  // $scope.socketClient = initSocketClient();
 
   if (!Authentication.user || !Authentication.user.roles || Authentication.user.roles.length === 0) {
     $scope.role = 'guest';
