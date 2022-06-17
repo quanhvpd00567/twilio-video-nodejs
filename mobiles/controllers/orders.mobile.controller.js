@@ -36,7 +36,10 @@ exports.validateProductsToOrder = async function (req, res) {
     }
 
     const productIds = products.map(item => item.productId);
-    const productsToOrder = await Product.find({ _id: { $in: productIds } }).lean();
+    const productsToOrderPromises = productIds.map(productId => {
+      return Product.findById(productId).lean();
+    });
+    const productsToOrder = await Promise.all(productsToOrderPromises);
 
     let _products = productsToOrder;
     _products = _products.map((item, index) => {
@@ -100,7 +103,10 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     }
 
     const productIds = cart.products.map(item => item.productId);
-    let productsToOrder = await Product.find({ _id: { $in: productIds } }).lean();
+    const productsToOrderPromises = productIds.map(productId => {
+      return Product.findById(productId).lean();
+    });
+    let productsToOrder = await Promise.all(productsToOrderPromises);
     cart.products = cart.products.map((item, index) => {
       item.product = productsToOrder[index];
       return item;
