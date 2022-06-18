@@ -18,6 +18,7 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('locations', clear);
+      vm.condition.limitToDisplay = vm.condition.limit;
       vm.condition.sort_column = 'created';
       vm.condition.sort_direction = '-';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
@@ -35,6 +36,7 @@
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.totalDocs;
+          vm.condition.limitToDisplay = vm.condition.limit;
           $scope.conditionFactoryUpdate('locations', vm.condition);
         })
         .error(function (error) {
@@ -80,15 +82,19 @@
 
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: $filter('translate')('locations.list.controller.message.confirm_delete')
+        message: $filter('translate')('locations.list.controller.message.confirm_delete1')
       }, function () {
-        var location = new LocationsService({ _id: _id });
-        location.$remove(function () {
-          handleSearch();
-          var message = $filter('translate')('locations.list.controller.message.delete_success');
-          $scope.handleShowToast(message);
-        }, function (error) {
-          $scope.handleShowToast($scope.parseErrorMessage(error), true);
+        $scope.handleShowConfirm({
+          message: $filter('translate')('locations.list.controller.message.confirm_delete2')
+        }, function () {
+          var location = new LocationsService({ _id: _id });
+          location.$remove(function () {
+            handleSearch();
+            var message = $filter('translate')('locations.list.controller.message.delete_success');
+            $scope.handleShowToast(message);
+          }, function (error) {
+            $scope.handleShowToast($scope.parseErrorMessage(error), true);
+          });
         });
       });
     };
