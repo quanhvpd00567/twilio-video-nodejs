@@ -103,7 +103,7 @@
                   <input type="password" name="password" class="form-control" ng-model="vm.location.admin.password"
                     placeholder="{{'locations.form.password.placeholder' | translate}}"
                     ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/" ng-required="!vm.location._id"
-                    ng-minlength="8" ng-maxlength="16">
+                    ng-minlength="8" maxlength="16">
                   <span><small>{{'locations.form.note_password.label' | translate}}</small></span>
                 </td>
               </tr>
