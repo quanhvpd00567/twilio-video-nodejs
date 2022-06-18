@@ -161,6 +161,7 @@ exports.delete = async function (req, res) {
   try {
     let location = req.model;
     await Location.updateOne({ _id: location._id }, { deleted: true }).session(session);
+    await User.updateMany({ location: location._id }, { deleted: true }).session(session);
 
     await session.commitTransaction();
     session.endSession();

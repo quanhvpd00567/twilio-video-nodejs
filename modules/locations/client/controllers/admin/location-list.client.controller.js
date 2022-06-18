@@ -80,15 +80,19 @@
 
     vm.remove = function (_id) {
       $scope.handleShowConfirm({
-        message: $filter('translate')('locations.list.controller.message.confirm_delete')
+        message: $filter('translate')('locations.list.controller.message.confirm_delete1')
       }, function () {
-        var location = new LocationsService({ _id: _id });
-        location.$remove(function () {
-          handleSearch();
-          var message = $filter('translate')('locations.list.controller.message.delete_success');
-          $scope.handleShowToast(message);
-        }, function (error) {
-          $scope.handleShowToast($scope.parseErrorMessage(error), true);
+        $scope.handleShowConfirm({
+          message: $filter('translate')('locations.list.controller.message.confirm_delete2')
+        }, function () {
+          var location = new LocationsService({ _id: _id });
+          location.$remove(function () {
+            handleSearch();
+            var message = $filter('translate')('locations.list.controller.message.delete_success');
+            $scope.handleShowToast(message);
+          }, function (error) {
+            $scope.handleShowToast($scope.parseErrorMessage(error), true);
+          });
         });
       });
     };
