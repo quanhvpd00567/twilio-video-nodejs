@@ -36,7 +36,10 @@ exports.getConfiguration = function (req, res) {
       prefectures: master_data.masterdata.prefectures,
       sending_application_forms: master_data.masterdata.sending_application_forms,
       application_sexes: master_data.masterdata.application_sexes,
-      simulation_donation: master_data.masterdata.simulation_donation
+      simulation_donation: master_data.masterdata.simulation_donation,
+      sending_application_form_mark: master_data.masterdata.sending_application_form_mark,
+      application_sex_mark: master_data.masterdata.application_sex_mark,
+      hideOneStopDate: master_data.masterdata.hideOneStopDate
     });
   });
 };
