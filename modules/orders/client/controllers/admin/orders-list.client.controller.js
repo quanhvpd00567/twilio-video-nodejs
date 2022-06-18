@@ -24,6 +24,7 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('orders', clear);
+      vm.condition.limitToDisplay = vm.condition.limit;
       vm.condition.export_status = 1;
       vm.condition.is_usage_system = 'all';
       vm.condition.sort_column = 'number';
@@ -48,6 +49,7 @@
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.totalDocs;
+          vm.condition.limitToDisplay = vm.condition.limit;
           $scope.conditionFactoryUpdate('orders', vm.condition);
           $scope.handleCloseWaiting();
         })

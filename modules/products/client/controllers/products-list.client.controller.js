@@ -48,6 +48,7 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('products', clear);
+      vm.condition.limitToDisplay = vm.condition.limit;
       // vm.condition.sort_column = '';
       // vm.condition.sort_direction = '';
       vm.dateOptionsCreatedMin = { showWeeks: false, maxDate: null };
@@ -73,6 +74,7 @@
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.totalDocs;
+          vm.condition.limitToDisplay = vm.condition.limit;
           $scope.conditionFactoryUpdate('products', vm.condition);
           $scope.handleCloseWaiting();
         })

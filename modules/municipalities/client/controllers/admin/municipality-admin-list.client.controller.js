@@ -19,6 +19,7 @@
 
     function prepareCondition(clear) {
       vm.condition = $scope.prepareCondition('municipalities', clear);
+      vm.condition.limitToDisplay = vm.condition.limit;
       // vm.condition.sort_column = '';
       // vm.condition.sort_direction = '';
       vm.dateOptionsCreatedMax = { showWeeks: false, maxDate: null };
@@ -37,6 +38,7 @@
           vm.condition.count = res.docs.length;
           vm.condition.page = res.page;
           vm.condition.total = res.totalDocs;
+          vm.condition.limitToDisplay = vm.condition.limit;
           $scope.conditionFactoryUpdate('municipalities', vm.condition);
           $scope.handleCloseWaiting();
         })
