@@ -79,7 +79,7 @@ module.exports = {
     }]
   },
   system: {
-    domain: 'https://fufuru-stg.techlog.bz/',
+    domain: 'https://fufuru-mft-stg.techlog.bz/',
     env: 'ctest',
     contact_email: 'inquiry@fufuru-tax.jp'
   },

@@ -15,6 +15,7 @@ var mongoose = require('mongoose'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   mailerServerUtils = require(path.resolve('./modules/core/server/utils/mailer.server.util')),
   master_data = require(path.resolve('./config/lib/master-data')),
+  config = require(path.resolve('./config/config')),
   translate = require(path.resolve('./config/locales/mobile/ja.json'));
 
 moment.tz.setDefault('Asia/Tokyo');
@@ -39,7 +40,8 @@ exports.getConfiguration = function (req, res) {
       simulation_donation: master_data.masterdata.simulation_donation,
       sending_application_form_mark: master_data.masterdata.sending_application_form_mark,
       application_sex_mark: master_data.masterdata.application_sex_mark,
-      hideOneStopDate: master_data.masterdata.hideOneStopDate
+      hideOneStopDate: master_data.masterdata.hideOneStopDate,
+      admin_url: config.system.domain
     });
   });
 };
