@@ -31,6 +31,9 @@
         $scope.handleShowWaiting();
       }
 
+      if (!$scope.isValidDate(vm.condition.created_max)) {
+        vm.condition.created_max = null;
+      }
       MunicipalitiesApi.list(vm.condition)
         .success(function (res) {
           $scope.handleCloseWaiting();
