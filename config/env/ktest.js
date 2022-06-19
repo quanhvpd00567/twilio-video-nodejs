@@ -82,7 +82,7 @@ module.exports = {
     }]
   },
   system: {
-    domain: 'http://fufuru-ktest.techlog.bz/',
+    domain: 'http://fufuru-mft-ktest.techlog.bz/',
     env: 'ktest',
     contact_email: 'dev@ktcc.co.jp'
   },
