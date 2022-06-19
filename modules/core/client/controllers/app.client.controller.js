@@ -607,4 +607,8 @@ function AppController(
       || errorMessage || $filter('translate')('common.data.failed');
     return message;
   };
+
+  $scope.isValidDate = function (d) {
+    return d instanceof Date && !isNaN(d);
+  };
 }
