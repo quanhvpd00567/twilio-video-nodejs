@@ -428,8 +428,7 @@ function getQueryAggregate(condition) {
       foreignField: '_id',
       as: 'locations'
     }
-  }
-  , {
+  }, {
     $match: matchLocation
   }
   );
