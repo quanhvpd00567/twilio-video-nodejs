@@ -27,7 +27,7 @@ var productSchema = new Schema({
   // 価格
   price: { type: Number, required: true },
   // 容量
-  capacity: { type: String, required: true },
+  capacity: { type: String },
   // 消費期限
   expire: { type: Number, default: 1, required: true },
   // 消費期限

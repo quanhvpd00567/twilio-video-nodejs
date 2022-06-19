@@ -385,7 +385,6 @@
   "products.form.controller.message.confirm_save": "この返礼品を保存します。よろしいですか？",
   "products.form.controller.message.save_success": "返礼品の保存が完了しました。",
   "products.form.controller.message.save_failed": "返礼品の保存に失敗しました。",
-  "products.form.pictures.controller.message.upload_pictures_success": "",
   "products.form.pictures.controller.message.upload_pictures_failed": "画像データのアップロードが失敗しました。もう一度お試しください。",
   "products.list.page.label": "返礼品一覧",
   "products.list.search.keyword.label": "検索キー（返礼品コード、返礼品）",
