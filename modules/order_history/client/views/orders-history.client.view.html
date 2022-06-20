@@ -103,7 +103,7 @@
             <div class="history-record-number bdbt row" ng-repeat="product in munic.topProductsCount track by $index">
               <div class="text-right col-xs-2 col-sm-1">{{$index + 1}}位</div>
               <div class="col-xs-6 col-sm-8">
-                <a ui-sref="municipality.products.detail({ productId: product._id._id })">{{product._id.name}}</a>
+                <a ui-sref="admin.products.detail({ productId: product._id._id })">{{product._id.name}}</a>
               </div>
               <div class="text-right col-xs-2 col-sm-2 pd1r">
                 {{product.count | format_money :false : true}}
@@ -131,7 +131,7 @@
             <div class="history-record bdbt row" ng-repeat="product in munic.topProductsPrice track by $index">
               <div class="text-right col-xs-2 col-sm-1">{{$index + 1}}位</div>
               <div class="col-xs-6 col-sm-8">
-                <a ui-sref="municipality.products.detail({ productId: product._id._id })">{{product._id.name}}</a>
+                <a ui-sref="admin.products.detail({ productId: product._id._id })">{{product._id.name}}</a>
               </div>
               <div class="text-right col-xs-2 col-sm-2 pd1r">
                 {{product.sum | format_money :false : true}}

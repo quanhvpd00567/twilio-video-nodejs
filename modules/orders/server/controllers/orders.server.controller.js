@@ -128,7 +128,7 @@ exports.exportOrderAdmin = async function (req, res) {
           // 郵便番号;
           filesServerController.setValue(wsExport, row, 4, item.zip_code, 'left');
           // 住所;
-          filesServerController.setValue(wsExport, row, 5, item.prefecture + item.address + item.building, 'left');
+          filesServerController.setValue(wsExport, row, 5, item.prefecture + item.address + item.building || '', 'left');
           // 自治体ID;
           filesServerController.setValue(wsExport, row, 6, item.municipality.code, 'left');
           // 自治体名;
