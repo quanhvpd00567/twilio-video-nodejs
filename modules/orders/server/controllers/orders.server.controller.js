@@ -128,13 +128,14 @@ exports.exportOrderAdmin = async function (req, res) {
           // 郵便番号;
           filesServerController.setValue(wsExport, row, 4, item.zip_code, 'left');
           // 住所;
-          filesServerController.setValue(wsExport, row, 5, item.prefecture + item.address + item.building || '', 'left');
+          let building = item.building ? item.building : '';
+          filesServerController.setValue(wsExport, row, 5, item.prefecture + item.address + building, 'left');
           // 自治体ID;
           filesServerController.setValue(wsExport, row, 6, item.municipality.code, 'left');
           // 自治体名;
           filesServerController.setValue(wsExport, row, 7, item.municipality.name, 'left');
           // 導入施設ID;
-          filesServerController.setValue(wsExport, row, 8, item.location.admin ? item.location.admin.code : null, 'left');
+          filesServerController.setValue(wsExport, row, 8, item.location.admin ? item.location.admin.code : '', 'left');
           // 導入施設名;
           filesServerController.setValue(wsExport, row, 9, item.location.name, 'left');
           // 返礼品コード;
