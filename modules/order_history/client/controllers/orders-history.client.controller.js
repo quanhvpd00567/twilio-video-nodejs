@@ -60,8 +60,6 @@
         return doc.municId === municId;
       });
 
-      console.log(munic);
-
       if (munic && !munic.isFetchDetail) {
         OrderHistoryApi.historyByMunic(municId)
           .success(function (res) {
