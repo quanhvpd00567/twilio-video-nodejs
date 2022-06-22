@@ -38,6 +38,10 @@ const CONSTANTS = {
     ON_SALE: 1,
     END_SALE: 2
   },
+  PRODUCT_SHOW_STATUS: {
+    SHOW: 1,
+    HIDE: 2
+  },
   TRANSACTION_STATUS: {
     SUCCESS: 1,
     FAILED: 2

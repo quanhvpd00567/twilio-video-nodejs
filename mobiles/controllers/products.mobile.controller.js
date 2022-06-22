@@ -16,7 +16,7 @@ exports.list = async function (req, res) {
     const options = {
       sort: '-created', page: page || 1, limit: limit ? Number(limit) : constants.LIMIT_ITEM_PER_PAGE_MOBILE, lean: true
     };
-    let query = { deleted: false, locations: req.user.location };
+    let query = { deleted: false, locations: req.user.location, show_status: constants.PRODUCT_SHOW_STATUS.SHOW };
     const result = await Product.paginate(query, options);
 
     return res.json(result);
