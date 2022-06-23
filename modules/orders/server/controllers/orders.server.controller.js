@@ -343,7 +343,8 @@ exports.exportOrder = async function (req, res) {
         if (productFirst.accepted_schedule === '指定なし') {
           newLine.push('"希望なし"');
         } else {
-          newLine.push('"' + productFirst.accepted_schedule + '"');
+          let accepted_schedule = productFirst.accepted_schedule ? productFirst.accepted_schedule : '';
+          newLine.push('"' + accepted_schedule + '"');
         }
         // ご不在期間
         newLine.push('""');
