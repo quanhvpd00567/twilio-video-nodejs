@@ -13,7 +13,7 @@
       position: 5,
       roles: ['municipality'],
       class: 'fa fa-map-marker',
-      title: '導入施設配信',
+      title: '導入施設管理',
       state: 'municipality.locations.list',
       parrent_state: 'municipality.locations'
     });
