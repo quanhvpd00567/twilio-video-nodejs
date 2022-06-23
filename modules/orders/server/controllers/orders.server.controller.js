@@ -135,7 +135,7 @@ exports.exportOrderAdmin = async function (req, res) {
           // 自治体名;
           filesServerController.setValue(wsExport, row, 7, item.municipality.name, 'left');
           // 導入施設ID;
-          filesServerController.setValue(wsExport, row, 8, item.location.admin ? item.location.admin.code : '', 'left');
+          filesServerController.setValue(wsExport, row, 8, item.location ? item.location.code : '', 'left');
           // 導入施設名;
           filesServerController.setValue(wsExport, row, 9, item.location.name, 'left');
           // 返礼品コード;
@@ -754,8 +754,7 @@ function getQueryAggregate(condition) {
     $unwind: '$munic'
   }, {
     $match: matchUser
-  },
-  {
+  }, {
     $addFields: {
       munic_id: { $convert: { input: '$munic._id', to: 'string' } },
       munic_name: { $convert: { input: '$munic.name', to: 'string' } },
