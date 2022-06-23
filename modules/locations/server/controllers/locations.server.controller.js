@@ -24,14 +24,16 @@ exports.create = async function (req, res) {
 
     const locationObject = {
       name: data.name,
+      code: data.code,
       municipality: data.municipality
     };
     let userObject = data.admin;
     userObject.roles = constants.ROLE.LOCATION;
     const email_lower = help.trimAndLowercase(userObject.email);
-    const [isEmailExisting, isNumberExisting] = await Promise.all([
+    const [isEmailExisting, isNumberExisting, isCodeExisting] = await Promise.all([
       User.findOne({ email_lower, deleted: false }).lean(),
-      userObject.number ? User.findOne({ municipality: locationObject.municipality, number: userObject.number, roles: constants.ROLE.LOCATION, deleted: false }).lean() : null
+      userObject.number ? User.findOne({ municipality: locationObject.municipality, number: userObject.number, roles: constants.ROLE.LOCATION, deleted: false }).lean() : null,
+      Location.findOne({ municipality: locationObject.municipality, deleted: false, code: locationObject.code }).lean()
     ]);
 
     if (isEmailExisting) {
@@ -39,6 +41,9 @@ exports.create = async function (req, res) {
     }
     if (isNumberExisting) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.number_exists') });
+    }
+    if (isCodeExisting) {
+      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.code_exists') });
     }
 
     let locationCreated = new Location(locationObject);
@@ -99,6 +104,7 @@ exports.update = async function (req, res) {
     // Prepare data update
     const dataUpdate = {
       name: body.name,
+      code: body.code,
       municipality: body.municipality
     };
 
@@ -114,9 +120,16 @@ exports.update = async function (req, res) {
       adminUpdate.password = body.password;
     }
 
-    let account = await User.findOne({ deleted: false, _id: req.model.admin._id });
+    let [account, isCodeExisting] = await Promise.all([
+      User.findOne({ deleted: false, _id: req.model.admin._id }),
+      Location.findOne({ deleted: false, _id: { $ne: req.model._id }, municipality: dataUpdate.municipality, code: dataUpdate.code }).lean()
+    ]);
     if (!account) {
       return res.status(422).send({ message: help.getMsLoc(lang, 'locations.server.error.not_found') });
+    }
+
+    if (isCodeExisting) {
+      return res.status(422).send({ message: help.getMsLoc(lang, 'municipalities.form.server.error.code_exists') });
     }
 
     // Check email exists

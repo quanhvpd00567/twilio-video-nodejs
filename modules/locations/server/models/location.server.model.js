@@ -14,6 +14,9 @@ var mongoose = require('mongoose'),
 var locationSchema = new Schema({
   municipality: { type: Schema.ObjectId, ref: 'Municipality', required: true },
   admin: { type: Schema.ObjectId, ref: 'User', required: true },
+
+  // 施設ID
+  code: { type: String, required: true },
   name: { type: String, required: true },
 
   created: { type: Date, default: Date.now },

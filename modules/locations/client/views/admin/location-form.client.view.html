@@ -32,6 +32,16 @@
               </tr>
               <tr>
                 <th class="col-xs-1">
+                  {{'locations.form.code.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="text" name="code" class="form-control" ng-model="vm.location.code"
+                    placeholder="{{'locations.form.code.placeholder' | translate}}" required maxlength="60">
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-1">
                   {{'locations.form.name.label' | translate}}
                   <span class="text-red">*</span>
                 </th>
@@ -131,6 +141,10 @@
         <div class="messages mg30t" ng-if="vm.isSaveClick">
           <div ng-messages="vm.locationForm.municipality.$error" role="alert">
             <li class="text-red" ng-message="required">{{'locations.form.municipality.error.required' | translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.locationForm.code.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'locations.form.code.error.required' | translate}}
             </li>
           </div>
           <div ng-messages="vm.locationForm.name.$error" role="alert">
