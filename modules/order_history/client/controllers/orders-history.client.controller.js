@@ -123,7 +123,7 @@
       }
 
       $scope.handleShowConfirm({
-        message: '注文データをダウンロードします。よろしいですか？'
+        message: '寄付履歴をダウンロードします。よろしいですか？'
       }, function () {
         OrderApi.adminExportExcel(vm.condition)
           .success(function (res) {
