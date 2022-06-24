@@ -29,7 +29,7 @@ var productSchema = new Schema({
   // 容量
   capacity: { type: String },
   // 消費期限
-  expire: { type: Number, default: 1, required: true },
+  expire: { type: Number },
   // 消費期限
   expire_detail: { type: String },
   // 取扱い事業者

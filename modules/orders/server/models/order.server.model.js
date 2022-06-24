@@ -35,6 +35,8 @@ var orderSchema = new Schema({
   // 最初出力日
   export_date: { type: Date },
 
+  payment: { type: Number, default: 1 },
+
   // 名前
   name: { type: String, required: true },
   // ふりがな
