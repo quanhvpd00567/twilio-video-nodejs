@@ -1,5 +1,5 @@
 'use strict';
-exports.version = '1655646906413';
+exports.version = '1656139857407';
 exports.masterdata = {
   DAY_IN_MILLISECONDS: 1 * 24 * 60 * 60 * 1000,
   months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -17,7 +17,7 @@ exports.masterdata = {
     { id: 2, value: '女性' } // female
   ],
 
-  hideOneStopDate: '2022-06-29T03:29:00.150Z',
+  hideOneStopDate: '2030-06-29T03:29:00.150Z',
   sending_application_form_mark: `
 ワンストップ特例制度を受けるためには、寄付を行った年の翌年1月10日までにワンストップ特例申請書を寄付先の自治体に提出する必要があります。
 また、ワンストップ特例制度を利用するには、以下の条件を満たす必要があります。
