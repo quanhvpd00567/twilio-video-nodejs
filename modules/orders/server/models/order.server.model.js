@@ -55,6 +55,8 @@ var orderSchema = new Schema({
   // 建物名
   building: { type: String },
 
+  city: { type: String },
+
   products: [{
     product: { type: Schema.ObjectId, ref: 'Product', required: true },
     price: { type: Number, default: 0 },
