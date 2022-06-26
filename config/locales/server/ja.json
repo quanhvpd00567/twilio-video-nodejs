@@ -4,7 +4,7 @@
     "server.email.subject.user.reset_password": "パスワードの再発行について",
     "server.email.subject.user.updated_email": "メールアドレス変更",
     "server.email.subject.create.municipality": "「ふるさとNow」アカウント登録完了通知",
-    "server.email.subject.order_success": "【ふふる】申込完了 {municipalityPrefecture} {municipalityName}へのふるさと納税",
+    "server.email.subject.order_success": "【ふふる】申込完了 {municipalityPrefecture}{municipalityName}へのふるさと納税",
     "server.email.subject.order_success_munic": "【ふるさとNow】寄付の申し込み通知",
     "system.version.update_app_optional": "新しいバージョンのアプリが公開されました。アップデートを行ってください。",
     "system.version.update_app_required": "ご利用中のバージョンが古くなりましたのでApp StoreまたはGoogle Playでアプリをアップデートしてください。",
