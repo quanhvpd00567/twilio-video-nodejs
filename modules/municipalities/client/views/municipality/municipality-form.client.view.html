@@ -88,10 +88,9 @@
                   {{'municipalities.form.settlement_fee.label' | translate}}
                 </th>
                 <td class="col-xs-10 form-group" show-errors colspan="3">
-                  <input type="number" name="settlement_fee" class="form-control apply_form_input" number-integer-only
+                  <input type="number" name="settlement_fee" class="form-control apply_form_input"
                     placeholder="{{'municipalities.form.settlement_fee.placeholder' | translate}}"
-                    ng-model="vm.munic.settlement_fee" input-validator="number"
-                    ng-keydown="preventPressCommaKey($event)" min="0" />
+                    ng-model="vm.munic.settlement_fee" input-validator="number" min="0" />
                   <span>{{'common.label.unit.percent' | translate}}</span>
                 </td>
               </tr>
