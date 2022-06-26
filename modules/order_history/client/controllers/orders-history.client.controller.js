@@ -17,7 +17,7 @@
     onCreate();
 
     function onCreate() {
-      prepareCondition();
+      prepareCondition(true);
       getMunicipality();
       handleSearch();
     }

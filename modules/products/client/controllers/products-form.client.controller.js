@@ -429,13 +429,17 @@
     }
 
     vm.onChangeMunic = function () {
+      vm.product.locations = [];
       getLocationByMunic();
     };
 
     vm.onRemoveTagLocation = function (item) {
       vm.productLocations = vm.product.locations.filter(function (location) {
-        return location._id !== item._id;
+        console.log(location._id.toString() === item._id.toString());
+        return location._id !== item._id.toString();
       });
+
+      vm.product.locations = vm.productLocations;
     };
 
     vm.onChangeProductLocations = function (items) {

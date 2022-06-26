@@ -120,9 +120,9 @@ exports.exportOrderAdmin = async function (req, res) {
     orders.forEach((item, index) => {
       item.products.forEach((item2, index) => {
         for (let index = 0; index < item2.quantity; index++) {
-          filesServerController.setValue(wsExport, row, 1, no, 'left');
+          filesServerController.setValue(wsExport, row, 1, no, 'right');
           // 寄付番号
-          filesServerController.setValue(wsExport, row, 2, item.number, 'left');
+          filesServerController.setValue(wsExport, row, 2, item.number, 'right');
           // 電話番号;
           filesServerController.setValue(wsExport, row, 3, item.tel, 'left');
           // 郵便番号;
@@ -137,7 +137,7 @@ exports.exportOrderAdmin = async function (req, res) {
           // 導入施設ID;
           filesServerController.setValue(wsExport, row, 8, item.location ? item.location.code : '', 'left');
           // 導入施設名;
-          filesServerController.setValue(wsExport, row, 9, item.location.name, 'left');
+          filesServerController.setValue(wsExport, row, 9, item.location ? item.location.name : '', 'left');
           // 返礼品コード;
           filesServerController.setValue(wsExport, row, 10, item2.product.code, 'left');
           // 返礼品;
@@ -155,9 +155,10 @@ exports.exportOrderAdmin = async function (req, res) {
     await workbook.xlsx.writeFile(outputExcelFileName);
 
     const promiseUpdate = orders.map(async item => {
-      if (item.export_status === 1) {
-        return await Order.findOneAndUpdate({ _id: item._id }, { export_status: 2, export_date: new Date });
-      }
+      return true;
+      // if (item.export_status === 1) {
+      //   return await Order.findOneAndUpdate({ _id: item._id }, { export_status: 2, export_date: new Date });
+      // }
     });
 
     Promise.all([promiseUpdate])

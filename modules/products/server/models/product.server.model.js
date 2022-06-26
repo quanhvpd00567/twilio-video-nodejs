@@ -66,7 +66,7 @@ var productSchema = new Schema({
   except_place: { type: String },
 
   except_place_options: { type: [{ type: Number }] },
-  // 配送除外日
+  // 発送除外日
   except_date: { type: String },
   // のし対応
   is_accept_noshi: { type: Number, default: 1 },

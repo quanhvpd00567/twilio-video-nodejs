@@ -93,7 +93,7 @@
                         ng-disabled="!vm.product.municipality"
                         placeholder="導入施設を選択"
                         is-show-list="true"
-                        labels="{search: '検索'}"
+                        labels="{search: '検索', 'itemsSelected': '選択'}"
                         options="vm.locations">
                       </multiselect>
                     </div>
@@ -471,7 +471,7 @@
                 </td>
               </tr>
 
-              <!-- 配送除外日 -->
+              <!-- 発送除外日 -->
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.except_date.label' | translate}}
@@ -569,6 +569,9 @@
 
           <div ng-messages="vm.municMemberForm.avatar.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.avatar.error.required' | translate}}</li>
+          </div>
+          <div ng-messages="vm.municMemberForm.accepted_schedule.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'products.form.accepted_schedule.error.required' | translate}}</li>
           </div>
 
         </div>
