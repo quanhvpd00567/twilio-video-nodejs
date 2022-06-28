@@ -87,7 +87,11 @@
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
                   <div class="row">
                     <div class="col-xs-3">
-                      <multiselect  ng-model="vm.productLocations" name="locations" 
+
+                    <div ng-dropdown-multiselect="" events="yourEvents" options="vm.locations"
+                      selected-model="vm.productLocations" extra-settings="example9settings" >
+                    </div>
+                      <!-- <multiselect  ng-model="vm.productLocations" name="locations" 
                         show-search="true" id-prop="_id" display-prop="name"
                         on-change="vm.onChangeProductLocations"
                         ng-disabled="!vm.product.municipality"
@@ -95,7 +99,7 @@
                         is-show-list="true"
                         labels="{search: '検索', 'itemsSelected': '選択'}"
                         options="vm.locations">
-                      </multiselect>
+                      </multiselect> -->
                     </div>
                     
                     <div class="col-xs-9">
