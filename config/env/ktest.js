@@ -26,7 +26,7 @@ module.exports = {
     deep_link: 'astena-mft-ktest://open-app'
   },
   mailer: {
-    prefix_subject: '【ふふる】',
+    prefix_subject: '【ふるさとNow】',
     from: 'support@fufuru-ktest.techlog.bz',
     to: 'support@fufuru-ktest.techlog.bz',
     options: {
