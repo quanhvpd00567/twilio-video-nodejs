@@ -28,7 +28,8 @@ function ngDropdownMultiselect($filter, $document, $compile, $parse) {
       searchFilter: '=?',
       translationTexts: '=',
       groupBy: '@',
-      disabled: '='
+      disabled: '=',
+      textDefault: '=?'
     },
     template: function (element, attrs) {
       var checkboxes = !!attrs.checkboxes;
@@ -144,7 +145,7 @@ function ngDropdownMultiselect($filter, $document, $compile, $parse) {
         selectionCount: 'checked',
         selectionOf: '/',
         searchPlaceholder: '検索',
-        buttonDefaultText: '承認者を選択',
+        buttonDefaultText: '導入施設を選択',
         dynamicButtonTextSuffix: '選択',
         disableSearch: 'Disable search',
         enableSearch: 'Enable search',
@@ -255,7 +256,7 @@ function ngDropdownMultiselect($filter, $document, $compile, $parse) {
         if ($scope.settings.dynamicTitle && ($scope.selectedModel.length > 0 || (angular.isObject($scope.selectedModel) && Object.keys($scope.selectedModel).length > 0))) {
           if ($scope.settings.smartButtonMaxItems > 0) {
             var itemsText = [];
-
+            console.log(121);
             angular.forEach($scope.options, function (optionItem) {
               if ($scope.isChecked($scope.getPropertyForObject(optionItem, $scope.settings.idProp))) {
                 var displayText = $scope.getPropertyForObject(optionItem, $scope.settings.displayProp);
@@ -272,6 +273,7 @@ function ngDropdownMultiselect($filter, $document, $compile, $parse) {
 
             return itemsText.join(', ');
           } else {
+            console.log(2);
             var totalSelected;
 
             if ($scope.singleSelection) {
@@ -281,8 +283,10 @@ function ngDropdownMultiselect($filter, $document, $compile, $parse) {
             }
 
             if (totalSelected === 0) {
+              console.log(totalSelected);
               return $scope.texts.buttonDefaultText;
             } else {
+              console.log(1);
               return totalSelected + ' ' + $scope.texts.dynamicButtonTextSuffix;
             }
           }
