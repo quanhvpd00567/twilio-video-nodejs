@@ -59,14 +59,14 @@ var productSchema = new Schema({
   // 発送期日
   ship_date: { type: String },
   // 配送希望設定
-  is_accept_schedule: { type: Number, default: 1 },
+  is_accept_schedule: { type: Number },
   // 配送希望時間
   accepted_schedule: { type: [{ type: String }] },
   // 配送不可地域
   except_place: { type: String },
 
   except_place_options: { type: [{ type: Number }] },
-  // 配送除外日
+  // 発送除外日
   except_date: { type: String },
   // のし対応
   is_accept_noshi: { type: Number, default: 1 },

@@ -23,7 +23,8 @@
       IS_ACCEPT_SCHEDULE: 1, // 指定不可
       YEAR_ROUND: 1, // 通年
       ALWAYS_STOCK: 1, // 常に在庫あり
-      LIMIT_BUY_NONE: 1 // なし
+      LIMIT_BUY_NONE: 1, // なし
+      IS_NOT_ACCEPT_SCHEDULE: 2
     };
     vm.isFirstLoadEdit = true;
 
@@ -53,14 +54,14 @@
       }
 
       if (!vm.product._id) {
-        // vm.product.expire = 1;
+        vm.product.expire = 1;
         vm.product.ship_method = 1;
         vm.product.is_accept_noshi = 1;
-        vm.product.is_accept_schedule = 1;
+        // vm.product.is_accept_schedule = 1;
         vm.product.is_apply_condition = true;
-        // vm.product.is_set_stock_quantity = vm.constants.ALWAYS_STOCK;
-        // vm.product.is_set_max_quantity = vm.constants.LIMIT_BUY_NONE;
-        // vm.product.is_deadline = vm.constants.YEAR_ROUND;
+        vm.product.is_set_stock_quantity = vm.constants.ALWAYS_STOCK;
+        vm.product.is_set_max_quantity = vm.constants.LIMIT_BUY_NONE;
+        vm.product.is_deadline = vm.constants.YEAR_ROUND;
       } else {
         if (vm.product.expire !== vm.constants.OK) {
           vm.product.expire_detail = '';
@@ -429,18 +430,33 @@
     }
 
     vm.onChangeMunic = function () {
+      vm.product.locations = [];
       getLocationByMunic();
     };
 
     vm.onRemoveTagLocation = function (item) {
       vm.productLocations = vm.product.locations.filter(function (location) {
-        return location._id !== item._id;
+        return location._id.toString() !== item._id.toString();
       });
+
+      vm.product.locations = vm.productLocations;
     };
 
     vm.onChangeProductLocations = function (items) {
+      console.log('items');
+      console.log(items);
+      console.log('sitems');
+
       if (items !== undefined) {
         vm.product.locations = items;
+      }
+      console.log(vm.product.locations);
+    };
+
+    vm.onChangeSchedule = function (item) {
+      vm.product.is_accept_schedule = item.id;
+      if (vm.product.accepted_schedule.length === 0 || vm.product.is_accept_schedule === vm.constants.IS_ACCEPT_SCHEDULE) {
+        vm.product.accepted_schedule = '';
       }
     };
   }

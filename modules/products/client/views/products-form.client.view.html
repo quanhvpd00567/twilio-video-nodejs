@@ -93,7 +93,7 @@
                         ng-disabled="!vm.product.municipality"
                         placeholder="導入施設を選択"
                         is-show-list="true"
-                        labels="{search: '検索'}"
+                        labels="{search: '検索', 'itemsSelected': '選択'}"
                         options="vm.locations">
                       </multiselect>
                     </div>
@@ -419,12 +419,13 @@
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.accepted_schedule.label' | translate}}
-                  <span class="text-red">*</span>
+                  <!-- <span class="text-red">*</span> -->
                 </th>
                 <td class="col-xs-4 form-group" colspan="{{vm.product._id ? 3 : ''}}">
                   <div style="display: inline-block;">
                     <label class="radio-inline" ng-repeat="item in vm.master.accept_schedule_status">
-                      <input type="radio" ng-click="vm.product.is_accept_schedule = item.id" name="is_accept_schedule"
+                      <input type="radio" ng-click="vm.onChangeSchedule(item)" 
+                        name="is_accept_schedule"
                         ng-checked="vm.product.is_accept_schedule === item.id" value="{{item.id}}"
                         id="is_accept_schedule_{{item.id}}">{{item.value}}
                     </label>
@@ -432,7 +433,7 @@
 
                   <div style="display: inline-block; width: 30%; margin-bottom: 0;" class="form-group {{
                       vm.isSaveClick &&
-                      vm.product.is_accept_schedule !== vm.constants.IS_ACCEPT_SCHEDULE 
+                      vm.product.is_accept_schedule === vm.constants.IS_NOT_ACCEPT_SCHEDULE 
                       && (vm.product.accepted_schedule.length === 0 || vm.product.accepted_schedule === underfined || vm.product.accepted_schedule === '' ) ? 'has-error' : ''
                     }}" show-errors>
                     <multiselect class="input-xlarge" ng-model="vm.product.accepted_schedule" name="accept_schedule"
@@ -443,7 +444,7 @@
                     </multiselect>
                   </div>
                   <input type="hidden" name="accepted_schedule" ng-model="vm.product.accepted_schedule"
-                    ng-required="vm.product.is_accept_schedule !== vm.constants.IS_ACCEPT_SCHEDULE">
+                    ng-required="vm.product.is_accept_schedule === vm.constants.IS_NOT_ACCEPT_SCHEDULE">
                 </td>
               </tr>
 
@@ -471,7 +472,7 @@
                 </td>
               </tr>
 
-              <!-- 配送除外日 -->
+              <!-- 発送除外日 -->
               <tr>
                 <th class="col-xs-2">
                   {{'products.form.except_date.label' | translate}}
@@ -569,6 +570,9 @@
 
           <div ng-messages="vm.municMemberForm.avatar.$error" role="alert">
             <li class="text-red" ng-message="required">{{'products.form.avatar.error.required' | translate}}</li>
+          </div>
+          <div ng-messages="vm.municMemberForm.accepted_schedule.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'products.form.accepted_schedule.error.required' | translate}}</li>
           </div>
 
         </div>
