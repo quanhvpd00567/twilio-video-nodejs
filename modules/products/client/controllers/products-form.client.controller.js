@@ -18,6 +18,16 @@
     vm.showBtnChooseFile = true;
     vm.locations = [];
     vm.productLocations = [];
+    $scope.example9settings = {
+      enableSearch: true,
+      searchField: 'name',
+      displayProp: 'name',
+      showCheckAll: false,
+      showUncheckAll: false,
+      idProp: '_id',
+      externalIdProp: '',
+      buttonDefaultText: '導入施設を選択'
+    };
     vm.constants = {
       OK: 1, // あり
       IS_ACCEPT_SCHEDULE: 1, // 指定不可
@@ -449,6 +459,8 @@
 
       if (items !== undefined) {
         vm.product.locations = items;
+        console.log(vm.productLocations);
+        // vm.productLocations = items;
       }
       console.log(vm.product.locations);
     };
