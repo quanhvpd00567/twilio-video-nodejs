@@ -53,14 +53,14 @@
       }
 
       if (!vm.product._id) {
-        // vm.product.expire = 1;
+        vm.product.expire = 1;
         vm.product.ship_method = 1;
         vm.product.is_accept_noshi = 1;
         vm.product.is_accept_schedule = 1;
         vm.product.is_apply_condition = true;
-        // vm.product.is_set_stock_quantity = vm.constants.ALWAYS_STOCK;
-        // vm.product.is_set_max_quantity = vm.constants.LIMIT_BUY_NONE;
-        // vm.product.is_deadline = vm.constants.YEAR_ROUND;
+        vm.product.is_set_stock_quantity = vm.constants.ALWAYS_STOCK;
+        vm.product.is_set_max_quantity = vm.constants.LIMIT_BUY_NONE;
+        vm.product.is_deadline = vm.constants.YEAR_ROUND;
       } else {
         if (vm.product.expire !== vm.constants.OK) {
           vm.product.expire_detail = '';
@@ -435,7 +435,6 @@
 
     vm.onRemoveTagLocation = function (item) {
       vm.productLocations = vm.product.locations.filter(function (location) {
-        console.log(location._id.toString() === item._id.toString());
         return location._id !== item._id.toString();
       });
 
@@ -443,9 +442,14 @@
     };
 
     vm.onChangeProductLocations = function (items) {
+      console.log('items');
+      console.log(items);
+      console.log('sitems');
+
       if (items !== undefined) {
         vm.product.locations = items;
       }
+      console.log(vm.product.locations);
     };
   }
 }());
