@@ -64,7 +64,7 @@
       }
 
       if (!vm.product._id) {
-        vm.product.expire = 1;
+        vm.product.expire = 2;
         vm.product.ship_method = 1;
         vm.product.is_accept_noshi = 1;
         // vm.product.is_accept_schedule = 1;
