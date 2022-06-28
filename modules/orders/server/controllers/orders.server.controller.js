@@ -129,7 +129,7 @@ exports.exportOrderAdmin = async function (req, res) {
           filesServerController.setValue(wsExport, row, 4, item.zip_code, 'left');
           // 住所;
           let building = item.building ? item.building : '';
-          filesServerController.setValue(wsExport, row, 5, item.prefecture + item.address + building, 'left');
+          filesServerController.setValue(wsExport, row, 5, item.prefecture + item.city + item.address + building, 'left');
           // 自治体ID;
           filesServerController.setValue(wsExport, row, 6, item.municipality.code, 'left');
           // 自治体名;
