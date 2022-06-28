@@ -59,7 +59,7 @@ var productSchema = new Schema({
   // 発送期日
   ship_date: { type: String },
   // 配送希望設定
-  is_accept_schedule: { type: Number, default: 1 },
+  is_accept_schedule: { type: Number },
   // 配送希望時間
   accepted_schedule: { type: [{ type: String }] },
   // 配送不可地域
