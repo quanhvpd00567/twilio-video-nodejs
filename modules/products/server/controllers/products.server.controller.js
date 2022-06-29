@@ -37,9 +37,11 @@ exports.create = async function (req, res) {
     }
     let product = new Product(data);
 
-    data.locations = data.locations.map(location => {
-      return location._id;
-    });
+    if (data.locations) {
+      data.locations = data.locations.map(location => {
+        return location._id;
+      });
+    }
 
     product.except_place_options = product.except_place_options.sort((a, b) => a - b);
 
@@ -414,24 +416,23 @@ function getQueryAggregate(condition) {
   }
   );
 
-  // Match location
-  let matchLocation = {
-    $and: [
-      { 'locations.deleted': false }
-    ]
-  };
-
   aggregates.push({
     $lookup: {
       from: 'locations',
-      localField: 'locations',
-      foreignField: '_id',
+      let: { location_ids: '$locations' },
+      pipeline: [{
+        $match: {
+          $expr: {
+            $and: [
+              { $in: ['$_id', '$$location_ids'] },
+              { $eq: ['$deleted', false] }
+            ]
+          }
+        }
+      }],
       as: 'locations'
     }
-  }, {
-    $match: matchLocation
-  }
-  );
+  });
 
   aggregates.push({
     $project: {
