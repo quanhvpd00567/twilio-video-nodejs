@@ -357,7 +357,7 @@
   "products.form.accepted_schedule.placeholder": "指定可能な時間を選択",
   "products.form.except_plane.label": "配送不可地域",
   "products.form.except_plane.placeholder": "その他の場合に記載",
-  "products.form.except_date.label": "",
+  "products.form.except_date.label": "発送除外日",
   "products.form.except_date.placeholder": "自由記述(最大100文字)",
   "products.form.is_accept_noshi.label": "のし対応",
   "products.form.pictures.label": "追加写真",
