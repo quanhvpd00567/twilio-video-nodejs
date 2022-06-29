@@ -294,23 +294,18 @@ function checkSellStatusAndQuantity(products) {
       continue;
     }
 
-    if ((product.is_set_stock_quantity === 2 && product.stock_quantity <= 0) && product.sell_status === constants.SELL_STATUS.ON_SALE) {
-      let message = translate['order.product.error.sold_out'];
+    if (product.show_status === 2 || product.sell_status === constants.SELL_STATUS.END_SALE) {
+      let message = translate['order.product.error.end_sale'];
       message = message.replace('{0}', product.name);
       errors.push(message);
       continue;
-    } else if (product.sell_status === constants.SELL_STATUS.END_SALE && (product.is_set_stock_quantity === 2 && product.stock_quantity > 0)) {
-      let message = translate['order.product.error.end_sale'];
+    } else if ((product.is_set_stock_quantity === 2 && product.stock_quantity <= 0) && product.sell_status === constants.SELL_STATUS.ON_SALE) {
+      let message = translate['order.product.error.sold_out'];
       message = message.replace('{0}', product.name);
       errors.push(message);
       continue;
     } else if ((product.is_set_stock_quantity === 2 && product.stock_quantity <= 0) && product.sell_status === constants.SELL_STATUS.END_SALE) {
       let message = translate['order.product.error.sold_out'];
-      message = message.replace('{0}', product.name);
-      errors.push(message);
-      continue;
-    } else if (product.show_status === 2) {
-      let message = translate['order.product.error.end_sale'];
       message = message.replace('{0}', product.name);
       errors.push(message);
       continue;
