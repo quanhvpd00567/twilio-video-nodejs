@@ -128,7 +128,7 @@
               <td class="text-center w100" style="vertical-align: middle;" ng-bind="order.total | format_money2"></td>
               <td class="text-center w150" style="vertical-align: middle;"
                 ng-bind="showMasterValue(masterdata.order_payments, order.payment)"></td>
-              <td class="text-left">
+              <td class="text-left" style="vertical-align: middle;">
                 <span ng-repeat="item in order.products">{{item.product.name}} × {{item.quantity}} <br> </span>
               </td>
               <td class="text-center w100" style="vertical-align: middle;"
