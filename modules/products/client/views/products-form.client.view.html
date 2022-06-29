@@ -443,7 +443,7 @@
                     <multiselect class="input-xlarge" ng-model="vm.product.accepted_schedule" name="accept_schedule"
                       ng-change="vm.onChangeAcceptedSchedule()"
                       placeholder="{{'products.form.accepted_schedule.placeholder' | translate}}"
-                      ng-disabled="vm.product.is_accept_schedule === vm.constants.IS_ACCEPT_SCHEDULE"
+                      ng-disabled="vm.product.is_accept_schedule !== vm.constants.IS_NOT_ACCEPT_SCHEDULE"
                       options="vm.master.accept_schedule">
                     </multiselect>
                   </div>
