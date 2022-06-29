@@ -94,14 +94,19 @@
                                         ふりがな: <%= furigana %><br>
                                           郵便番号: <%= zip_code %> <br>
                                             都道府県: <%= prefecture %><br>
-                                              住所: <%= address %>
-                                                <% if(building) { %>
-                                                  <span>
-                                                    <%= ' ' + building %>
-                                                  </span>
-                                                  <% } %>
-                                                    <br>
-                                                    電話番号: <%= ' ' + tel %><br>
+                                              <% if(city) { %>
+                                                <span>
+                                                  市区町村: <%= city %>
+                                                </span> <br>
+                                                <% } %>
+                                                  住所: <%= address %>
+                                                    <% if(building) { %>
+                                                      <span>
+                                                        <%= ' ' + building %>
+                                                      </span>
+                                                      <% } %>
+                                                        <br>
+                                                        電話番号: <%= ' ' + tel %><br>
                                   </span><br>
 
                                   <!-- list products -->
