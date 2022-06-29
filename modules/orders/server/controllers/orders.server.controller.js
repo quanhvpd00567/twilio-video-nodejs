@@ -249,7 +249,7 @@ exports.exportOrder = async function (req, res) {
         // 番地・マンション名
         let address = someObject.address || '';
         if (someObject.building) {
-          address = address + '・' + someObject.building;
+          address = address + ' ' + someObject.building;
         }
         newLine.push(address);
         // 電話番号
