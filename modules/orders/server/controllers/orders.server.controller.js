@@ -48,6 +48,9 @@ exports.list = async function (req, res) {
         {
           path: 'municipality',
           select: 'name fee'
+        },
+        {
+          path: 'user'
         }
       ],
       limit: limit,
@@ -276,21 +279,21 @@ exports.exportOrder = async function (req, res) {
         newLine.push('""');
         // ワンストップ特例_要望
         if (someObject.sending_application_form === 1) {
-          newLine.push('"希望しない"');
-        } else {
           newLine.push('"希望する"');
+        } else {
+          newLine.push('"希望しない"');
         }
         // ワンストップ特例_性別
         if (someObject.sending_application_form === 1) {
-          newLine.push('""');
-        } else {
           newLine.push(someObject.application_sex === 1 ? '"男"' : '"女"');
+        } else {
+          newLine.push('""');
         }
         // ワンストップ特例_生年月日
         if (someObject.sending_application_form === 1) {
-          newLine.push('""');
-        } else {
           newLine.push('"' + someObject.application_birthday + '"');
+        } else {
+          newLine.push('""');
         }
         // ワンストップ特例_返送確認日
         newLine.push('""');
@@ -370,19 +373,19 @@ exports.exportOrder = async function (req, res) {
 
 
         // お届け先_書類_名前
-        var docFullName = '';
+        var docFullName = someObject.name;
         // 送り先_書類_郵便番号
-        var docZipcode = '';
+        var docZipcode = someObject.zip_code;
         // 送り先_書類_都道府県
-        var docPrefecture = '';
+        var docPrefecture = someObject.prefecture;
         // 送り先_書類_市区町村
-        var docCity = '';
+        var docCity = someObject.city;
         // お届け先_書類_番地・マンション名
-        var docAddress = '';
-        var docBuilding = '';
+        var docAddress = someObject.address || '';
+        var docBuilding = someObject.building || '';
         // お届け先_書類_電話番号
-        var docTel = '';
-        var docAddressfurigana = '';
+        var docTel = someObject.tel || '';
+        var docAddressfurigana = someObject.furigana;
 
         if (docBuilding) {
           docAddress = `${docAddress}${docBuilding}`;
