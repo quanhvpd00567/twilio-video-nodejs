@@ -201,7 +201,9 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     logger.info('Call Veritrans api to payment');
     if (orderObject.total) {
       const response = await creditServerController.pay(userId, new Date().valueOf(), cardIdOfVeritran, orderObject.total);
+      logger.info('Veritrans response' + JSON.stringify(response));
       const vResultCode = response && response.result && response.result.vResultCode;
+      logger.info('vResultCode ' + JSON.stringify(vResultCode));
 
       const checkVCode = handleVResponse(vResultCode);
       let transactionOject = { user: userId, amount: orderObject.total };
