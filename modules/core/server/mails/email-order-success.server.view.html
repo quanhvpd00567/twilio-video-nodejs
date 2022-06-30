@@ -94,12 +94,13 @@
                                         ふりがな: <%= furigana %><br>
                                           郵便番号: <%= zip_code %> <br>
                                             都道府県: <%= prefecture %><br>
+                                              住所:
                                               <% if(city) { %>
                                                 <span>
-                                                  市区町村: <%= city %>
-                                                </span> <br>
+                                                  <%= city %>
+                                                </span>
                                                 <% } %>
-                                                  住所: <%= address %>
+                                                  <%= ' ' + address %>
                                                     <% if(building) { %>
                                                       <span>
                                                         <%= ' ' + building %>
@@ -124,6 +125,7 @@
 
                                       <!-- payment date -->
                                       <span>▼ お支払い方法</span><br>
+                                      <span>お支払い方法: クレジットカード</span><br>
                                       <span>決済金額: <%= totalFormatted %>円</span><br>
                                       <span>決済日時: <%= paymentDate %></span><br><br>
 
