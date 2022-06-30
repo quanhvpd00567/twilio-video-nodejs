@@ -20,7 +20,7 @@
               ng-model="vm.condition.created_min" ng-change="vm.onChangeCreatedMin()" />
 
               <div ng-messages="vm.adminExport.created_min.$error"  ng-if="vm.isSaveClick" role="alert">
-                <small class="text-red" ng-message="required">寄付日付(From)を選択してください。</small>
+                <small class="text-red" ng-message="required">寄付日時(From)を選択してください。</small>
               </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
                 vm.condition.created_max || 'null'
               }}); vm.onChangeCreatedMax()" />
               <div ng-messages="vm.adminExport.created_max.$error"  ng-if="vm.isSaveClick" role="alert">
-                <small class="text-red" ng-message="required">寄付日付(To)を選択してください。</small>
+                <small class="text-red" ng-message="required">寄付日時(To)を選択してください。</small>
               </div>
           </div>
         </div>
