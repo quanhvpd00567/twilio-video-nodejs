@@ -130,7 +130,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     // 3
     const cardToken = card.token;
     if (!cardToken) {
-      logger.info('Respond errors: ' + translate['order.card.error.authorize_card']);
+      logger.info('Respond errors: ' + translate['order.card.error.authorize_card'] + '- Card token null');
       return { queueNumber, success: false, message: translate['order.card.error.authorize_card'] };
     }
 
@@ -147,7 +147,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
 
     const cardIdOfVeritran = cardInfo && cardInfo.cardId;
     if (!cardInfo || !cardIdOfVeritran) {
-      logger.info('Respond errors: ' + translate['order.card.error.authorize_card']);
+      logger.info('Respond errors: ' + translate['order.card.error.authorize_card'] + ' No cardId from Veritran');
       return { queueNumber, success: false, message: translate['order.card.error.authorize_card'] };
     }
 
@@ -201,7 +201,9 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     logger.info('Call Veritrans api to payment');
     if (orderObject.total) {
       const response = await creditServerController.pay(userId, new Date().valueOf(), cardIdOfVeritran, orderObject.total);
+      logger.info('Veritrans response' + JSON.stringify(response));
       const vResultCode = response && response.result && response.result.vResultCode;
+      logger.info('vResultCode ' + JSON.stringify(vResultCode));
 
       const checkVCode = handleVResponse(vResultCode);
       let transactionOject = { user: userId, amount: orderObject.total };
@@ -232,7 +234,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
       ]).lean().exec().then(order => {
         // mapping order data to mail template
         order.products = order.products.map(item => {
-          item.priceFormatted = helpServer.formatNumber(item.price);
+          item.priceFormatted = helpServer.formatNumber(item.price * item.quantity);
           return item;
         });
 
