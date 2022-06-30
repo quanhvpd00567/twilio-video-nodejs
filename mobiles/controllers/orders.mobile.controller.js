@@ -234,7 +234,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
       ]).lean().exec().then(order => {
         // mapping order data to mail template
         order.products = order.products.map(item => {
-          item.priceFormatted = helpServer.formatNumber(item.price);
+          item.priceFormatted = helpServer.formatNumber(item.price * item.quantity);
           return item;
         });
 
