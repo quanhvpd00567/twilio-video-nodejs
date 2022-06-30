@@ -79,7 +79,8 @@ exports.pay = function (userId, orderId, cardId, amount) {
         jpo: 10,
         withCapture: true,
         payNowIdParam: {
-          accountParam: { accountId: userId,
+          accountParam: {
+            accountId: userId,
             cardParam: { cardId: cardId }
           }
         },
@@ -91,6 +92,7 @@ exports.pay = function (userId, orderId, cardId, amount) {
 
     data.authHash = genAuthHash(data.params);
     var body = JSON.stringify(data);
+    logger.info('Pay api Body ' + body);
     var options = {
       url: config.veritrans.urls.authorize,
       method: 'POST',
