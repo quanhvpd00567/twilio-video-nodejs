@@ -130,7 +130,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     // 3
     const cardToken = card.token;
     if (!cardToken) {
-      logger.info('Respond errors: ' + translate['order.card.error.authorize_card']);
+      logger.info('Respond errors: ' + translate['order.card.error.authorize_card'] + '- Card token null');
       return { queueNumber, success: false, message: translate['order.card.error.authorize_card'] };
     }
 
@@ -147,7 +147,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
 
     const cardIdOfVeritran = cardInfo && cardInfo.cardId;
     if (!cardInfo || !cardIdOfVeritran) {
-      logger.info('Respond errors: ' + translate['order.card.error.authorize_card']);
+      logger.info('Respond errors: ' + translate['order.card.error.authorize_card'] + ' No cardId from Veritran');
       return { queueNumber, success: false, message: translate['order.card.error.authorize_card'] };
     }
 
