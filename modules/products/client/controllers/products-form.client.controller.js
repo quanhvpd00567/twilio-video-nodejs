@@ -58,6 +58,9 @@
       vm.imageUrl = $scope.getImageDefault(vm.product.avatar);
       if ($scope.isMunicipality) {
         vm.product.municipality = $scope.Authentication.user.municipalityId;
+        if (!vm.product._id) {
+          vm.product.locations = [];
+        }
         getLocationByMunic();
       } else {
         getMunicipality();
@@ -434,7 +437,9 @@
         ProductApi.getLocationByMunic(vm.product.municipality)
           .success(function (res) {
             vm.locations = res;
-            vm.productLocations = vm.product.locations;
+            if (vm.product.locations) {
+              vm.productLocations = vm.product.locations;
+            }
           });
       }
     }
@@ -453,16 +458,9 @@
     };
 
     vm.onChangeProductLocations = function (items) {
-      console.log('items');
-      console.log(items);
-      console.log('sitems');
-
       if (items !== undefined) {
         vm.product.locations = items;
-        console.log(vm.productLocations);
-        // vm.productLocations = items;
       }
-      console.log(vm.product.locations);
     };
 
     vm.onChangeSchedule = function (item) {
