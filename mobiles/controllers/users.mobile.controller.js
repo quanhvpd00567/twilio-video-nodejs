@@ -32,6 +32,33 @@ exports.getConfiguration = function (req, res) {
     setting = _setting;
     setting = JSON.parse(JSON.stringify(setting));
 
+    if (setting.term) {
+      setting.term = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="overflow-x: hidden;"> 
+          ${setting.term}
+        </body>
+      </html>
+      `;
+    }
+    if (setting.policy) {
+      setting.policy = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="overflow-x: hidden;"> 
+          ${setting.policy}
+        </body>
+      </html>
+      `;
+    }
+
     res.jsonp({
       config: setting, version: setting.version,
       prefectures: master_data.masterdata.prefectures,

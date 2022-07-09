@@ -28,6 +28,12 @@ var configSchema = new Schema({
     // android_require: { type: Boolean, default: false }
   },
 
+  // 利用規約
+  term: { type: String },
+
+  // プライバシーポリシー
+  policy: { type: String },
+
   // resolutions:
   resolutions: [
     { type: String }
