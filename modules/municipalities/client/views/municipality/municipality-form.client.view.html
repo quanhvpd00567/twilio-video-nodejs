@@ -75,6 +75,17 @@
 
               <tr>
                 <th class="col-xs-2">
+                  {{'municipalities.form.using.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors colspan="3">
+                  <input type="using" name="using" class="form-control" ng-model="vm.munic.using"
+                    placeholder="{{'municipalities.form.using.placeholder' | translate}}" required>
+                </td>
+              </tr>
+
+              <tr>
+                <th class="col-xs-2">
                   {{'municipalities.form.fax.label' | translate}}
                 </th>
                 <td class="col-xs-10 form-group" show-errors colspan="3">
@@ -197,6 +208,9 @@
           <div ng-messages="vm.municForm.email.$error" role="alert">
             <li class="text-red" ng-message="required">{{'municipalities.form.email.error.required' | translate}}</li>
             <li class="text-red" ng-message="email">{{'municipalities.form.email.error.invalid' | translate}}</li>
+          </div>
+          <div ng-messages="vm.municForm.using.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'municipalities.form.using.error.required' | translate}}</li>
           </div>
           <div ng-messages="vm.municForm.fax.$error" role="alert">
             <li class="text-red" ng-message="tel">{{'municipalities.form.fax.error.invalid' | translate}}</li>
