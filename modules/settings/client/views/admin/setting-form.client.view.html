@@ -80,6 +80,16 @@
               translate}}
             </li>
           </div>
+          <div ng-messages="vm.settingForm.term.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'setting.form.term.error.required' |
+              translate}}
+            </li>
+          </div>
+          <div ng-messages="vm.settingForm.policy.$error" role="alert">
+            <li class="text-red" ng-message="required">{{'setting.form.policy.error.required' |
+              translate}}
+            </li>
+          </div>
         </div>
       </div>
     </div>

@@ -73,7 +73,8 @@ var orderSchema = new Schema({
   // 申し込み日時
   created: { type: Date, default: Date.now },
   deleted: { type: Boolean, default: false },
-  updated: { type: Date }
+  updated: { type: Date },
+  using: { type: String, trim: true }
 });
 orderSchema.plugin(paginate);
 orderSchema.plugin(mongooseAggregatePaginate);

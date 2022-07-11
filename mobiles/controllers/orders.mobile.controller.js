@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
   moment = require('moment-timezone'),
   Product = mongoose.model('Product'),
   Order = mongoose.model('Order'),
+  Municipality = mongoose.model('Municipality'),
   Transaction = mongoose.model('Transaction'),
   logger = require(path.resolve('./mobiles/controllers/logger.mobile.controller')),
   veritransResultCode = require(path.resolve('./mobiles/controllers/veritrans-result-code.json')),
@@ -187,6 +188,10 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
     orderObject.municipality = municipalityId;
     orderObject.location = locationId;
     orderObject.total = cart.total;
+
+    let munic = await Municipality.findOne({ _id: municipalityId }).lean();
+
+    orderObject.using = munic.using;
 
     const totalQuantity = cart.products.reduce((total, item) => {
       return total + item.quantity;

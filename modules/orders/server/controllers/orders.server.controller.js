@@ -270,9 +270,8 @@ exports.exportOrder = async function (req, res) {
         newLine.push('"クレジットカード"');
         // クレジット与信結果
         newLine.push('""');
-        let usingName = someObject.municipality.using || '';
         // 寄附金の使途 using
-        newLine.push(usingName);
+        newLine.push(someObject.using || '""');
         // 同意確認
         newLine.push('""');
         // 寄附情報の公表
