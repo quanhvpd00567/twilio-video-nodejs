@@ -114,6 +114,7 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
 
     let errors = [];
     // 1 & 2
+    logger.info('\n\n---------- Start Order------------');
     logger.info('Checking Products was deleted or end sell or not enough quantity?');
     let _products = productsToOrder;
     _products = _products.map((item, index) => {
@@ -134,7 +135,9 @@ async function handleOrder(body, userId, queueNumber, municipalityId, locationId
       return { queueNumber, success: false, message: translate['order.card.error.authorize_card'] };
     }
 
+    logger.info('Call Veritrans api to authorize token');
     const response = await creditServerController.authorize(userId, cardToken);
+    logger.info('Veritrans response' + JSON.stringify(response));
     const vResultCode = response.result && response.result.vResultCode;
     const checkVCode = handleVResponse(vResultCode);
     if (!checkVCode.isSuccess) {

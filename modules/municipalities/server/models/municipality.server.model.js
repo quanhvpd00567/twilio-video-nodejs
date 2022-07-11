@@ -19,6 +19,7 @@ var municipalitiesSchema = new Schema({
   prefecture: { type: String, required: true },
   // 自治体名
   name: { type: String, required: true, trim: true },
+  using: { type: String, trim: true },
 
   fax: { type: String },
   settlement_fee: { type: Number, default: 0 },

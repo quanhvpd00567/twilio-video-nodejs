@@ -33,6 +33,39 @@
           </table>
         </div>
 
+        <!-- term & policy -->
+        <div class="table-custom">
+          <div class="row mg10b">
+            <div class="col-xs-12">
+              <h4>{{'setting.form.term_and_policy_setting.subtitle' | translate}}</h4>
+            </div>
+          </div>
+          <table class="table table-detail table-bordered">
+            <tbody>
+              <tr>
+                <th class="col-xs-2">
+                  {{'setting.form.term.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <textarea ck-editor ng-model="vm.setting.term" name="term" class="form-control"
+                    placeholder="{{'setting.form.term.placeholder' | translate}}" required></textarea>
+                </td>
+              </tr>
+              <tr>
+                <th class="col-xs-2">
+                  {{'setting.form.policy.label' | translate}}
+                  <span class="text-red">*</span>
+                </th>
+                <td class="col-xs-10 form-group" show-errors>
+                  <textarea ck-editor ng-model="vm.setting.policy" name="policy" class="form-control"
+                    placeholder="{{'setting.form.policy.placeholder' | translate}}" required></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div class="form-group mgnb mg50b text-center">
           <button-save></button-save>
         </div>
