@@ -8,12 +8,58 @@ var mongoose = require('mongoose'),
   Location = mongoose.model('Location'),
   User = mongoose.model('User'),
   path = require('path'),
+  { v4: uuidv4 } = require('uuid'),
   constants = require(path.resolve('./modules/core/server/shares/constants')),
   _ = require('lodash'),
   logger = require(path.resolve('./modules/core/server/controllers/logger.server.controller')),
   help = require(path.resolve('./modules/core/server/controllers/help.server.controller'));
 
 const lang = 'ja';
+const accountSid = 'ACdbe1000690ca780d9fa660264be466ae';
+const authToken = '6f66ff0065985942610dceefbccc9ae1';
+// const client = require('twilio')(accountSid, authToken, {
+//   lazyLoading: true
+// });
+
+
+const AccessToken = require('twilio').jwt.AccessToken;
+const VideoGrant = AccessToken.VideoGrant;
+
+// const Video = require('twilio-video');
+
+// Serialize the token to a JWT string
+exports.createRoomZoom = async function (req, res) {
+  const identity = uuidv4();
+
+  // Create Video Grant
+  const videoGrant = new VideoGrant({
+    room: 'Myroom'
+  });
+
+  // Create an access token which we will sign and return to the client,
+  // containing the grant we just created
+  const token = new AccessToken(
+    'ACa31def3feb11a648b05415bf87dfe9cf',
+    'SKb848536251d84d72f85a2a2f27a1dfad',
+    '8xVmEETPfOvqFwLt31V2MxcryHagw8Ud',
+    { identity: identity }
+  );
+
+  token.addGrant(videoGrant);
+
+  // Video.connect(token.toJwt(), { name: 'Myroom' }).then(room => {
+  //   console.log(room);
+  // });
+
+  try {
+    return res.json(token.toJwt());
+  } catch (error) {
+    console.log(error.response.data);
+    return res.status(422).send({ message: help.getMsLoc() });
+  }
+
+};
+
 exports.create = async function (req, res) {
   let session = null;
   try {

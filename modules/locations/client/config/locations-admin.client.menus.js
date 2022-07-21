@@ -13,8 +13,8 @@
       position: 5,
       roles: ['admin'],
       class: 'fa fa-map-marker',
-      title: '導入施設管理',
-      state: 'admin.locations.list',
+      title: 'Zoomus demo',
+      state: 'admin.locations.demo',
       parrent_state: 'admin.locations'
     });
   }

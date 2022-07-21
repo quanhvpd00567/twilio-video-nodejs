@@ -1,122 +1,48 @@
 ﻿<section class="content container-fluid">
+
   <div class="row mg10b">
     <div class="col-xs-6">
       <form-title></form-title>
     </div>
   </div>
   <table-search>
-    <table-search-button>
-      <a class="btn btn-success btn-sm pull-right mg5r" data-ui-sref="admin.locations.create">
-        <span class="glyphicon glyphicon-plus"></span> {{'common.button.add' | translate}}
-      </a>
-    </table-search-button>
-    <table-search-content>
-      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
-        <div class="form-group">
-          <label>{{'locations.list.search.keyword.label' | translate}}</label>
-          <input type="text" name="keyword" class="form-control" ng-model="vm.condition.keyword"
-            placeholder="{{'locations.list.search.keyword.placeholder' | translate}}"
-            event-enter="vm.handleConditionChanged(true)" />
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="form-group">
-          <label>{{'locations.list.search.created_min.label' | translate}}</label>
-          <input type="text" name="created_min" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMin"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_min')"
-            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_min" class="form-control"
-            ng-model="vm.condition.created_min" ng-change="vm.onChangeCreatedMin()" />
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="form-group">
-          <label>{{'locations.list.search.created_max.label' | translate}}</label>
-          <input type="text" name="created_max" datetime-picker="" datepicker-options="vm.dateOptionsCreatedMax"
-            timepicker-options="timeOptions" ng-click="openCalendar($event, 'created_max')"
-            placeholder="YYYY/MM/DD HH:mm" is-open="open.created_max" class="form-control"
-            ng-model="vm.condition.created_max" ng-change="vm.handleConditionChanged(false, 'created_max', {{
-              vm.condition.created_max || 'null'
-            }}); vm.onChangeCreatedMax()" />
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="form-group">
-          <label>{{'common.label.max_row_in_page' | translate}}</label>
-          <input type="text" input-number name="limit" class="form-control" ng-model="vm.condition.limit"
-            placeholder="{{'common.placeholder.max_row_in_page' | translate}}" search-limit maxlength="4" />
-        </div>
-      </div>
-    </table-search-content>
   </table-search>
 
   <div class="row">
-    <!-- 各ボタン -->
-    <div class="col-xs-12">
-      <div class="title-group">
-        <p class="mgn title-group__inline-title">
-          {{ tableReport(vm.condition) }}
-        </p>
-      </div>
-    </div>
+    <div id="token">{{vm.token}}</div>
     <!-- #各ボタン -->
     <div class="col-xs-12">
-      <div class="table-responsive table-list">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th class="col-index">#</th>
-              <th class="w150" tbtitle="{{'locations.list.table.header.municipality.label' | translate}}"
-                tbmodel="municipality_name" ng-click="vm.handleSortChanged('municipality_name')" table-order
-                tbcondition="vm.condition"></th>
-              <th class="w150" tbtitle="{{'locations.list.table.header.name.label' | translate}}" tbmodel="name"
-                ng-click="vm.handleSortChanged('name')" table-order tbcondition="vm.condition"></th>
-              <th class="w150" tbtitle="{{'locations.list.table.header.admin_name.label' | translate}}"
-                tbmodel="admin_name" ng-click="vm.handleSortChanged('admin_name')" table-order
-                tbcondition="vm.condition"></th>
-              <th class="w150" tbtitle="{{'locations.list.table.header.admin_email.label' | translate}}"
-                tbmodel="admin_email" ng-click="vm.handleSortChanged('admin_email')" table-order
-                tbcondition="vm.condition"></th>
-              <th class="w150" tbtitle="{{'locations.list.table.header.admin_phone.label' | translate}}"
-                tbmodel="admin_phone" ng-click="vm.handleSortChanged('admin_phone')" table-order
-                tbcondition="vm.condition"></th>
-              <th class="w150 text-center" tbtitle="{{'locations.list.table.header.created.label' | translate}}"
-                tbmodel="created" ng-click="vm.handleSortChanged('created')" table-order tbcondition="vm.condition">
-              </th>
-              <th class="text-center w150">{{'common.table.header.action' | translate}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="10" ng-show="!vm.docs || vm.docs.length === 0">
-                {{'common.table.no_data_available' | translate}}
-              </td>
-            </tr>
-            <tr class="clickable" ng-repeat="item in vm.docs track by $index"
-              ui-sref="admin.locations.detail({ locationId: item._id })">
-              <td class="text-center">
-                {{ tableIndex(vm.condition, $index) }}
-              </td>
-              <td ng-bind="item.municipality_name"></td>
-              <td ng-bind="item.name"></td>
-              <td ng-bind="item.admin_name"></td>
-              <td ng-bind="item.admin_email"></td>
-              <td ng-bind="item.admin_phone"></td>
-              <td class="text-center clickable" ng-bind="item.created | dateTimeNormal"></td>
-              <td class="text-center" ui-sref-ignore>
-                <button class="btn btn-xs btn-primary" ui-sref="admin.locations.edit({locationId: item._id})">
-                  <i class="fa fa-pencil" aria-hidden="true"></i>
-                  {{'common.button.edit' | translate}}
-                </button>
-                <a class="btn btn-xs btn-danger" ng-click="vm.remove(item._id)">
-                  <i class="fa fa-trash" aria-hidden="true"></i>
-                  {{'common.button.del' | translate}}
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div ng-include="'/modules/core/client/views/pagination.client.view.html'"></div>
+      <button class="btn btn-primary" type="button" ng-click="vm.onCreateRoomZoom()">Create room zoom</button>
+      <button class="btn btn-primary" type="button" onclick="joinRoom()">Create room zoom</button>
     </div>
   </div>
 </section>
+<script>
+      // room.once('disconnected', (room, error) => {});
+
+  function joinRoom() {
+    var token = $('#token').text();
+    const Video = Twilio.Video;
+
+    if (Video.isSupported) {
+      Video.connect(token, {
+        name: 'Myroom',
+        video: true,
+        _useTwilioConnection: true,
+        logLevel: 'debug',
+        audio: true
+      }).then(room => {
+        console.log(`Successfully joined a Room: ${room}`);
+        // room.on('participantConnected', participant => {
+        //   console.log(`A remote Participant connected: ${participant}`);
+        // });
+      }, error => {
+        console.error(`Unable to connect to Room: ${error.message}`);
+      });
+    } else {
+      console.error('This browser is not supported by twilio-video.js.');
+    }
+
+
+  }
+</script>

@@ -21,6 +21,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/locations/:locationId',
       permissions: '*'
     }, {
+      resources: '/api/zoomus/create-room',
+      permissions: '*'
+    }, {
       resources: '/api/locations/paging',
       permissions: '*'
     }, {

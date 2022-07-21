@@ -37,9 +37,11 @@
     "seed:test": "gulp seed:test"
   },
   "dependencies": {
+    "@zoomus/websdk": "^2.5.0",
     "acl": "^0.4.11",
     "archiver": "^3.0.0",
     "async": "~2.5.0",
+    "axios": "^0.27.2",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "bower": "^1.8.8",
@@ -91,6 +93,7 @@
     "imagemin-pngquant": "~5.1.0",
     "jaconv": "^1.0.4",
     "jasmine-core": "~2.7.0",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "lusca": "^1.6.1",
     "method-override": "^2.3.10",
@@ -120,13 +123,17 @@
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.2.0",
     "start": "^5.1.0",
+    "twilio": "^3.79.0",
+    "twilio-video": "^2.22.1",
     "underscore": "^1.9.1",
+    "uuid": "^8.3.2",
     "validator": "~8.0.0",
     "wanakana": "^4.0.2",
     "winston": "^2.4.4",
     "winston-daily-rotate-file": "^3.8.0",
     "wiredep": "~4.0.0",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "zoomus": "^0.1.4"
   },
   "devDependencies": {
     "coveralls": "^2.13.3",

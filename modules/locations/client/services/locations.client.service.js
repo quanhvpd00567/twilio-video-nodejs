@@ -54,6 +54,10 @@
       return $http.get('/api/locations/' + locationId + '/detail');
     };
 
+    this.createZoomRoom = function () {
+      return $http.post('/api/zoomus/create-room');
+    };
+
     return this;
   }
 }());

@@ -55,6 +55,7 @@ module.exports = {
         // end
         'public/admin/js/adminlte.min.js',
         'public/admin/js/input-tag.min.js',
+        'public/admin/js/twilio-video.min.js',
         'public/local_libs/japanese/jaconv.min.js',
 
         'public/lib/ngmap/build/scripts/ng-map.min.js',
